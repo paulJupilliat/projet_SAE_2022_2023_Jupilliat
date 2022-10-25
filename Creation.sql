@@ -24,12 +24,12 @@ CREATE TABLE QCM (
 )
 
 CREATE TABLE ELEVE  (
-    numEtu INT NOT NULL AUTO_INCREMENT,
+    numEtu VARCHAR(12) NOT NULL,
     nomEleve VARCHAR(255) NOT NULL,
     prenomEleve VARCHAR(255) NOT NULL,
     groupeS1 INT(10) NOT NULL,
     groupeS2 INT(10) NOT NULL,
-    Primary Key (idEleve)
+    Primary Key (numEtu)
 );
 
 CREATE TABLE PROF (
@@ -61,9 +61,9 @@ CREATE TABLE DATE (
 CREATE TABLE RESULTAT (
     note deicmal(6,2),
     idQCM INT NOT NULL AUTO_INCREMENT,
-    idEleve INT NOT NULL AUTO_INCREMENT,
-    Primary Key(idEleve,idQCM),
-    FOREIGN KEY(idEleve) REFERENCES ELEVE(idEleve),
+    numEtu INT NOT NULL AUTO_INCREMENT,
+    Primary Key(numEtu,idQCM),
+    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu),
     FOREIGN KEY(idQCM) REFERENCES QCM(idQCM)
 );
 
@@ -71,18 +71,20 @@ CREATE TABLE REPSONDAGE (
     participation VARCHAR(255),
     matiere VARCHAR(255),
     commentaire VARCHAR(255),
-    idEleve INT NOT NULL AUTO_INCREMENT,
+    numEtu INT NOT NULL AUTO_INCREMENT,
     idSondage INT NOT NULL AUTO_INCREMENT,
-    Primary Key(idEleve,idSondage),
-    FOREIGN KEY(idEleve) REFERENCES ELEVE(idEleve),
+    Primary Key(numEtu,idSondage),
+    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu),
     FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
 
 CREATE TABLE PARTICIPE (
     commentaire VARCHAR(255),
-    idEleve INT NOT NULL AUTO_INCREMENT,
+    numEtu INT NOT NULL AUTO_INCREMENT,
     idOral INT NOT NULL AUTO_INCREMENT,
-    Primary Key(idEleve,idOral),
-    FOREIGN KEY (idEleve) REFERENCES ELEVE(idEleve),
+    Primary Key(numEtu,idOral),
+    FOREIGN KEY (numEtu) REFERENCES ELEVE(numEtu),
     FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
+
+create or replace Trigger 
