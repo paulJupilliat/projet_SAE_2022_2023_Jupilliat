@@ -70,6 +70,7 @@ CREATE TABLE REPSONDAGE (
     participation VARCHAR(255),
     matiere VARCHAR(255),
     commentaire VARCHAR(255),
+
     idEleve INT,
     idSondage INT,
     idOral INT,
