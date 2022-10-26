@@ -1,3 +1,4 @@
+DROP TABLE EST_DISPONIBLE;
 DROP TABLE SOUTENIR;
 DROP TABLE PARTICIPE;
 DROP TABLE REPSONDAGE;
@@ -96,6 +97,14 @@ CREATE TABLE SOUTENIR(
     FOREIGN KEY (idProf) REFERENCES PROF(idProf)
 );
 
+Create TABLE EST_DISPONIBLE(
+    idProf int(10),
+    idOral int(10),
+    Primary Key(idProf,idOral),
+    FOREIGN KEY (idProf) REFERENCES PROF(idProf),
+    FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
+);
+
 
 
 
@@ -129,35 +138,69 @@ CREATE TABLE SOUTENIR(
 
 -- un profs a un oral doit doit etre en capacite de faire la matiere de l'oral
 
+-- delimiter |
+-- create or replace trigger prof_capable_oraux before insert on ORAUX for each row
+-- BEGIN 
+--     declare matiere_possible VARCHAR(25) default '';
+--     declare matiere_oral VARCHAR(25) default '';
+--     declare messa VARCHAR(100) default '';
+--     declare fini boolean DEFAULT false;
+--     declare nomProfActu VARCHAR(100);
+--     declare peut_faire boolean default false;
+--     declare matiere_prof int;
+--     declare lesMatieres cursor for
+--         select idMatiere from SOUTENIR where new.idProf = SOUTENIR.idProf;
+--     declare continue handler for not found set fini = true;
+--     open lesMatieres;
+
+--     while not fini do
+--         fetch lesMatieres into matiere_prof;
+--         if not fini then
+--             if matiere_prof = new.idMatiere then
+--                 set peut_faire = true;
+--             end if;
+--         end if;
+--     end while;
+--     close lesMatieres;
+--     select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
+--     if not peut_faire then 
+--         set messa = concat("le professeur ",nomProfActu,"  n'est pas en capacité d'assurer ce cours ");
+--         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+--     end if ;
+-- end |
+-- delimiter ;
+
+--trigger pour que le prof soit disponible pour l'oral
+
+
+    -- si le prof ajouter dans l'oral n'est pas dans la table disponible avec le new.idOral alors je met le message d'erreur
 delimiter |
 create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
-BEGIN 
-    declare matiere_possible VARCHAR(25) default '';
-    declare matiere_oral VARCHAR(25) default '';
+BEGIN
     declare messa VARCHAR(100) default '';
-    declare fini boolean DEFAULT false;
-    declare nomProfActu VARCHAR(100);
-    declare peut_faire boolean default false;
-    declare matiere_prof int;
-    declare lesMatieres cursor for
-        select idMatiere from SOUTENIR where new.idProf = SOUTENIR.idProf;
-    declare continue handler for not found set fini = true;
-    open lesMatieres;
-
-    while not fini do
-        fetch lesMatieres into matiere_prof;
-        if not fini then
-            if matiere_prof = new.idMatiere then
-                set peut_faire = true;
-            end if;
+    declare prof int;
+    if new.idProf is not null then 
+        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
+        if prof is null then
+            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
+            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
         end if;
-    end while;
-    close lesMatieres;
-    select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
-    if not peut_faire then 
-        set messa = concat("le professeur ",nomProfActu,"  n'est pas en capacité d'assurer ce cours ");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+    end if ;
+end |
+
+create or replace trigger prof_dispo_oraux before update on ORAUX for each row
+BEGIN
+    declare messa VARCHAR(100) default '';
+    declare prof int;
+    if new.idProf is not null then 
+        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
+        if prof is null then
+            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
+            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+        end if;
     end if ;
 end |
 delimiter ;
+
+
 
