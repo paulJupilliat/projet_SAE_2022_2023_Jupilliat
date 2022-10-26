@@ -20,7 +20,11 @@ CREATE TABLE QCM (
     idQCM INT,
     nomQCM VARCHAR(255),
     urlQCM VARCHAR(255),
-    Primary Key(idQCM)
+    idMatiere INT,
+    dateDebut DATE,
+    dateFin DATE,
+    Primary Key(idQCM),
+    Foreign Key (idMatiere) References MATIERE(idMatiere)
 );
 
 CREATE TABLE ELEVE  (
@@ -52,6 +56,7 @@ CREATE TABLE ORAUX (
     nbEleveMax INT(10),
     idMatiere int(10),
     idProf int(10),
+    dateOral DATE,
     Primary Key(idOral),
     FOREIGN KEY (idMatiere) REFERENCES MATIERE(idMatiere),
     FOREIGN KEY (idProf) REFERENCES PROF(idProf)
@@ -70,7 +75,7 @@ CREATE TABLE REPSONDAGE (
     participation VARCHAR(255),
     matiere VARCHAR(255),
     commentaire VARCHAR(255),
-
+    dateSondage DATE,
     idEleve INT,
     idSondage INT,
     idOral INT,
@@ -127,7 +132,7 @@ CREATE TABLE SOUTENIR(
 
 
 
--- un profs a un oral doit doit etre en capacite de faire la matiere de l'oral
+-- un profs a un oral doit etre en capacite de faire la matiere de l'oral
 
 delimiter |
 create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
@@ -161,3 +166,68 @@ BEGIN
 end |
 delimiter ;
 
+-- trigger pour verifier que le prof n'a pas deja un oral a cette date
+
+delimiter |
+create or replace trigger prof_dispo_date before insert on ORAUX for each row
+BEGIN 
+    declare messa VARCHAR(100) default '';
+    declare fini boolean DEFAULT false;
+    declare nomProfActu VARCHAR(100);
+    declare peut_faire boolean default false;
+    declare date_prof date;
+    declare lesDates cursor for
+        select dateOral from ORAUX where new.idProf = ORAUX.idProf;
+    declare continue handler for not found set fini = true;
+    open lesDates;
+
+    while not fini do
+        fetch lesDates into date_prof;
+        if not fini then
+            if date_prof = new.dateOral then
+                set peut_faire = true;
+            end if;
+        end if;
+    end while;
+    close lesDates;
+    select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
+    if peut_faire then 
+        set messa = concat("le professeur ",nomProfActu,"  a deja un oral a cette date ");
+        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+    end if ;
+end |
+delimiter ;
+
+-- trigger pour verifier qu'un commentaire doit etre redige par le prof qui a cree l'oral
+
+delimiter |
+create or replace trigger prof_commentaire before insert on REPSONDAGE for each row
+BEGIN 
+    declare messa VARCHAR(100) default '';
+    declare fini boolean DEFAULT false;
+    declare nomProfActu VARCHAR(100);
+    declare peut_faire boolean default false;
+    declare idProfOral int;
+    declare lesProf cursor for
+        select idProf from ORAUX where new.idOral = ORAUX.idOral;
+    declare continue handler for not found set fini = true;
+    open lesProf;
+
+    while not fini do
+        fetch lesProf into idProfOral;
+        if not fini then
+            if idProfOral = new.idEleve then
+                set peut_faire = true;
+            end if;
+        end if;
+    end while;
+    close lesProf;
+    select nomProf into nomProfActu from PROF where PROF.idProf = new.idEleve;
+    if not peut_faire then 
+        set messa = concat("le professeur ",nomProfActu,"  n'a pas cree cet oral ");
+        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+    end if ;
+end |
+delimiter ;
+-- trigger pour que le prof faisant l'oral soit dispo
+-- trigger
