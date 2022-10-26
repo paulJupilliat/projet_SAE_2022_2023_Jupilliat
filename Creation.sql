@@ -140,7 +140,6 @@ Create TABLE EST_DISPONIBLE(
 
 
 
-
 -- un profs a un oral doit etre en capacite de faire la matiere de l'oral
 
 -- delimiter |

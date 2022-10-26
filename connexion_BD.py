@@ -7,6 +7,7 @@ import getpass
 
 from Oraux import Oraux
 from Prof import Prof
+from Eleve import Eleve
 
 def ajouter_prof_pour_un_oral(connexion, prof,oral):
     """
@@ -19,6 +20,33 @@ def ajouter_prof_pour_un_oral(connexion, prof,oral):
     """
     resultat = connexion.execute("update ORAUX set idProf = %s where idOral = %s", (prof.get_idProf(),oral.get_idOral()))
     
+def ajouter_elev_pour_un_oral(connexion, eleve,oral):
+    """
+    ajoute un élève pour un oral, les contraintes sont vérifiées par la BD
+    paramètres:
+       connexion (connexion) la connexion à la base de données
+       eleve     (str) le nom de l'élève
+       oral      (str) le nom de l'oral
+    résultat: aucun
+    """
+    resultat = connexion.execute("update ORAUX set idEleve = %s where idOral = %s", (eleve.get_numEtu(),oral.get_idOral()))
+
+def ajouter_commentaire(connexion,eleve, commentaire, oral):
+    """
+    ajoute un commentaire pour un oral, les contraintes sont vérifiées par la BD
+    paramètres:
+       connexion (connexion) la connexion à la base de données
+       eleve     (str) le nom de l'élève
+       commentaire (str) le commentaire
+       oral      (str) le nom de l'oral
+    résultat: aucun
+    """
+    # je verifie que l'élève est bien inscrit à l'oral
+    res = connexion.execute("select idEleve from ORAUX where idOral = %s", (oral.get_idOral(),))
+    if eleve.get_numEtu() not in res :
+        raise ValueError("l'élève n'est pas inscrit à l'oral")
+    else:
+        resultat = connexion.execute("update PARTICIPE set commentaire = %s where idOral = %s and idEleve = %s", (commentaire,oral.get_idOral(),eleve.get_numEtu()))
 
 
 def ouvrir_connexion(user,passwd,host,database):
