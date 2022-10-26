@@ -1,7 +1,7 @@
+DROP TABLE SOUTENIR;
 DROP TABLE PARTICIPE;
 DROP TABLE REPSONDAGE;
 DROP TABLE RESULTAT;
-DROP TABLE DATE;
 DROP TABLE ORAUX;
 DROP TABLE MATIERE;
 DROP TABLE PROF;
@@ -11,59 +11,58 @@ DROP TABLE SONDAGE;
 
 
 CREATE TABLE SONDAGE (
-    idSondage INT NOT NULL AUTO_INCREMENT,
-    urlSondage VARCHAR(255) NOT NULL,
+    idSondage INT,
+    urlSondage VARCHAR(255),
     Primary Key (idSondage)
 );
 
 CREATE TABLE QCM (
-    idQCM INT NOT NULL AUTO_INCREMENT,
+    idQCM INT,
     nomQCM VARCHAR(255),
     urlQCM VARCHAR(255),
     Primary Key(idQCM)
-)
+);
 
 CREATE TABLE ELEVE  (
-    numEtu INT NOT NULL AUTO_INCREMENT,
-    nomEleve VARCHAR(255) NOT NULL,
-    prenomEleve VARCHAR(255) NOT NULL,
-    groupeS1 INT(10) NOT NULL,
-    groupeS2 INT(10) NOT NULL,
-    Primary Key (idEleve)
+    numEtu INT(10),
+    nomEleve VARCHAR(255),
+    prenomEleve VARCHAR(255),
+    groupeS1 INT(10),
+    groupeS2 INT(10),
+    Primary Key (numEtu)
 );
 
 CREATE TABLE PROF (
-    idProf INT NOT NULL AUTO_INCREMENT,
-    nomProf VARCHAR(255) NOT NULL,
-    prenomProf VARCHAR(255) NOT NULL,
-    emailProf VARCHAR(255) NOT NULL,
+    idProf INT,
+    nomProf VARCHAR(255),
+    prenomProf VARCHAR(255),
+    emailProf VARCHAR(255),
     Primary Key (idProf)
 );
 
 CREATE TABLE MATIERE (
-    idMatiere INT NOT NULL AUTO_INCREMENT,
-    nomMatiere VARCHAR(255) NOT NULL,
+    idMatiere INT,
+    nomMatiere VARCHAR(255),
     Primary Key (idMatiere)
 );
 
 CREATE TABLE ORAUX (
-    idOral INT NOT NULL AUTO_INCREMENT,
-    nomOral VARCHAR(255) NOT NULL,
-    nbEleveMax INT(10) NOT NULL,
-    Primary Key(idOral)
-);
-
-CREATE TABLE DATE (
-    date DATE,
-    Primary Key(date)
+    idOral INT,
+    nomOral VARCHAR(255),
+    nbEleveMax INT(10),
+    idMatiere int(10),
+    idProf int(10),
+    Primary Key(idOral),
+    FOREIGN KEY (idMatiere) REFERENCES MATIERE(idMatiere),
+    FOREIGN KEY (idProf) REFERENCES PROF(idProf)
 );
 
 CREATE TABLE RESULTAT (
-    note deicmal(6,2),
-    idQCM INT NOT NULL AUTO_INCREMENT,
-    idEleve INT NOT NULL AUTO_INCREMENT,
+    note DECIMAL (6,2),
+    idQCM INT,
+    idEleve INT,
     Primary Key(idEleve,idQCM),
-    FOREIGN KEY(idEleve) REFERENCES ELEVE(idEleve),
+    FOREIGN KEY(idEleve) REFERENCES ELEVE(numEtu),
     FOREIGN KEY(idQCM) REFERENCES QCM(idQCM)
 );
 
@@ -71,18 +70,76 @@ CREATE TABLE REPSONDAGE (
     participation VARCHAR(255),
     matiere VARCHAR(255),
     commentaire VARCHAR(255),
-    idEleve INT NOT NULL AUTO_INCREMENT,
-    idSondage INT NOT NULL AUTO_INCREMENT,
+    idEleve INT,
+    idSondage INT,
+    idOral INT,
     Primary Key(idEleve,idSondage),
-    FOREIGN KEY(idEleve) REFERENCES ELEVE(idEleve),
+    FOREIGN KEY(idEleve) REFERENCES ELEVE(numEtu),
     FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
 
 CREATE TABLE PARTICIPE (
     commentaire VARCHAR(255),
-    idEleve INT NOT NULL AUTO_INCREMENT,
-    idOral INT NOT NULL AUTO_INCREMENT,
+    idEleve INT,
+    idOral INT,
     Primary Key(idEleve,idOral),
-    FOREIGN KEY (idEleve) REFERENCES ELEVE(idEleve),
+    FOREIGN KEY (idEleve) REFERENCES ELEVE(numEtu),
     FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
+
+CREATE TABLE SOUTENIR(
+    idProf int(10),
+    idMatiere int(10),
+    Primary Key(idProf,idMatiere),
+    FOREIGN KEY (idMatiere) REFERENCES MATIERE(idMatiere),
+    FOREIGN KEY (idProf) REFERENCES PROF(idProf)
+);
+
+
+
+
+
+delimiter |
+
+create or replace trigger max_etu_oraux before insert on PARTICIPE for each row
+BEGIN 
+    declare mes VARCHAR(100) default '';
+    declare nombreEle int; 
+    declare eleMax int;
+    select nbEleveMax into eleMax from ORAUX where ORAUX.idOral = new.idOral;
+    select count(idEleve) into nombreEle from PARTICIPE where PARTICIPE.idOral = new.idOral; 
+    if nombreEle+1 > eleMax then 
+        set mes = concat("l'oral ne peut pas etre créé car il comporte plus que ", eleMax ," étudiants");
+        signal SQLSTATE '45000' set MESSAGE_TEXT = mes;
+    end if ; 
+end |
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+-- un profs a un oral doit doit etre en capacite de faire la matiere de l'oral
+
+-- delimiter |
+-- create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
+-- BEGIN 
+--     declare matiere_possible VARCHAR(25) default '';
+--     declare matiere_oral VARCHAR(25) default '';
+--     declare messa VARCHAR(100) default '';
+--     declare professeur int(10);
+--     select idMatiere, idProf into matiere_oral, professeur from ORAUX where new.idMatiere in (select idMatiere from SOUTENIR where SOUTENIR.idProf = ORAUX.idProf) and ORAUX.idMatiere = new.idMatiere;
+--     if idMatiere is null then 
+--         set messa = concat("le professeur : " + professeur + " n'est pas en capacité d'assurer ce cours ");
+--         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+--     end if ;
+-- end |
+-- delimiter ;
+
