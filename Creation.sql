@@ -66,9 +66,9 @@ CREATE TABLE ORAUX (
 CREATE TABLE RESULTAT (
     note DECIMAL (6,2),
     idQCM INT,
-    idEleve INT,
-    Primary Key(idEleve,idQCM),
-    FOREIGN KEY(idEleve) REFERENCES ELEVE(numEtu),
+    numEtu INT,
+    Primary Key(numEtu,idQCM),
+    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu),
     FOREIGN KEY(idQCM) REFERENCES QCM(idQCM)
 );
 
@@ -77,20 +77,20 @@ CREATE TABLE REPSONDAGE (
     matiere VARCHAR(255),
     commentaire VARCHAR(255),
     dateSondage DATE,
-    idEleve INT,
+    numEtu INT,
     idSondage INT,
     idOral INT,
-    Primary Key(idEleve,idSondage),
-    FOREIGN KEY(idEleve) REFERENCES ELEVE(numEtu),
+    Primary Key(numEtu,idSondage),
+    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu),
     FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
 
 CREATE TABLE PARTICIPE (
     commentaire VARCHAR(255),
-    idEleve INT,
+    numEtu INT,
     idOral INT,
-    Primary Key(idEleve,idOral),
-    FOREIGN KEY (idEleve) REFERENCES ELEVE(numEtu),
+    Primary Key(numEtu,idOral),
+    FOREIGN KEY (numEtu) REFERENCES ELEVE(numEtu),
     FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
 
@@ -122,7 +122,7 @@ Create TABLE EST_DISPONIBLE(
 --     declare nombreEle int; 
 --     declare eleMax int;
 --     select nbEleveMax into eleMax from ORAUX where ORAUX.idOral = new.idOral;
---     select count(idEleve) into nombreEle from PARTICIPE where PARTICIPE.idOral = new.idOral; 
+--     select count(numEtu) into nombreEle from PARTICIPE where PARTICIPE.idOral = new.idOral; 
 --     if nombreEle+1 > eleMax then 
 --         set mes = concat("l'oral ",new.idOral," ne peut pas etre créé car il comporte plus que ", eleMax ," étudiants");
 --         signal SQLSTATE '45000' set MESSAGE_TEXT = mes;
@@ -237,6 +237,32 @@ Create TABLE EST_DISPONIBLE(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- A VERIFIER 
+
+
+
 -- trigger pour verifier que le prof n'a pas deja un oral a cette date
 
 -- delimiter |
@@ -287,13 +313,13 @@ Create TABLE EST_DISPONIBLE(
 --     while not fini do
 --         fetch lesProf into idProfOral;
 --         if not fini then
---             if idProfOral = new.idEleve then
+--             if idProfOral = new.numEtu then
 --                 set peut_faire = true;
 --             end if;
 --         end if;
 --     end while;
 --     close lesProf;
---     select nomProf into nomProfActu from PROF where PROF.idProf = new.idEleve;
+--     select nomProf into nomProfActu from PROF where PROF.idProf = new.numEtu;
 --     if not peut_faire then 
 --         set messa = concat("le professeur ",nomProfActu,"  n'a pas cree cet oral ");
 --         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
