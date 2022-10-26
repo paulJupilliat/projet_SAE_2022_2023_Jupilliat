@@ -4,6 +4,23 @@ from more_itertools import first
 import sqlalchemy
 import getpass
 
+
+from Oraux import Oraux
+from Prof import Prof
+
+def ajouter_prof_pour_un_oral(connexion, prof,oral):
+    """
+    ajoute un professeur pour un oral, les contraintes sont vérifiées par la BD
+    paramètres:
+       connexion (connexion) la connexion à la base de données
+       prof      (str) le nom du professeur
+       oral      (str) le nom de l'oral
+    résultat: aucun
+    """
+    resultat = connexion.execute("update ORAUX set idProf = %s where idOral = %s", (prof.get_idProf(),oral.get_idOral()))
+    
+
+
 def ouvrir_connexion(user,passwd,host,database):
     """
     ouverture d'une connexion MySQL
@@ -27,11 +44,14 @@ def ouvrir_connexion(user,passwd,host,database):
 
 
 if __name__ == "__main__":
-    login="lemort"
-    passwd="mathys"
+    login="jupilliat"
+    passwd="jupilliat"
     serveur="servinfo-mariadb"
     bd="DB"+login
 
     cnx = ouvrir_connexion(login,passwd,serveur,bd)
     #appel des procedures
+    print(ajouter_prof_pour_un_oral(cnx, Prof(10, "arzouz","julien","juju@gmail.com" ), Oraux(2,"oral2",4)))
+
+
     
