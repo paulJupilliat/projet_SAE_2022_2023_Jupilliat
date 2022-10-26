@@ -15,17 +15,29 @@ insert into MATIERE values (150, "python");
 -- 
 
 
+
 insert into SOUTENIR values (10,100);
 --trigger2
 insert into SOUTENIR values (11,150);
 insert into SOUTENIR values (11,100);
 --
 
-insert into ORAUX values (2,"oral2",4,100,11);
-insert into ORAUX values(1,"oral1",2,100,10);
+
+
+insert into ORAUX values (2,"oral2",4,100,NULL);
+insert into ORAUX values(1,"oral1",2,100,NULL);
 --trigger2
-insert into ORAUX values(3,"oral3",5,150,10);
+insert into ORAUX values(3,"oral3",5,150,NULL);
 -- sencé retourner le pb car le prof 10 n'est pas capable de faire le cours 150
+
+-- trigger3
+insert into ORAUX values(5,"ORAL5",3,100,NULL);
+-- FAIRE DES UPDATES SUR LES ORAUX SQLACHEMY POUR AJOUTER DES PROFESSEURS AUX ORAUX
+
+insert into EST_DISPONIBLE values(10,1);
+insert into EST_DISPONIBLE values(10,3);
+insert into EST_DISPONIBLE values(11,2);
+
 
 insert into RESULTAT VALUES (10.5,11,1);
 
