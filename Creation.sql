@@ -99,21 +99,21 @@ CREATE TABLE SOUTENIR(
 
 
 
-delimiter |
+-- delimiter |
 
-create or replace trigger max_etu_oraux before insert on PARTICIPE for each row
-BEGIN 
-    declare mes VARCHAR(100) default '';
-    declare nombreEle int; 
-    declare eleMax int;
-    select nbEleveMax into eleMax from ORAUX where ORAUX.idOral = new.idOral;
-    select count(idEleve) into nombreEle from PARTICIPE where PARTICIPE.idOral = new.idOral; 
-    if nombreEle+1 > eleMax then 
-        set mes = concat("l'oral ne peut pas etre créé car il comporte plus que ", eleMax ," étudiants");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = mes;
-    end if ; 
-end |
-delimiter ;
+-- create or replace trigger max_etu_oraux before insert on PARTICIPE for each row
+-- BEGIN 
+--     declare mes VARCHAR(100) default '';
+--     declare nombreEle int; 
+--     declare eleMax int;
+--     select nbEleveMax into eleMax from ORAUX where ORAUX.idOral = new.idOral;
+--     select count(idEleve) into nombreEle from PARTICIPE where PARTICIPE.idOral = new.idOral; 
+--     if nombreEle+1 > eleMax then 
+--         set mes = concat("l'oral ",new.idOral," ne peut pas etre créé car il comporte plus que ", eleMax ," étudiants");
+--         signal SQLSTATE '45000' set MESSAGE_TEXT = mes;
+--     end if ;
+-- end |
+-- delimiter ;
 
 
 
@@ -128,18 +128,35 @@ delimiter ;
 
 -- un profs a un oral doit doit etre en capacite de faire la matiere de l'oral
 
--- delimiter |
--- create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
--- BEGIN 
---     declare matiere_possible VARCHAR(25) default '';
---     declare matiere_oral VARCHAR(25) default '';
---     declare messa VARCHAR(100) default '';
---     declare professeur int(10);
---     select idMatiere, idProf into matiere_oral, professeur from ORAUX where new.idMatiere in (select idMatiere from SOUTENIR where SOUTENIR.idProf = ORAUX.idProf) and ORAUX.idMatiere = new.idMatiere;
---     if idMatiere is null then 
---         set messa = concat("le professeur : " + professeur + " n'est pas en capacité d'assurer ce cours ");
---         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
---     end if ;
--- end |
--- delimiter ;
+delimiter |
+create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
+BEGIN 
+    declare matiere_possible VARCHAR(25) default '';
+    declare matiere_oral VARCHAR(25) default '';
+    declare messa VARCHAR(100) default '';
+    declare fini boolean DEFAULT false;
+    declare nomProfActu VARCHAR(100);
+    declare peut_faire boolean default false;
+    declare matiere_prof int;
+    declare lesMatieres cursor for
+        select idMatiere from SOUTENIR where new.idProf = SOUTENIR.idProf;
+    declare continue handler for not found set fini = true;
+    open lesMatieres;
+
+    while not fini do
+        fetch lesMatieres into matiere_prof;
+        if not fini then
+            if matiere_prof = new.idMatiere then
+                set peut_faire = true;
+            end if;
+        end if;
+    end while;
+    close lesMatieres;
+    select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
+    if not peut_faire then 
+        set messa = concat("le professeur ",nomProfActu,"  n'est pas en capacité d'assurer ce cours ");
+        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+    end if ;
+end |
+delimiter ;
 
