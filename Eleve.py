@@ -1,5 +1,6 @@
 class Eleve:
-    def __init__(self, nom, prenom, groupeS1,groupeS2):
+    def __init__(self, numEtu, nom, prenom, groupeS1,groupeS2):
+        self.numEtu = numEtu
         self.nom = nom
         self.prenom = prenom
         self.groupeS1 = groupeS1
