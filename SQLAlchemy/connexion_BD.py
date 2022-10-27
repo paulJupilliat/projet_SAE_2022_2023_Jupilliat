@@ -72,8 +72,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 
 if __name__ == "__main__":
-    login="jupilliat"
-    passwd="jupilliat"
+    login="lemort"
+    passwd="lemort"
     serveur="servinfo-mariadb"
     bd="DB"+login
 
