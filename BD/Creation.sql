@@ -4,10 +4,10 @@ DROP TABLE PARTICIPE;
 DROP TABLE REPSONDAGE;
 DROP TABLE RESULTAT;
 DROP TABLE ORAUX;
-DROP TABLE MATIERE;
 DROP TABLE PROF;
 DROP TABLE ELEVE;
 DROP TABLE QCM;
+DROP TABLE MATIERE;
 DROP TABLE SONDAGE;
 
 
@@ -17,6 +17,12 @@ CREATE TABLE SONDAGE (
     Primary Key (idSondage)
 );
 
+CREATE TABLE MATIERE (
+    idMatiere INT,
+    nomMatiere VARCHAR(255),
+    Primary Key (idMatiere)
+);
+
 CREATE TABLE QCM (
     idQCM INT,
     nomQCM VARCHAR(255),
@@ -24,7 +30,7 @@ CREATE TABLE QCM (
     idMatiere INT,
     dateDebut DATE,
     dateFin DATE,
-    Primary Key(idQCM),
+    Primary Key (idQCM),
     Foreign Key (idMatiere) References MATIERE(idMatiere)
 );
 
@@ -45,11 +51,6 @@ CREATE TABLE PROF (
     Primary Key (idProf)
 );
 
-CREATE TABLE MATIERE (
-    idMatiere INT,
-    nomMatiere VARCHAR(255),
-    Primary Key (idMatiere)
-);
 
 CREATE TABLE ORAUX (
     idOral INT,
@@ -58,7 +59,7 @@ CREATE TABLE ORAUX (
     idMatiere int(10),
     idProf int(10),
     dateOral DATE,
-    Primary Key(idOral),
+    Primary Key (idOral),
     FOREIGN KEY (idMatiere) REFERENCES MATIERE(idMatiere),
     FOREIGN KEY (idProf) REFERENCES PROF(idProf)
 );
@@ -67,9 +68,9 @@ CREATE TABLE RESULTAT (
     note DECIMAL (6,2),
     idQCM INT,
     numEtu INT,
-    Primary Key(numEtu,idQCM),
-    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu),
-    FOREIGN KEY(idQCM) REFERENCES QCM(idQCM)
+    Primary Key (numEtu,idQCM),
+    FOREIGN KEY (numEtu) REFERENCES ELEVE(numEtu),
+    FOREIGN KEY (idQCM) REFERENCES QCM(idQCM)
 );
 
 CREATE TABLE REPSONDAGE (
@@ -174,10 +175,10 @@ Create TABLE EST_DISPONIBLE(
 -- end |
 -- delimiter ;
 
---trigger pour que le prof soit disponible pour l'oral
+-- trigger pour que le prof soit disponible pour l'oral
 
 
-    -- si le prof ajouter dans l'oral n'est pas dans la table disponible avec le new.idOral alors je met le message d'erreur
+-- si le prof ajouter dans l'oral n'est pas dans la table disponible avec le new.idOral alors je met le message d'erreur
 -- delimiter |
 -- create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
 -- BEGIN
@@ -262,39 +263,20 @@ Create TABLE EST_DISPONIBLE(
 
 
 
--- trigger pour verifier que le prof n'a pas deja un oral a cette date
-
--- delimiter |
--- create or replace trigger prof_dispo_date before insert on ORAUX for each row
--- BEGIN 
---     declare messa VARCHAR(100) default '';
---     declare fini boolean DEFAULT false;
---     declare nomProfActu VARCHAR(100);
---     declare peut_faire boolean default false;
---     declare date_prof date;
---     declare lesDates cursor for
---         select dateOral from ORAUX where new.idProf = ORAUX.idProf;
---     declare continue handler for not found set fini = true;
---     open lesDates;
-
---     while not fini do
---         fetch lesDates into date_prof;
---         if not fini then
---             if date_prof = new.dateOral then
---                 set peut_faire = true;
---             end if;
---         end if;
---     end while;
---     close lesDates;
---     select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
---     if peut_faire then 
---         set messa = concat("le professeur ",nomProfActu,"  a deja un oral a cette date ");
---         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
---     end if ;
--- end |
--- delimiter ;
-
--- -- trigger pour verifier qu'un commentaire doit etre redige par le prof qui a cree l'oral
+-- fais un trigger pour que le prof ne puisse pas avoir plus de 1 oral par jour
+delimiter |
+create or replace trigger max_oraux_prof before insert on ORAUX for each row
+BEGIN 
+    declare mes VARCHAR(100) default '';
+    declare nombreOral int; 
+    select count(idOral) into nombreOral from ORAUX where ORAUX.idProf = new.idProf and ORAUX.dateOral = new.dateOral; 
+    if nombreOral > 1 then 
+        set mes = concat("le professeur ",new.idProf," ne peut pas etre créé car il comporte plus que 1 oral");
+        signal SQLSTATE '45000' set MESSAGE_TEXT = mes;
+    end if ;
+end |
+delimiter ;
+-- trigger pour verifier qu'un commentaire doit etre redige par le prof qui a cree l'oral
 
 -- delimiter |
 -- create or replace trigger prof_commentaire before insert on REPSONDAGE for each row
