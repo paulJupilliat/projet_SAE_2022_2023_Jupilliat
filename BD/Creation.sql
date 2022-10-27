@@ -140,7 +140,6 @@ Create TABLE EST_DISPONIBLE(
 
 
 
-
 -- un profs a un oral doit etre en capacite de faire la matiere de l'oral
 
 -- delimiter |
@@ -179,100 +178,152 @@ Create TABLE EST_DISPONIBLE(
 
 
     -- si le prof ajouter dans l'oral n'est pas dans la table disponible avec le new.idOral alors je met le message d'erreur
-delimiter |
-create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
-BEGIN
-    declare messa VARCHAR(100) default '';
-    declare prof int;
-    if new.idProf is not null then 
-        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
-        if prof is null then
-            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
-            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-        end if;
-    end if ;
-end |
+-- delimiter |
+-- create or replace trigger prof_dispo_oraux before insert on ORAUX for each row
+-- BEGIN
+--     declare messa VARCHAR(100) default '';
+--     declare prof int;
+--     if new.idProf is not null then 
+--         select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
+--         if prof is null then
+--             set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
+--             signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+--         end if;
+--     end if ;
+-- end |
 
-create or replace trigger prof_dispo_oraux before update on ORAUX for each row
-BEGIN
-    declare messa VARCHAR(100) default '';
-    declare prof int;
-    if new.idProf is not null then 
-        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
-        if prof is null then
-            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
-            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-        end if;
-    end if ;
-end |
-delimiter ;
+-- create or replace trigger prof_dispo_oraux before update on ORAUX for each row
+-- BEGIN
+--     declare messa VARCHAR(100) default '';
+--     declare prof int;
+--     if new.idProf is not null then 
+--         select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
+--         if prof is null then
+--             set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
+--             signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+--         end if;
+--     end if ;
+-- end |
+-- delimiter ;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- A VERIFIER 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- A VERIFIER 
 
 
 
 -- trigger pour verifier que le prof n'a pas deja un oral a cette date
 
-delimiter |
-create or replace trigger prof_dispo_date before insert on ORAUX for each row
-BEGIN 
-    declare messa VARCHAR(100) default '';
-    declare fini boolean DEFAULT false;
-    declare nomProfActu VARCHAR(100);
-    declare peut_faire boolean default false;
-    declare date_prof date;
-    declare lesDates cursor for
-        select dateOral from ORAUX where new.idProf = ORAUX.idProf;
-    declare continue handler for not found set fini = true;
-    open lesDates;
+-- delimiter |
+-- create or replace trigger prof_dispo_date before insert on ORAUX for each row
+-- BEGIN 
+--     declare messa VARCHAR(100) default '';
+--     declare fini boolean DEFAULT false;
+--     declare nomProfActu VARCHAR(100);
+--     declare peut_faire boolean default false;
+--     declare date_prof date;
+--     declare lesDates cursor for
+--         select dateOral from ORAUX where new.idProf = ORAUX.idProf;
+--     declare continue handler for not found set fini = true;
+--     open lesDates;
 
-    while not fini do
-        fetch lesDates into date_prof;
-        if not fini then
-            if date_prof = new.dateOral then
-                set peut_faire = true;
-            end if;
-        end if;
-    end while;
-    close lesDates;
-    select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
-    if peut_faire then 
-        set messa = concat("le professeur ",nomProfActu,"  a deja un oral a cette date ");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-    end if ;
-end |
-delimiter ;
+--     while not fini do
+--         fetch lesDates into date_prof;
+--         if not fini then
+--             if date_prof = new.dateOral then
+--                 set peut_faire = true;
+--             end if;
+--         end if;
+--     end while;
+--     close lesDates;
+--     select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
+--     if peut_faire then 
+--         set messa = concat("le professeur ",nomProfActu,"  a deja un oral a cette date ");
+--         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+--     end if ;
+-- end |
+-- delimiter ;
 
--- trigger pour verifier qu'un commentaire doit etre redige par le prof qui a cree l'oral
+-- -- trigger pour verifier qu'un commentaire doit etre redige par le prof qui a cree l'oral
 
-delimiter |
-create or replace trigger prof_commentaire before insert on REPSONDAGE for each row
-BEGIN 
-    declare messa VARCHAR(100) default '';
-    declare fini boolean DEFAULT false;
-    declare nomProfActu VARCHAR(100);
-    declare peut_faire boolean default false;
-    declare idProfOral int;
-    declare lesProf cursor for
-        select idProf from ORAUX where new.idOral = ORAUX.idOral;
-    declare continue handler for not found set fini = true;
-    open lesProf;
+-- delimiter |
+-- create or replace trigger prof_commentaire before insert on REPSONDAGE for each row
+-- BEGIN 
+--     declare messa VARCHAR(100) default '';
+--     declare fini boolean DEFAULT false;
+--     declare nomProfActu VARCHAR(100);
+--     declare peut_faire boolean default false;
+--     declare idProfOral int;
+--     declare lesProf cursor for
+--         select idProf from ORAUX where new.idOral = ORAUX.idOral;
+--     declare continue handler for not found set fini = true;
+--     open lesProf;
 
-    while not fini do
-        fetch lesProf into idProfOral;
-        if not fini then
-            if idProfOral = new.numEtu then
-                set peut_faire = true;
-            end if;
-        end if;
-    end while;
-    close lesProf;
-    select nomProf into nomProfActu from PROF where PROF.idProf = new.numEtu;
-    if not peut_faire then 
-        set messa = concat("le professeur ",nomProfActu,"  n'a pas cree cet oral ");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-    end if ;
-end |
-delimiter ;
+--     while not fini do
+--         fetch lesProf into idProfOral;
+--         if not fini then
+--             if idProfOral = new.numEtu then
+--                 set peut_faire = true;
+--             end if;
+--         end if;
+--     end while;
+--     close lesProf;
+--     select nomProf into nomProfActu from PROF where PROF.idProf = new.numEtu;
+--     if not peut_faire then 
+--         set messa = concat("le professeur ",nomProfActu,"  n'a pas cree cet oral ");
+--         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+--     end if ;
+-- end |
+-- delimiter ;
 -- trigger pour que le prof faisant l'oral soit dispo
 -- trigger
