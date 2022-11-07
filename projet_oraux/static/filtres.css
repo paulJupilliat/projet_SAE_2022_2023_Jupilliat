@@ -17,9 +17,13 @@
     max-height: 2em;
 }
 table{
-    height: 20;
+    max-height: 20em;
     overflow-y: scroll;
+    width: 70em;
+    border-spacing: 0;
+    display: block;
 }
+
 table,
 td,
 th {
@@ -29,6 +33,7 @@ th {
 td,th{
     padding: 0.5em;
     width: 10em;
+    text-align: center;    
 }
 
 thead,
@@ -36,10 +41,14 @@ tfoot{
     background-color: #333;
     color: #fff;
 }
-#colonnes{
+#colonnes,#moyennes{
     position: sticky;
     top: 0;
-    background-color: #fff;
+    background-color: #A0A0A0;
+    color: #860061;
 }
 
-
+tbody {
+  background-color: #d6d6d6;
+  white-space: normal;
+}
