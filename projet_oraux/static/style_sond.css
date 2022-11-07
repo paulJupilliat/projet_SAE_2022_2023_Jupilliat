@@ -48,3 +48,5 @@ aside{
     color: white;
 }
 
+input[type=checkbox]:checked + label {
+    display: none;}
