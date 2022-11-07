@@ -166,14 +166,7 @@ BEGIN
     end if ;
     if new.idProf is not null then 
         select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
-        if prof is null then
-            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
-            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-        end if;
-    end if ;
-    if new.idProf is not null then 
-        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
-        if prof is null then
+        if prof is not null then
             set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
             signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
         end if;
