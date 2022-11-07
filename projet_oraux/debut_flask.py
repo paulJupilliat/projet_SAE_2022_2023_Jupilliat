@@ -4,4 +4,4 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('navbar.html')
+    return render_template('Accueil.html')

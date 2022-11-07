@@ -1,0 +1,65 @@
+
+#recup_données_btn{
+    margin-left: 4%;
+    margin-right: 4%;
+    background-color: #860061;
+    color: white;
+    
+}
+main{
+    display: flex;
+}
+
+.res_qcm{
+    background-color: lightgray;
+    border-radius: 10px;
+    margin-top: 3%;
+    padding: 3%;
+    text-align: center;
+}
+
+.info-acc{
+    display: flex;
+}
+
+.res_sond{
+    background-color: lightgray;
+    border-radius: 10px;
+    margin-bottom: 3%;
+    padding: 3%;
+    text-align: center;
+}
+
+.dispo_en{
+    background-color: lightgray;
+    border-radius: 10px;
+    margin-top: 3%;
+    padding: 3%;
+    text-align: center;
+    
+}
+
+.sond_dispo{
+    display: inline;
+    background-color: lightgray;
+}
+.aside_tab{
+    display: flex;
+    flex-direction: column;
+    margin-left: 4%;
+    margin-right: 4%;
+    padding: 3%;
+    margin-bottom: 10px;
+}
+
+/* les tab */
+table,
+td {
+    border: 1px solid #333;
+}
+
+thead,
+tfoot {
+    background-color: #860061;
+    color: #fff;
+}
