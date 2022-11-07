@@ -1,3 +1,4 @@
+/* pour le tableau */
 table,
 td {
     border: 1px solid #333;
@@ -8,3 +9,42 @@ tfoot {
     background-color: #333;
     color: #fff;
 }
+table{
+    margin: 3%;
+}
+
+/* ---BODY------------------ */
+main{
+    display: flex;
+}
+
+aside{
+    margin-right: 10%;
+}
+#encadrer_table{
+    background-color: lightgrey;
+    border-radius: 10px;
+}
+/* ----------------------- */
+#aside_filtres , #aside_grp {
+    display: flex;
+    flex-direction: row;
+    margin:auto;
+}
+#grps_filtres li {
+    list-style-type: none;
+    font-weight: bold;
+}
+#grps_filtres {
+    align-items: left;
+}
+#dep{
+    margin-top: 1em;
+    max-height: 2em;
+}
+
+#titre_tableau_sondage{
+    background-color: #860061;
+    color: white;
+}
+

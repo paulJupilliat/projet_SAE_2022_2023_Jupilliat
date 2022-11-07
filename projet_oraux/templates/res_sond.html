@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script src="../JS/res_sond.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,50 +10,137 @@
 </head>
 <body>
     <!-- TODO: menu nav bar paul -->
-    <table>
-        <thead>
-            <tr>
-                <th colspan="5">The table header</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>Etudiant</th>
-                <th>Groupe</th>
-                <th>Soutien ?</th>
-                <th>Matiere</th>
-                <th>Commentaire</th>
-            </tr>
+    <main>
+        <aside>
+            <div id="aside_filtres">
+                <h2>Filtres</h2>
+                <img src="../img/deplie.png" alt="deplie" id="dep"/>
+            </div>
+            <select name="semaines" id="selec-sem">
+                <option value="">Semaine 43</option>
+                <option value="">Semaine 44</option>
+                <option value="">Semaine 45</option>
+                <option value="">Semaine 46</option>
+                <option value="">Semaine 47</option>
+            </select>
+            <div id="aside_grp">
+                <h3>Groupes</h3>
+                <img src="../img/deplie.png" alt="deplie" id="dep"/>
+            </div>
+            <ul id="grps_filtres">
+                <li>
+                    <input type="checkbox" name="11A" id="11A">
+                    <label for="11A">11A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="11B" id="11B">
+                    <label for="11B">11B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12A" id="12A">
+                    <label for="12A">12A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12B" id="12B">
+                    <label for="12B">12B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13A" id="13A">
+                    <label for="13A">13A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13B" id="13B">
+                    <label for="13B">13B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14A" id="14A">
+                    <label for="14A">14A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14B" id="14B">
+                    <label for="14B">14B</label>
+                </li>
+            </ul>
+        </aside>
 
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>OUI</td>
-                <td>Web</td>
-                <td>NULL</td>
-                
-            </tr>
 
 
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>OUI</td>
-                <td>Web</td>
-                <td>je regarde si le commentaire est enorme sducfbsiefuqsifhcsoefhcsdihkvsofhicowdhifoseihfosdcfsoehnc</td>
-                
-            </tr>
 
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>OUI</td>
-                <td>Web</td>
-                <td>NULL</td>
-                
-            </tr>
-        </tbody>
-    </table>
-    
+
+
+        <div id="encadrer_table">
+            <table>
+                <thead>
+                    <tr>
+                        <th id="titre_tableau_sondage" colspan="5"><H2>Sondage</H2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th> <input type="checkbox" name="etus" id="etu" class="etu" onclick="cache_decache_colonne()"> <label for="etu"> Etudiant</label></th>
+                        <th><input type="checkbox" name="grp" id="grp" class="grp"> <label for="grp"> Groupe</label></th>
+                        <th><input type="checkbox" name="soutien" id="soutien" class="soutien"> <label for="soutien"> Soutien?</label></th>
+                        <th><input type="checkbox" name="mat" id="mat" class="mat"> <label for="mat"> Matiere</label></th>
+                        <th><input type="checkbox" name="com" id="comm" class="comm"> <label for="comm"> Commentaire</label></th>
+                    </tr>
+
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">NULL</td>
+                        
+                    </tr>
+
+
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
+                    </tr>
+
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">NULL</td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
+                    </tr>
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
+                    </tr>
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
+                    </tr>
+                    <tr>
+                        <td class="etu">Paul</td>
+                        <td class="grp">11A</td>
+                        <td class="soutien">OUI</td>
+                        <td class="mat">Web</td>
+                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </body>
 </html>
