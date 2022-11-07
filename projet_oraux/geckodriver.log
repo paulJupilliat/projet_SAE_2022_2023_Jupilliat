@@ -1,0 +1,20 @@
+1666793122499	geckodriver	INFO	Listening on 127.0.0.1:43479
+1666793122504	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--remote-debugging-port" "41383" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilemvFUZI"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1666793123447	Marionette	INFO	Marionette enabled
+1666793123450	Marionette	INFO	Listening on port 38343
+Read port: 38343
+WebDriver BiDi listening on ws://127.0.0.1:41383
+1666793123548	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilemvFUZI/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:41383/devtools/browser/41edcd8c-e3f5-4b77-a6f8-301ffc9d2b06
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://auth.univ-orleans.fr."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://auth.univ-orleans.fr."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://celene.univ-orleans.fr."
+JavaScript error: https://celene.univ-orleans.fr/mod/quiz/report.php?id=435096&mode=overview, line 1548: TypeError: M.form.initFormDependencies is not a function
+1666793205782	Marionette	INFO	Stopped listening on port 38343
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+Sandbox: Unexpected EOF, op 0 flags 00 path /proc/cpuinfo
