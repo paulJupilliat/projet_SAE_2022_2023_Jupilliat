@@ -1,7 +1,5 @@
 body{
-    background-color: #860061;
     display: flex;
-    align-items: center;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -12,23 +10,4 @@ main{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    background-color: antiquewhite;
-}
-
-h1{
-    flex-basis: 95%;
-    flex-grow: 1;
-    text-align: center;
-}
-a{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-basis: 100%;
-}
-button{
-    margin-left: auto;
-    margin-right: auto;
-    max-height: 10em;
-    max-width: auto;
 }
