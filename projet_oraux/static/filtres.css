@@ -17,7 +17,14 @@
     max-height: 2em;
 }
 
-
+button{
+  border: none;
+  background-color: #fff;
+}
+button img{
+  width: 1.5em;
+  height: 1.5em;
+}
 #Dispo th{
   border-left: 1px solid black;
   border-right: 1px solid black;
@@ -40,7 +47,7 @@ table {
   overflow-y: scroll;
   display: block;
   border-spacing: 0;
-  max-height: 20em;
+  max-height: 40em;
 }
 
 
@@ -81,7 +88,6 @@ tfoot{
   margin-right: 0%;
   padding-right: 0%;
 }
-/* met toutes les div de la classe matières dans une ligne */
 #matieres_gauche > div {
   margin-left: 0%;
   padding-left: 0%;
