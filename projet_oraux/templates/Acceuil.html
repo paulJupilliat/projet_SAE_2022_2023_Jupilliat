@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="../JS/navbar.js"></script>
     <link rel="stylesheet" href="../static/nav.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,9 +13,10 @@
     <nav class="navbar">
         
         <div class="navbar__container ">
-            
-            
 
+            
+            <a href="" class="burger" onclick="changeImage()"><img id="menu" src="../img/croix.png" alt="" height="60em"></a>
+            
             <!-- la toggle du mode telephone -->
             <div class="navbar__toggle" id="mobile-menu">
                 <span class="bar"></span>
@@ -26,11 +28,11 @@
             </div>
             
             
-            <ul class="navbar__menu">
+            <ul class="navbar__menu" id="navbar_menu">
 
-                <li class="home">
-                    <a href="/" id="navbar_home"> 
-                        <img src="../img/ret_accueil.png" alt="" height="60em">
+                <li class="navbar__item">
+                    <a href="/" > 
+                        <img id="maison" src="../img/acuueil_violet_1.png" alt="" height="60em">
                     </a>
 
                 </li>
@@ -39,7 +41,7 @@
                 </li>
 
                 <li class="navbar__item">
-                    <a href="tech.html" class="navbar__links">Sondages</a>
+                    <a href="/" class="navbar__links">Sondages</a>
                 </li>
 
                 <li class="navbar__item">
@@ -59,8 +61,14 @@
                 </li>
 
                 <li class="navbar__item">
-                    <a href="/" class="navbar__links">Voir le soutien</a>
+                    <a href="/" class="navbar__links"><img src="../img/reglages_1_1.png" alt="" height="60em"></a>
                 </li>
+
+                <li class="navbar__item">
+                    <a href="/" class="navbar__links"><img src="../img/deconnexion.png" alt="" height="60em"></a>
+                </li>
+
+                
 
             </ul>
         </div>
