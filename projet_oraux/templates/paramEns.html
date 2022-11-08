@@ -12,6 +12,7 @@
 <body>
     <!-- ici la navbar -->
     <main>
+        <section class="bouts_gen">
         <select name="Semaine" id="sem-select">
             <option value="">Semaine</option>
             <!-- remplir avec le selenium -->
@@ -26,36 +27,31 @@
         </section>
 
     
-    </main>
+   
     <section class="info_par">
-        <div class="gest_heures">
-            <h3 class="titre_div">Gestion des heures de soutien</h3>
-            <div class="horaire">
-                <input type="date" id="date" name="date">
-                <label for="h_deb">De</label>
-                <input type="time" id="h_deb" name="h_deb">
-                <label for="h_fin">À</label>
-                <input type="time" id="h_fin" name="h_fin">
+        <div class="gest_mat">
+            <h3 class="titre_div">Gestion des matières</h3>
+            <div class="matiere">
+                <fieldset>
+                    <legend>WEB</legend>
+                <input type="checkbox" id="mat1" name="p1" value="P1">
+                <label for="p1">P1</label>
+                <input type="checkbox" id="mat2" name="p2" value="p2">
+                <label for="p2">P2</label>
+                <input type="checkbox" id="mat3" name="p3" value="p3">
+                <label for="p3">P3</label>
+                <input type="checkbox" id="mat4" name="p4" value="p4">
+                <label for="p4">P4</label>
+                </fieldset>
                 <button id="poubelle">
-                    <img src="../img/poubelle.png" alt="supprimer" height="20em">
+                    <img src="../img/poubelle.png" alt="supprimer" height="30em">
                 </button>
             </div>
-            <button id="ajt_date">
+            <button id="ajt_mat">
                 <img src="../img/plus.png" alt="ajouter" height="10em">
-                Ajouter une date
+                Ajouter une matière
             </button>
-        </div>
-        <div class="default_set">
-            <h3 class="titre_div">Paramètres par défault</h3>
-            <div class="default_sett">
-                <div class="zone_st">
-                <label for="jour">Jour de soutien</label>
-                <input type="text" id="jour" name="jourS"></div>
-                <div class="zone_st"><label for="seuil">Seuil pour les groupes</label>
-                <input type="number" id="seuil" name="seuil"></div>
-                <div class="zone_st"><label for="cgt_sem">Date changement de semestre</label>
-                <input type="date" id="cgt_sem" name="cgt_s"></div>
-        </div>
+        </div>        
     </section>
 </main>
 </body>
