@@ -1,0 +1,56 @@
+.bgen{
+    margin: 1em;
+    padding: 2em;
+    border-radius: 0.5em;
+    border: 1px solid #333;
+    background-color: #fff;
+    color: #860061;
+    font-weight: bold;
+}
+
+#conteneur{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin: 1em;
+    background-color: #d9d9d9;
+    border-radius: 1em;
+}
+
+#retour{
+    margin: 1em;
+    padding: 1em;
+    background-color: #fff;
+    color: #860061;
+    font-weight: bold;
+    border: none;
+}
+#connexion{
+    margin: 1em;
+    background-color: #fff;
+}
+#ident, #mdp{
+    margin: 1em;
+    padding: 1em;
+    display:block;
+    text-align: center;
+}
+#ident *, #mdp *{
+    margin: 1em;
+}
+
+button{
+    border-radius: 0.5em;
+    border: 1px solid #333;
+    background-color: #fff;
+
+}
+
+#logo{
+    margin: 1em;
+    padding: 1em;
+    flex-basis: 100%;
+}
