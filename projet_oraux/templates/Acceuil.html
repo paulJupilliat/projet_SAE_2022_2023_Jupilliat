@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="../JS/navbar.js"></script>
     <link rel="stylesheet" href="../static/nav.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,67 +9,30 @@
 </head>
 <body>
     <!-- ici la navbar -->
-    <nav class="navbar">
+    <nav>
+        <label for="toggle">☰</label>
+        <input type="checkbox" id="toggle">
+        <div class="main_pages">
+            <a href="#" id="navbar_home"> 
+                <img src="../img/acceuil_act.png" alt="" height="60em">
+            </a>
+
+            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
+       
+
+            <a href="./res_sond.html" class="navbar__links">Sondages</a>
         
-        <div class="navbar__container ">
 
-            
-            <a href="" class="burger" onclick="changeImage()"><img id="menu" src="../img/croix.png" alt="" height="60em"></a>
-            
-            <!-- la toggle du mode telephone -->
-            <div class="navbar__toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            <!-------------------------------->
-                
+            <a href="/" class="navbar__links">Disponibilité Enseignant</a>
+       
 
-            </div>
-            
-            
-            <ul class="navbar__menu" id="navbar_menu">
-
-                <li class="navbar__item">
-                    <a href="/" > 
-                        <img id="maison" src="../img/acuueil_violet_1.png" alt="" height="60em">
-                    </a>
-
-                </li>
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Resultats QCM</a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Sondages</a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Disponibilité Enseignant</a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Gerer ses disponibilités</a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Voir le soutien</a>
-                </li>
-                
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Suivi Etudiant</a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links"><img src="../img/reglages_1_1.png" alt="" height="60em"></a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links"><img src="../img/deconnexion.png" alt="" height="60em"></a>
-                </li>
-
-                
-
-            </ul>
+            <a href="/" class="navbar__links">Gerer ses disponibilités</a>
+       
+            <a href="/" class="navbar__links">Voir le soutien</a>
+        
+            <a href="/" class="navbar__links">Suivi Etudiant</a>
+        
+            <a href="/" class="navbar__links">Voir le soutien</a>
         </div>
     </nav>
 </body>
