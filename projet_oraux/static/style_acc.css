@@ -1,5 +1,5 @@
 
-#recup_données_btn{
+#recup_données_btn, #save_sett{
     margin-left: 4%;
     margin-right: 4%;
     background-color: #860061;
@@ -24,7 +24,7 @@ main{
     
 }
 
-.info-acc{
+.info-acc, .info_par{
     display: flex;
 }
 

@@ -2,6 +2,106 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/filtres.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <title>DIspos Enseignant</title>
+</head>
+<body>
+    <!-- TODO: menu nav bar paul -->
+    <aside>
+        <div id="aside_filtres">
+            <h2>Filtres</h2>
+            <img src="../img/deplie.png" alt="deplie" id="dep"/>
+        </div>
+        <select name="semaines" id="selec-sem">
+            <option value="">Semaine 43</option>
+            <option value="">Semaine 44</option>
+            <option value="">Semaine 45</option>
+            <option value="">Semaine 46</option>
+            <option value="">Semaine 47</option>
+        </select>
+        <div id="aside_grp">
+            <h3>Matières</h3>
+            <img src="../img/deplie.png" alt="deplie" id="dep"/>
+        </div>
+        <ul id="grps_filtres">
+            <li>
+                <input type="checkbox" name="Python" id="Python">
+                <label for="Python">Python</label>
+            </li>
+            <li>
+                <input type="checkbox" name="BDD" id="BDD">
+                <label for="BDD">BDD</label>
+            </li>
+            <li>
+                <input type="checkbox" name="Java" id="Java">
+                <label for="Java">Java</label>
+            </li>
+            <li>
+                <input type="checkbox" name="Bash" id="Bash">
+                <label for="Bash">Bash</label>
+            </li>
+            <li>
+                <input type="checkbox" name="Maths" id="Maths">
+                <label for="Maths">Maths</label>
+            </li>
+        </ul>
+    </aside>
+    <main>
+        <h1>Disponibilitées</h1>
+        <table id="Dispo">
+            <tr id="colonnes">
+                <th id="noms">Enseignant</th>
+                <th id="noms">matiere1</th>
+                <th id="noms">matiere2</th>
+                <th id="noms">matière3</th>
+                <th id="noms">date</th>
+            </tr>
+            <tr>
+                <td>Arsouze</td>
+                <td>Python</td>
+                <td>Java</td>
+                <td>Maths</td>
+                <td>2021-11-11</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+                <td>Maths</td>
+                <td>2021-11-11</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+                <td>Maths</td>
+                <td>2021-11-11</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+                <td>Maths</td>
+                <td>2021-11-11</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+                <td>Maths</td>
+                <td>2021-11-11</td>
+            </tr>
+        </table>
+    </main>
+</body>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
     <script src="../JS/dispo.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

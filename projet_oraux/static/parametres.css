@@ -1,0 +1,91 @@
+.titre_div{
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em;
+    color: #860061;
+    background-color: #a0a0a0;
+    margin-top:0;
+    margin-bottom: 0.5em;
+    border-radius: 0.5em;
+    ;
+}
+
+.gest_heures, .default_set, .gest_mat{
+    background-color: #d6d6d6;
+    border-radius: 0.5em;
+    margin: 2em;
+    text-align: center;
+    flex-basis: 40%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    
+}
+.default_sett{
+    background-color: #d6d6d6;
+    border-radius: 0.5em;
+    text-align: center;
+    flex-basis: 40%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.default_sett *{
+    margin-right: 1em;
+}
+
+
+
+.horaire, .bouts_gen{
+    display: flex;
+    flex-direction: row;
+    margin: 1em;
+    background-color: #d6d6d6;
+}
+
+.bouts_gen{
+    background-color: white;
+}
+
+.horaire *{
+    margin : 0.2em;
+}
+
+#poubelle{
+    margin: 0em;
+    padding: 0em;
+    border: none;
+    background-color: #d6d6d6;
+}
+
+#ajt_date, #ajt_mat{
+    margin: 0em;
+    margin-right: 80%;
+    padding: 0em;
+    border: none;
+    background-color: #d6d6d6;
+}
+
+.zone_st{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: left;
+    align-items: left;
+    align-content: left;
+    margin: 1em;
+    background-color: #d6d6d6;
+    border-radius: 0.5em;
+}
+
+.matiere{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+}
+.matiere *{
+    margin: 1em;
+}
