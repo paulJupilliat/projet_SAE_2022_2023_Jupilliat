@@ -41,3 +41,16 @@
 #ident *, #mdp *{
     margin: 1em;
 }
+
+button{
+    border-radius: 0.5em;
+    border: 1px solid #333;
+    background-color: #fff;
+
+}
+
+#logo{
+    margin: 1em;
+    padding: 1em;
+    flex-basis: 100%;
+}
