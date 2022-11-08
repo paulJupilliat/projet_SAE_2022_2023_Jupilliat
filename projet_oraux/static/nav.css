@@ -38,8 +38,7 @@ label, #toggle
     display: none;
 }
  
-@media all and (max-width: 991px)
-{
+@media all and (max-width: 991px){
     nav
     {
         height: 60px;
@@ -56,7 +55,6 @@ label, #toggle
     nav .main_pages a {
         width: 50%;
     }
- 
     label 
     {
         width: 30px;
@@ -65,10 +63,10 @@ label, #toggle
         align-items: center;
         margin: 0 auto;
         font-size: 40px;
-        color: white;
+        color: #860061;
         cursor: pointer;
     }
     #toggle:checked + .main_pages {
         display: flex;
-    }
-}
+        color:black;
+    }}
