@@ -30,7 +30,7 @@
   background-color: white;
 }
 
-table {
+#Dispo {
   width: 70em;
   margin: 0 auto;
   overflow-y: scroll;
@@ -92,7 +92,7 @@ tfoot{
   margin:auto;
 }
 #partie_gauche {
-  width: 33%;
+  width: 30%;
 }
 main {
   display: flex;
@@ -107,23 +107,43 @@ main {
   margin-right: 1%;
   padding-right: 1%;
 }
-
+/* mets les items dans semaines_choix au milieu */
 #semaines_choix {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
   padding-top: 10%;
   margin: 5%;
-  width: 100%;
   background-color: aliceblue;
 }
+#selec_sem {
+  margin-top: -5%;
+}
 #partie_droite {
-  width: 33%;
+  width: 30%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10%;
+  margin: 5%;
+  background-color: aliceblue;
 }
 #partie_milieu {
-  width: 33%;
-}
-#selec_sem {
+  width: 30%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
   align-items: center;
-=======
+  padding-top: 10%;
+  margin: 5%;
+  background-color: aliceblue;
+}
+
+
 tbody {
   background-color: #d6d6d6;
   white-space: normal;
 }
+
