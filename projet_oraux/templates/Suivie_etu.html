@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script src="../JS/suivie_etu.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/filtres.css">
@@ -15,7 +16,8 @@
         </div>
         <div id="section_grp">
             <h3>Matières</h3>
-            <img src="../img/deplie.png" alt="deplie" id="dep"/>
+            <button id="dep_fil" type="button" onclick="plie_deplie_matieres()">
+                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
         </div>
         <section id="matieres_gauche">
             <div>
