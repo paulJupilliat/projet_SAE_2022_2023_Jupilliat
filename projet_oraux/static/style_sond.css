@@ -14,6 +14,11 @@ table{
 }
 
 /* ---BODY------------------ */
+body{
+    display: flex;
+    flex-direction: column;
+}
+
 main{
     display: flex;
 }
@@ -50,3 +55,5 @@ aside{
 
 input[type=checkbox]:checked + label {
     display: none;}
+
+
