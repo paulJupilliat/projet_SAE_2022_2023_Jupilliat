@@ -31,18 +31,14 @@
 }
 
 table {
-  width: 100%;
+  width: 70em;
   margin: 0 auto;
+  overflow-y: scroll;
   display: block;
   border-spacing: 0;
+  max-height: 20em;
 }
-#res{
-    max-height: 20em;
-    overflow-y: scroll;
-    width: 70em;
-    border-spacing: 0;
-    display: block;
-}
+
 
 table,
 td,
