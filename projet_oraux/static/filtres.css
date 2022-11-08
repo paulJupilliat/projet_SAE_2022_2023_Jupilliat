@@ -75,3 +75,62 @@ tr:last-child td {
   border-bottom-width: 0;
 }
 
+.matières li {
+  list-style-type: none;
+  font-weight: bold;
+}
+#matieres_gauche {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: 0%;
+  padding-left: 0%;
+  margin-right: 0%;
+  padding-right: 0%;
+}
+/* met toutes les div de la classe matières dans une ligne */
+#matieres_gauche > div {
+  margin-left: 0%;
+  padding-left: 0%;
+  margin-right: 0%;
+  padding-right: 0%;
+}
+
+
+#section_filtres , #section_grp {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin:auto;
+}
+#partie_gauche {
+  width: 33%;
+}
+main {
+  display: flex;
+  flex-wrap: nowrap;
+}
+#dates {
+  display: flex;
+}
+#dates > * {
+  margin-left: 1%;
+  padding-left: 1%;
+  margin-right: 1%;
+  padding-right: 1%;
+}
+
+#semaines_choix {
+  padding-top: 10%;
+  margin: 5%;
+  width: 100%;
+  background-color: aliceblue;
+}
+#partie_droite {
+  width: 33%;
+}
+#partie_milieu {
+  width: 33%;
+}
+#selec_sem {
+  align-items: center;
+}
