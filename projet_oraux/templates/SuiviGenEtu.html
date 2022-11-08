@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script src="../JS/suivie_gen_etu.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/style.css">
@@ -13,9 +14,10 @@
     <aside>
         <div id="aside_filtres">
             <h2>Filtres</h2>
-            <button id="dep_fil" type="button">
-                <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+                <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
         </div>
+        <section id="groupe_filtre"> 
         <select name="semaines" id="selec-sem">
             <option value="">Semaine 43</option>
             <option value="">Semaine 44</option>
@@ -25,8 +27,8 @@
         </select>
         <div id="aside_grp">
             <h3>Groupes</h3>
-            <button id="dep_grp" type="button">
-                <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
         </div>
         <ul id="grps_filtres">
             <li>
@@ -66,16 +68,17 @@
             <h3>Recherche</h3>
             <input type="text" name="recherche" id="recherche">
         </div>
+        </section>
     </aside>
     <main>
-        <table>
-            <tr id="colonnes">
-                <th id="noms">Etudiant</th>
-                <th id="noms">Date</th>
-                <th id="noms">Groupe</th>
-                <th id="noms">Matiere</th>
-                <th id="noms">Referent</th>
-                <th id="noms">Commentaire</th>
+        <table class="scrolable">
+            <tr class="colonnes">
+                <th class="noms">Etudiant</th>
+                <th class="noms">Date</th>
+                <th class="noms">Groupe</th>
+                <th class="noms">Matiere</th>
+                <th class="noms">Referent</th>
+                <th class="noms">Commentaire</th>
             </tr>            
                 <tr>
                     <td>Paul</td>

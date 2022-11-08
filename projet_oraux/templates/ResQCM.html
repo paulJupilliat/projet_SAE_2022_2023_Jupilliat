@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script src="../JS/res_qcm.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +14,8 @@
     <aside>
         <div id="aside_filtres">
             <h2>Filtres</h2>
-            <button id="dep_fil" type="button">
-            <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+            <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
         </div>
         <select name="semaines" id="selec-sem">
             <option value="">Semaine 43</option>
@@ -23,10 +24,11 @@
             <option value="">Semaine 46</option>
             <option value="">Semaine 47</option>
         </select>
+        <section id="groupe_filtre">
         <div id="aside_grp">
             <h3>Groupes</h3>
-            <button id="dep_grp" type="button">
-                <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
         </div>
         <ul id="grps_filtres">
             <li>
@@ -62,21 +64,22 @@
                 <label for="14B">14B</label>
             </li>
         </ul>
+        </section>
     </aside>
     <main>
         
         <table id="labels">
-            <tr id="colonnes">
-                <th id="noms">Etudiant</th>
-                <th id="noms">Groupe</th>
-                <th id="noms">matiere1</th>
-                <th id="noms">matiere2</th>
-                <th id="noms">Soutien</th>
-                <th id="noms">Voeu matiere</th>
+            <tr class="colonnes">
+                <th class="noms">Etudiant</th>
+                <th class="noms">Groupe</th>
+                <th class="noms">matiere1</th>
+                <th class="noms">matiere2</th>
+                <th class="noms">Soutien</th>
+                <th class="noms">Voeu matiere</th>
             </tr>
             <tr id="moyennes">
-                <th id="moy">Moyenne</th>
-                <th id="moy">
+                <th class="moy">Moyenne</th>
+                <th class="moy">
                     <select>
                         <option value="gen">Generale</option>
                         <option value="11A">11A</option>
@@ -89,11 +92,11 @@
                         <option value="14B">14B</option>
                     </select>
                 </th>
-                <th id="moy">12.5</th>
-                <th id="moy">12.5</th>
+                <th class="moy">12.5</th>
+                <th class="moy">12.5</th>
             </tr>
             </table>
-            <table id="res">
+            <table class="scrolable">
                 
                 <tr>
                     <td>Paul</td>
