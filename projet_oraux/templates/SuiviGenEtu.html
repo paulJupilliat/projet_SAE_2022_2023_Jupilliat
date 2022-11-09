@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="../static/filtres.css">
+    <link rel="stylesheet" href="../static/suiviGen.css">
     <link rel="stylesheet" href="../static/nav.css">
     <title>Suivi Etudiant</title>
 </head>
@@ -34,7 +35,7 @@
         
             <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
 
-            <a href="/" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
+            <a href="./paramEns.html" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
 
             <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
 
@@ -102,16 +103,24 @@
             </section>
         </aside>
         <section class="tableaugen">
-        <table class="scrolable">
+        <table class="tab">
+            <thead id="titre_suivi">
+                <tr>
+                    <th id="titre_tableau_sondage" colspan="6"><H2>Suivi Etudiant</H2></th>
+                </tr>
+                <tr class="colonnes">
+                    <th class="noms">Etudiant</th>
+                    <th class="noms">Date</th>
+                    <th class="noms">Groupe</th>
+                    <th class="noms">Matiere</th>
+                    <th class="noms">Referent</th>
+                    <th class="noms">Commentaire</th>
+                </tr>    
+            </thead>
+        </table>
+        <table class="scrolable" id="tab2">
             <tbody>
-            <tr class="colonnes">
-                <th class="noms">Etudiant</th>
-                <th class="noms">Date</th>
-                <th class="noms">Groupe</th>
-                <th class="noms">Matiere</th>
-                <th class="noms">Referent</th>
-                <th class="noms">Commentaire</th>
-            </tr>            
+                    
                 <tr>
                     <td>Paul</td>
                     <td>07/11</td>
