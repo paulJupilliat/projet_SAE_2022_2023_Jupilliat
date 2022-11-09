@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="../static/filtres.css">
+    <link rel="stylesheet" href="../static/QCM.css">
     <link rel="stylesheet" href="../static/nav.css">
+
     <title>Resultat QCM</title>
 </head>
 <body>
@@ -16,7 +18,7 @@
         <input type="checkbox" id="toggle">
         <div class="main_pages">
             <a href="./Acceuil.html" id="navbar_home"> 
-                <img src="../img/acceuil_act.png" height="50em" alt="" height="60em">
+                <img src="../img/acceuil.png" height="50em" alt="" height="60em">
             </a>
 
             <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
@@ -34,7 +36,7 @@
         
             <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
 
-            <a href="/" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
+            <a href="./paramEns.html" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
 
             <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
 
@@ -99,6 +101,11 @@
     
         <section id="tableauqcm">
         <table id="labels">
+            <thead id="QCM">
+                <tr>
+                    <th id="titre_tableau_sondage" colspan="5"><H2>QCM</H2></th>
+                </tr>
+            </thead>
             <tr class="colonnes">
                 <th class="noms">Etudiant</th>
                 <th class="noms">Groupe</th>

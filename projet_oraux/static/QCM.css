@@ -1,0 +1,13 @@
+/* ------------------ PARTIE DU QCM */
+#QCM{
+    background-color: #860061;
+    flex-wrap: nowrap;
+  }
+  
+  #titre_tableau_sondage{
+    flex-grow: 1;
+  }
+  
+  tr{
+    display: flex;
+  }
