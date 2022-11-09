@@ -65,3 +65,13 @@ button{
     padding: 1em;
     flex-basis: 100%;
 }
+#page_connexion {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin: 1em;
+    border-radius: 1em;
+}

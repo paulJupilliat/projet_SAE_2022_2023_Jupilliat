@@ -1,0 +1,12 @@
+#Dispo_nom{
+    background-color: #860061;
+    flex-wrap: nowrap;
+  }
+  
+  #titre_tableau_dispo{
+    flex-grow: 1;
+  }
+  
+  tr{
+    display: flex;
+  }

@@ -25,7 +25,7 @@ table{
     margin: 3%;
 }
 
-#encadrer_table, #tableauqcm{
+#encadrer_table, #tableauqcm, #tableaudispo{
     background-color: lightgrey;
     border-radius: 10px;
     margin-right:2em;
