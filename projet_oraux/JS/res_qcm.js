@@ -23,11 +23,6 @@ function plie_deplie_semaines() {
     } else {
         document.getElementById("groupe_filtre").style.display = "none";
     }
-    if (document.getElementById("selec-sem").style.display == "none") {
-        document.getElementById("selec-sem").style.display = "block";
-    } else {
-        document.getElementById("selec-sem").style.display = "none";
-    }
     if (img.src.match("../img/plie.png")) {
         img.src = "../img/deplie.png";
     } else {

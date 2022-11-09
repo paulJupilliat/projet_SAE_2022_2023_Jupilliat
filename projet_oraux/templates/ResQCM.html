@@ -43,9 +43,10 @@
         <aside>
             <div id="aside_filtres">
                 <h2>Filtres</h2>
-                <button id="dep_fil" type="button">
-                <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+                <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+                <img src="../img/deplie.png" alt="deplie" id="dep2"/></button>
             </div>
+            <section id="groupe_filtre">
             <select name="semaines" id="selec-sem">
                 <option value="">Semaine 43</option>
                 <option value="">Semaine 44</option>
@@ -55,7 +56,7 @@
             </select>
             <div id="aside_grp">
                 <h3>Groupes</h3>
-                <button id="dep_grp" type="button">
+                <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
                     <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
             </div>
             <ul id="grps_filtres">
@@ -92,6 +93,7 @@
                     <label for="14B">14B</label>
                 </li>
             </ul>
+        </section>
         </aside>
     
         <section id="tableauqcm">
