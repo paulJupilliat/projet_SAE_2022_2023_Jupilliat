@@ -6,67 +6,95 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style.css">
+    <!-- <link rel="stylesheet" href="../static/style.css"> -->
+    <link rel="stylesheet" href="../static/nav.css">
     <title>Resultat QCM</title>
 </head>
 <body>
-    <!-- TODO: menu nav bar paul -->
-    <aside>
-        <div id="aside_filtres">
-            <h2>Filtres</h2>
-            <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-            <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
+    <nav>
+        <label for="toggle">☰</label>
+        <input type="checkbox" id="toggle">
+        <div class="main_pages">
+            <a href="./Acceuil.html" id="navbar_home"> 
+                <img src="../img/acceuil_act.png" height="50em" alt="" height="60em">
+            </a>
+
+            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
+       
+
+            <a href="./res_sond.html" class="navbar__links">Sondages</a>
+        
+
+            <a href="./Dispo.html" class="navbar__links">Disponibilité Enseignant</a>
+       
+
+            <a href="/" class="navbar__links">Gerer ses disponibilités</a>
+       
+            <a href="/" class="navbar__links">Voir le soutien</a>
+        
+            <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
+
+            <a href="/" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
+
+            <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
+
         </div>
-        <select name="semaines" id="selec-sem">
-            <option value="">Semaine 43</option>
-            <option value="">Semaine 44</option>
-            <option value="">Semaine 45</option>
-            <option value="">Semaine 46</option>
-            <option value="">Semaine 47</option>
-        </select>
-        <section id="groupe_filtre">
-        <div id="aside_grp">
-            <h3>Groupes</h3>
-            <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
-        </div>
-        <ul id="grps_filtres">
-            <li>
-                <input type="checkbox" name="11A" id="11A">
-                <label for="11A">11A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="11B" id="11B">
-                <label for="11B">11B</label>
-            </li>
-            <li>
-                <input type="checkbox" name="12A" id="12A">
-                <label for="12A">12A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="12B" id="12B">
-                <label for="12B">12B</label>
-            </li>
-            <li>
-                <input type="checkbox" name="13A" id="13A">
-                <label for="13A">13A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="13B" id="13B">
-                <label for="13B">13B</label>
-            </li>
-            <li>
-                <input type="checkbox" name="14A" id="14A">
-                <label for="14A">14A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="14B" id="14B">
-                <label for="14B">14B</label>
-            </li>
-        </ul>
-        </section>
-    </aside>
+    </nav>
     <main>
+        <aside>
+            <div id="aside_filtres">
+                <h2>Filtres</h2>
+                <button id="dep_fil" type="button">
+                <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            </div>
+            <select name="semaines" id="selec-sem">
+                <option value="">Semaine 43</option>
+                <option value="">Semaine 44</option>
+                <option value="">Semaine 45</option>
+                <option value="">Semaine 46</option>
+                <option value="">Semaine 47</option>
+            </select>
+            <div id="aside_grp">
+                <h3>Groupes</h3>
+                <button id="dep_grp" type="button">
+                    <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            </div>
+            <ul id="grps_filtres">
+                <li>
+                    <input type="checkbox" name="11A" id="11A">
+                    <label for="11A">11A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="11B" id="11B">
+                    <label for="11B">11B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12A" id="12A">
+                    <label for="12A">12A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12B" id="12B">
+                    <label for="12B">12B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13A" id="13A">
+                    <label for="13A">13A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13B" id="13B">
+                    <label for="13B">13B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14A" id="14A">
+                    <label for="14A">14A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14B" id="14B">
+                    <label for="14B">14B</label>
+                </li>
+            </ul>
+        </aside>
+    
         
         <table id="labels">
             <tr class="colonnes">

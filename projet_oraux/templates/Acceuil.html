@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../static/style_acc.css">
+    <link rel="stylesheet" href="../static/nav.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,127 +9,34 @@
 </head>
 <body>
     <!-- ici la navbar -->
-    <main>
+    <nav>
+        <label for="toggle">☰</label>
+        <input type="checkbox" id="toggle">
+        <div class="main_pages">
+            <a href="./Acceuil.html" id="navbar_home"> 
+                <img src="../img/acceuil_act.png" height="50em" alt="" height="60em">
+            </a>
+
+            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
+       
+
+            <a href="./res_sond.html" class="navbar__links">Sondages</a>
         
 
-        <select name="Semaine" id="sem-select">
-            <option value="">Semaine</option>
-            <!-- remplir avec le selenium -->
-            <option value="semaine1">semaine1</option>
-            <option value="semaine2">semaine2</option>
-            <option value="semaine3">semaine3</option>
-            <option value="semaine4">semaine4</option>
-            <option value="semaine5">semaine5</option>
-            <option value="semaine6">semaine6</option>
-        </select>
+            <a href="./Dispo.html" class="navbar__links">Disponibilité Enseignant</a>
+       
 
-            <input id="recup_données_btn" type="button" value="Recuperer les données">
-            
-            <p class="text_mail"> les mails ont été envoyer pour la semaine 3</p> <!-- remplir avec le selenium -->
-        </section>
+            <a href="/" class="navbar__links">Gerer ses disponibilités</a>
+       
+            <a href="/" class="navbar__links">Voir le soutien</a>
+        
+            <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
 
-    
-    </main>
-    <section class="info-acc">
-        <div class="res_qcm">
-           
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="4"> <h2>Resultat QCM</h2></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th id="Groupe">Groupe</td>
-                        <th id="QCM1">QCM1</td>
-                        <th id="QCM2" >QCM2</td>
-                        <th id="QCM3"> QCM3 </td>
-                    </tr>
-                    <tr>
-                        <td>A</td>
-                        <td>web</td>
-                        <td>python</td>
-                        <td>BD</td>
-                    </tr>
+            <a href="/" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
 
-                    <tr>
-                        <td>A</td>
-                        <td>web</td>
-                        <td>python</td>
-                        <td>BD</td>
-                    </tr>
-                </tbody>
-            </table>
+            <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
+
         </div>
-        <section class="dispo_sond">
-    
-            <div class="res_sond">
-              
-                <table>
-                    <thead>
-                        <tr>
-                            <th colspan="4"><h2>Resultat Sondage</h2></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th id="Groupe">Groupe</td>
-                            <th id="QCM1">QCM1</td>
-                            <th id="QCM2" >QCM2</td>
-                            <th id="QCM3"> QCM3 </td>
-                        </tr>
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-
-                    </tbody>
-                </table>
-                
-            </div>
-
-            <div class="dispo_en"> 
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th colspan="4"><h2>Enseignant disponible</h2></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th id="Groupe">Groupe</td>
-                            <th id="QCM1">QCM1</td>
-                            <th id="QCM2" >QCM2</td>
-                            <th id="QCM3"> QCM3 </td>
-                        </tr>
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>    
-    </section>
+    </nav>
 </body>
 </html>
