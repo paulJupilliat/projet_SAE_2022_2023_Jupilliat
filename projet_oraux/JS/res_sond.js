@@ -1,3 +1,4 @@
+
 function cache_grp() {
     var grp = document.getElementsByClassName('grp');
     for (var i = 0; i < grp.length; i++) {
@@ -230,7 +231,21 @@ function cache_commentaire() {
     }
 
 }
+    
 function remettre_commentaire(){
     document.getElementById('comm').checked = false;
     cache_commentaire();
 }
+function plie_deplie_filtres() {
+    const img = document.getElementById("dep");
+    if (document.getElementById("grps_filtres").style.display == "none") {
+        document.getElementById("grps_filtres").style.display = "block";
+    } else {
+        document.getElementById("grps_filtres").style.display = "none";
+    }
+    if (img.src.match("../img/plie.png")) {
+        img.src = "../img/deplie.png";
+    } else {
+        img.src = "../img/plie.png";
+    }
+};

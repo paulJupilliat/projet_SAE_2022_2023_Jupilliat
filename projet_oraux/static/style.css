@@ -1,6 +1,7 @@
 body{
-    display: flex;
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: row;
 }
 
 main{
@@ -10,4 +11,5 @@ main{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    flex-direction: column;
 }

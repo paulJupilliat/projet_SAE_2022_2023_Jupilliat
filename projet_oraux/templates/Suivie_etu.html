@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script src="../JS/suivie_etu.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/filtres.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <title>Suivis etu</title>
+</head>
+<body>
+    <section id="partie_gauche">
+            <h2>num Etudiant</h1>
+            <h2>groupe etu</h2>
+        </div>
+        <div id="section_grp">
+            <h3>Matières</h3>
+            <button id="dep_fil" type="button" onclick="plie_deplie_matieres()">
+                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
+        </div>
+        <section id="matieres_gauche">
+            <div>
+            <ul class="matières">
+                <li>
+                    <input type="checkbox" name="Python" id="Python">
+                    <label for="Python">Python</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="BDD" id="BDD">
+                    <label for="BDD">BDD</label>
+                </li>
+            </ul>
+            </div>
+            <div>
+                <ul class="matières">
+                    <li>
+                        <input type="checkbox" name="Java" id="Java">
+                        <label for="Java">Java</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="Bash" id="Bash">
+                        <label for="Bash">Bash</label>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <ul class="matières">
+                    <li>
+                        <input type="checkbox" name="Maths" id="Maths">
+                        <label for="Maths">Maths</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="Eco" id="Eco">
+                        <label for="Eco">Eco</label>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section id="dates">
+                    <label for="date_debut">De</label>
+                    <input type="date" name="date_debut" id="date_debut">
+                    <label for="date_fin">À</label>
+                    <input type="date" name="date_fin" id="date_fin">
+        </section>
+        <section id="semaines_choix">
+            <div id="selec_sem">
+            <select name="semaines" id="selec-sem">
+                <option value="">Semaine 43</option>
+                <option value="">Semaine 44</option>
+                <option value="">Semaine 45</option>
+                <option value="">Semaine 46</option>
+                <option value="">Semaine 47</option>
+            </select>
+            </div>
+            <section id="para_qcm">
+                <h2>QCMs:</h2>
+                <div id="qcm">
+                    <p>QCM1</p>
+                    <p>QCM2</p>
+                    <p>QCM3</p>
+                    <p>QCM4</p>
+                    <p>QCM5</p>
+                </div>
+            </section>
+            <section id="para_soutien">
+                <h2>SOUTIEN</h2>
+                <div id="soutien">
+                    <p>Soutien1</p>
+                    <p>Soutien2</p>
+                    <p>Soutien3</p>
+                    <p>Soutien4</p>
+                    <p>Soutien5</p>
+                </div>
+            </section>
+        </section>
+    </section>
+    <section id="partie_milieu">
+        <h2>Suivi Etudiant</h2>
+        <section id="graphique">
+            <img src="../img/fond_graphique.png" alt="graphique">
+        </section>
+    </section>
+    <section id="partie_droite">
+        <table id="suivie_etu_table">
+            <tr id="colonnes">
+                <th id="noms">Sem</th>
+                <th id="noms">Matière</th>
+                <th id="noms">Commentaire</th>
+            </tr>
+            <tr>
+                <td>Arsouze</td>
+                <td>Python</td>
+                <td>Java</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+            </tr>
+            <tr>
+                <td>Paul</td>
+                <td>Python</td>
+                <td>Java</td>
+            </tr>
+        </table>
+    </section>
+</body>
+</html>

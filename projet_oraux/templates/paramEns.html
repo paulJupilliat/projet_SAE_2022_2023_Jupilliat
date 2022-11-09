@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="stylesheet" href="../static/style_acc.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/parametres.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres</title>
+</head>
+<body>
+    <!-- ici la navbar -->
+    <main>
+        <section class="bouts_gen">
+        <select name="Semaine" id="sem-select">
+            <option value="">Semaine</option>
+            <!-- remplir avec le selenium -->
+            <option value="semaine1">semaine1</option>
+            <option value="semaine2">semaine2</option>
+            <option value="semaine3">semaine3</option>
+            <option value="semaine4">semaine4</option>
+            <option value="semaine5">semaine5</option>
+            <option value="semaine6">semaine6</option>
+        </select>
+            <input id="save_sett" type="button" value="Sauvegarder les modifications">
+        </section>
+
+    
+   
+    <section class="info_par">
+        <div class="gest_mat">
+            <h3 class="titre_div">Gestion des matières</h3>
+            <div class="matiere">
+                <fieldset>
+                    <legend>WEB</legend>
+                <input type="checkbox" id="mat1" name="p1" value="P1">
+                <label for="p1">P1</label>
+                <input type="checkbox" id="mat2" name="p2" value="p2">
+                <label for="p2">P2</label>
+                <input type="checkbox" id="mat3" name="p3" value="p3">
+                <label for="p3">P3</label>
+                <input type="checkbox" id="mat4" name="p4" value="p4">
+                <label for="p4">P4</label>
+                </fieldset>
+                <button id="poubelle">
+                    <img src="../img/poubelle.png" alt="supprimer" height="30em">
+                </button>
+            </div>
+            <button id="ajt_mat">
+                <img src="../img/plus.png" alt="ajouter" height="10em">
+                Ajouter une matière
+            </button>
+        </div>        
+    </section>
+</main>
+</body>
+</html>

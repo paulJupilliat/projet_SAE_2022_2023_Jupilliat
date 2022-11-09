@@ -1,3 +1,14 @@
+body{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+main{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+}
 .bgen{
     margin: 1em;
     padding: 2em;
@@ -10,7 +21,7 @@
 
 #conteneur{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
