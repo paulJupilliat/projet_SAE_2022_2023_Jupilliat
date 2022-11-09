@@ -4,7 +4,8 @@ body{
     flex-direction: column;
 }
 nav{
-  
+    position: sticky;
+    top: 0;
     height: 100px;
     background: #d9d9d9;
 }
