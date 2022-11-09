@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/filtres.css">
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/suivi_etu.css">
     <title>Suivis etu</title>
 </head>
 <body>
@@ -101,7 +102,7 @@
             <img src="../img/fond_graphique.png" alt="graphique">
         </section>
     </section>
-    <section id="partie_droite">
+    <div id="content">
         <table id="suivie_etu_table">
             <tr id="colonnes">
                 <th id="noms">Sem</th>
@@ -134,6 +135,8 @@
                 <td>Java</td>
             </tr>
         </table>
-    </section>
+    </div>
+    <button type="button" id="collapsible" onclick="collapse()">
+    <img src="../img/moins.png" alt="-" height="10em"></button>
 </body>
 </html>
