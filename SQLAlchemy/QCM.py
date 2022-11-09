@@ -1,23 +1,28 @@
 class QCM:
-    def __init__(self, idQCM, nomQCM, urlQCM):
-        self.idQCM = idQCM
-        self.nomQCM = nomQCM
-        self.urlQCM = urlQCM
+    def __init__(self, idQCM, nomQCM, urlQCM, idmatiere):
+        self._idQCM = idQCM
+        self._nomQCM = nomQCM
+        self._urlQCM = urlQCM
+        self.idmatiere = idmatiere
     
     def __repr__(self):
-        return f"QCM({self.idQCM}, {self.nomQCM}, {self.urlQCM})"
+        return f"QCM({self._idQCM}, {self._nomQCM}, {self._urlQCM})"
     
     #getters and setters
     
     def get_idQCM(self):
-        return self.idQCM
+        return self._idQCM
     def get_nomQCM(self):
-        return self.nomQCM
+        return self._nomQCM
     def get_urlQCM(self):
-        return self.urlQCM
+        return self._urlQCM
+    def get_matiere(self):
+        return self._matiere
     def set_idQCM(self, idQCM):
-        self.idQCM = idQCM
+        self._idQCM = idQCM
     def set_nomQCM(self, nomQCM):
-        self.nomQCM = nomQCM
+        self._nomQCM = nomQCM
     def set_urlQCM(self, urlQCM):
-        self.urlQCM = urlQCM
+        self._urlQCM = urlQCM
+    def set_matiere(self,idmatiere):
+        self.idmatiere = idmatiere

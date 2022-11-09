@@ -1,7 +1,10 @@
+import connexion_BD
+from Eleve import Eleve
+from QCM import QCM
 
 def main(fichier_ouvrir):
     for fic in fichier_ouvrir:
-        fichier = open("./"+fic,"r")
+        fichier = open("./Traitement_Selenium/"+fic,"r")
         entete = fichier.readline()
         ligne_en_tete = entete.split(",")
         nom = 0
@@ -27,6 +30,7 @@ def main(fichier_ouvrir):
                     print("Dans la matière : "+ separe[matiere])
                 print("commentaire : " + separe[precision][:-1])
         else:
+            list_resultat = []
             for partie in ligne_en_tete:
                 if "Nom" in partie:
                     nom = ligne_en_tete.index(partie)

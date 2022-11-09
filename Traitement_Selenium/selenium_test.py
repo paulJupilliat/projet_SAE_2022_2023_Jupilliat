@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 import subprocess
 import os
 import traitement
+import fonction_BD
 os.environ['MOZ_HEADLESS'] = '1'
 
 user = input("Entrer votre nom utilisateur :")
@@ -34,7 +35,8 @@ try:
 
     for partie in list_telechargement:
 
-        browser.find_element(By.PARTIAL_LINK_TEXT,partie[0]).click()
+        bouton_matiere = browser.find_element(By.PARTIAL_LINK_TEXT,partie[0])
+        nom_matiere = bouton_matiere.text.split("/n")[1]
 
         for i in range(1,len(partie)):
             bouton_questionnaire = browser.find_element(By.PARTIAL_LINK_TEXT,partie[i])
@@ -42,7 +44,6 @@ try:
             bouton_questionnaire.click()
             if "QCM" in partie[i]:
                 nom_matiere = browser.find_element(By.XPATH,"/html/body/div[2]/div[4]/div/header/div/div[1]/div[1]/nav/ol/li[1]/a")
-                print(nom_matiere.text+"|")
                 nom = nom_matiere.text +" -"+ nom_partie +"-notes.csv"
                 list_move.append(nom.replace("/",""))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Résultats").click()
@@ -61,6 +62,6 @@ finally:
     browser.close()
 
 for elem in list_move:
-    subprocess.run(["./move_document.sh",elem])
+    subprocess.run(["./Traitement_Selenium/move_document.sh",elem])
 
 traitement.main(list_move)
