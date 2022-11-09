@@ -34,7 +34,7 @@ nav a:hover
     color:purple;
 }
 
-label, #toggle
+.label_nav, #toggle
 {
     display: none;
 }
@@ -56,7 +56,7 @@ label, #toggle
     nav .main_pages a {
         width: 50%;
     }
-    label 
+    .label_nav 
     {
         width: 30px;
         display: flex;
