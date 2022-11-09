@@ -1,13 +1,13 @@
 #recup_données_btn{
-    margin-left: 4%;
-    margin-right: 4%;
+    border-radius: 1em;
+    padding: 1em;
     background-color: #860061;
-    color: white;
-    
+    font-weight: bold;
+    font-size: 1em;
 }
 main{
     display: flex;
-    padding:2em;
+    justify-content: space-around;
 }
 
 .res_qcm{

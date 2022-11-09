@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <link rel="stylesheet" href="../static/style_acc.css">
+    <link rel="stylesheet" href="../static/nav.css">
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="../static/parametres.css">
     <meta charset="UTF-8">
@@ -10,34 +10,10 @@
     <title>Paramètres</title>
 </head>
 <body>
-    <nav >
-        <label for="toggle" class="label_nav">☰</label>
-        <input type="checkbox" id="toggle">
-        <div class="main_pages">
-            <a href="./Acceuil.html" id="navbar_home"> 
-                <img src="../img/acceuil_act.png" height="50em" alt="" height="60em">
-            </a>
-
-            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
-       
-
-            <a href="./res_sond.html" class="navbar__links">Sondages</a>
-        
-
-            <a href="./Dispo.html" class="navbar__links">Disponibilité Enseignant</a>
-       
-
-            <a href="/" class="navbar__links">Voir le soutien</a>
-        
-            <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
-
-            <a href="./paramAdm.html" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
-
-            <a href="./index.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
-
-        </div>
-    </nav>
+    <script src="../JS/nav_adapte.js"></script>
+    <nav id="menu"></nav>
     <main>
+        <section class="bouts_gen">
         <select name="Semaine" id="sem-select">
             <option value="">Semaine</option>
             <!-- remplir avec le selenium -->
@@ -52,8 +28,8 @@
         </section>
 
     
-    </main>
-    <section class="info_par">
+    
+    <section class="infos_par">
         <div class="gest_heures">
             <h3 class="titre_div">Gestion des heures de soutien</h3>
             <div class="horaire">

@@ -38,7 +38,7 @@
 
 
 
-.horaire, .bouts_gen{
+.horaire, .bouts_gen, .infos_par{
     display: flex;
     flex-direction: row;
     margin: 1em;
@@ -47,7 +47,15 @@
 
 .bouts_gen{
     background-color: white;
+    justify-content: space-around;
 }
+
+.infos_par{
+    justify-content: space-around;
+    flex-direction: row;
+    background-color: white;
+}
+
 
 .horaire *{
     margin : 0.2em;
@@ -61,7 +69,7 @@
 }
 
 #ajt_date, #ajt_mat{
-    margin: 0em;
+    margin: 1em;
     margin-right: 80%;
     padding: 0em;
     border: none;
@@ -88,4 +96,16 @@
 }
 .matiere *{
     margin: 1em;
+}
+
+#save_sett{
+    border-radius: 1em;
+    padding: 1em;
+    background-color: #860061;
+    font-weight: bold;
+    font-size: 1em;
+}
+main{
+    display: flex;
+    flex-direction: column;
 }
