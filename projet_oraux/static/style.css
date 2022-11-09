@@ -10,3 +10,33 @@ button{
     height: 1.5em;
   }
 
+/* pour le tableau */
+table,
+td {
+    border: 1px solid #333;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
+table{
+    margin: 3%;
+}
+
+#encadrer_table, #tableauqcm{
+    background-color: lightgrey;
+    border-radius: 10px;
+    margin-right:2em;
+    padding:2em;
+    width:80%
+}
+main{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3% ;
+}
+
+
+
