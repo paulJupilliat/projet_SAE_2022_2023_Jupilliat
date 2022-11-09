@@ -2,6 +2,7 @@
 table,
 td {
     border: 1px solid #333;
+    margin: 0%;
 }
 
 thead,
@@ -36,5 +37,26 @@ main{
 input[type=checkbox]:checked + label {
     display: none;}
 
+#tableau{
+    margin: 0%;
+    flex-grow: 1;
+}
+.scrolable_sondage{
+    margin: 0%;
+    flex-grow: 1;
+    width: fit-content;
+    
+}
+
+#scrolable_sondage{
+    margin: 0%;
+    width: auto;
+}
+
+.tableauqcm{
+    display: flex;
+    flex-direction: column;
+    
+}
 
 
