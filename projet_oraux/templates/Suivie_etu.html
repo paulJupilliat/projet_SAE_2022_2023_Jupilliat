@@ -7,10 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/filtres.css">
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/nav.css">
     <link rel="stylesheet" href="../static/suivi_etu.css">
     <title>Suivis etu</title>
 </head>
 <body>
+    <nav>
+        <label for="toggle" class="label_nav">☰</label>
+        <input type="checkbox" id="toggle">
+        <div class="main_pages">
+            <a href="./Acceuil.html" id="navbar_home"> 
+                <img src="../img/acceuil.png" height="50em" alt="" height="60em">
+            </a>
+
+            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
+       
+
+            <a href="./res_sond.html" class="navbar__links">Sondages</a>
+        
+
+            <a href="./Dispo.html" class="navbar__links">Disponibilité Enseignant</a>
+       
+
+            <a href="/" class="navbar__links">Gerer ses disponibilités</a>
+       
+            <a href="/" class="navbar__links">Voir le soutien</a>
+        
+            <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
+
+            <a href="./paramEns.html" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
+
+            <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
+
+        </div>
+    </nav>
+    <main>
     <section id="partie_gauche">
             <h2>num Etudiant</h1>
             <h2>groupe etu</h2>
@@ -137,6 +168,6 @@
         </table>
     </div>
     <button type="button" id="collapsible" onclick="collapse()">
-    <img src="../img/moins.png" alt="-" height="10em"></button>
+    <img src="../img/moins.png" alt="-" height="10em"></button></main>
 </body>
 </html>

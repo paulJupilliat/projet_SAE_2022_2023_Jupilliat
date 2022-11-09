@@ -81,7 +81,7 @@
     padding-left: 8em;
     padding-top: 1em;
     padding-bottom: 1em;
-    width:32%;
+    width: -moz-available;
     background-color: #a0a0a0;
   }
   #partie_milieu {

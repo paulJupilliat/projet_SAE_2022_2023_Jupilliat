@@ -102,6 +102,7 @@ tfoot{
 }
 #partie_gauche {
   width: 30%;
+  margin: 1em;
 }
 #dates {
   display: flex;
