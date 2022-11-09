@@ -12,7 +12,7 @@
 </head>
 <body>
     
-    <!-- TODO: menu nav bar paul -->
+   
     <nav>
         <label for="toggle">☰</label>
         <input type="checkbox" id="toggle">
@@ -112,11 +112,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th id="grp0"> <input type="checkbox" name="etus" id="etu" class="etudiant" > <label for="etu"> Etudiant</label></th>
-                        <th id="grp1"><input type="checkbox" name="grp" id="grp" class="groupe" onclick="cache_grp()"> <label for="grp"> Groupe</label></th>
-                        <th id="grp2"><input type="checkbox" name="soutien" id="soutien" class="soutien"> <label for="soutien"> Soutien?</label></th>
-                        <th id="grp3"><input type="checkbox" name="mat" id="mat" class="mat"> <label for="mat"> Matiere</label></th>
-                        <th id="grp4"><input type="checkbox" name="com" id="comm" class="comm"> <label for="comm"> Commentaire</label></th>
+                        <th id="grp0"> <input type="checkbox" name="etus" id="etu" class="etudiant" onclick="cache_etu()"> Etudiant <label for="etu"> Etudiant</label></th>
+                        <th id="grp1"><input type="checkbox" name="grp" id="grp" class="groupe" onclick="cache_grp()"> Groupe<label for="grp"> Groupe</label></th>
+                        <th id="grp2"><input type="checkbox" name="soutien" id="soutien" class="soutien" onclick="cache_soutien()"> Soutien? <label for="soutien"> Soutien?</label></th>
+                        <th id="grp3"><input type="checkbox" name="mat" id="mat" class="mat"  onclick="cache_matiere()"> Matiere <label for="mat"> Matiere</label></th>
+                        <th id="grp4"><input type="checkbox" name="com" id="comm" class="comm" onclick="cache_commentaire()">  Commentaire<label for="comm"> Commentaire</label></th>
                     </tr>
 
                     <tr>

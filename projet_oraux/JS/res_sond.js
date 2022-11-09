@@ -42,28 +42,195 @@ function remettre_grp(){
 }
 
 
-function adapte_nb_colonnes() {
-    // compte les checkbox cochées et soustraits ce nombre au colspan
-    let compteur = 0;
-    if (document.getElementById('etu').checked){
-        compteur++;
-    }
-    if (document.getElementById('grp').checked){
-        compteur++;
-    }
-    if (document.getElementById('soutien').checked){
-        compteur++;
-    }
-    if (document.getElementById('mat').checked){
-        compteur++;
-    }
-    if (document.getElementById('comm').checked){
-        compteur++;
-    }
-    // je recupere le tableau et je modifie le html
-    let tableau = document.getElementById('tableau');
-    tableau.innerHTML = tableau.innerHTML.replace(/colspan="5"/, 'colspan="'+(5-compteur)+'"');
 
-    
 
+
+
+
+function cache_etu(){
+    var etu = document.getElementsByClassName('etu');
+    for (var i = 0; i < etu.length; i++) {
+        // si le checkbox est coché alors on cache la colonne
+        if (document.getElementById('etu').checked) {
+            etu[i].style.display = 'none';
+            document.getElementById('grp0').style.display = 'none';
+            // ajout de la checkbox ailleurs
+            
+        }
+        else{
+            etu[i].style.display = 'table-cell';
+        }
+
+    }
+    if(document.getElementById('etu').checked){
+        const btn_rea = document.getElementById('etud');
+        if (btn_rea == null) {
+            document.getElementById("tableau").innerHTML += '<input type="checkbox" id="etud" name="etu" value="etu" onclick="remettre_etu()"> <label id = "label_etud" for="etud">Etudiant </label>';
+        }
+        else{
+            btn_rea.style.display = 'inline';
+            document.getElementById('label_etud').style.display = 'inline';
+        }
+    }
+    else{
+        const btn_rea = document.getElementById('etud');
+        if (btn_rea != null) {
+            document.getElementById('grp0').style.display = 'table-cell';
+            document.getElementById('etud').style.display = 'none';
+            document.getElementById('label_etud').style.display = 'none';
+            document.getElementById('etud').checked = false;
+        }
+        
+
+    }
+}
+
+function remettre_etu(){
+    document.getElementById('etu').checked = false;
+    cache_etu();
+}
+
+
+// --------------------------------------
+
+
+function cache_soutien() {
+    var soutien = document.getElementsByClassName('soutien');
+    for (var i = 0; i < soutien.length; i++) {
+        // si le checkbox est coché alors on cache la colonne
+        if (document.getElementById('soutien').checked) {
+            soutien[i].style.display = 'none';
+            document.getElementById('grp2').style.display = 'none';
+            // ajout de la checkbox ailleurs
+            
+        }
+        else{
+            soutien[i].style.display = 'table-cell';
+        }
+
+    }
+    if(document.getElementById('soutien').checked){
+        const btn_rea = document.getElementById('sout');
+        if (btn_rea == null) {
+            document.getElementById("tableau").innerHTML += '<input type="checkbox" id="sout" name="sout" value="soutien" onclick="remettre_soutien()"> <label id = "label_sout" for="sout">Soutien </label>';
+        }
+        else{
+            btn_rea.style.display = 'inline';
+            document.getElementById('label_sout').style.display = 'inline';
+        }
+    }
+    else{
+        const btn_rea = document.getElementById('sout');
+        if (btn_rea != null) {
+            document.getElementById('grp2').style.display = 'table-cell';
+            document.getElementById('sout').style.display = 'none';
+            document.getElementById('label_sout').style.display = 'none';
+            document.getElementById('sout').checked = false;
+        }
+        
+
+    }
+
+}
+function remettre_soutien(){
+    document.getElementById('soutien').checked = false;
+    cache_soutien();
+}
+
+
+
+
+
+// ---------------------
+
+
+function cache_matiere() {
+    var mat = document.getElementsByClassName('mat');
+    for (var i = 0; i < mat.length; i++) {
+        // si le checkbox est coché alors on cache la colonne
+        if (document.getElementById('mat').checked) {
+            mat[i].style.display = 'none';
+            document.getElementById('grp3').style.display = 'none';
+            // ajout de la checkbox ailleurs
+            
+        }
+        else{
+            mat[i].style.display = 'table-cell';
+        }
+
+    }
+    if(document.getElementById('mat').checked){
+        const btn_rea = document.getElementById('matiere');
+        if (btn_rea == null) {
+            document.getElementById("tableau").innerHTML += '<input type="checkbox" id="matiere" name="matiere" value="mat" onclick="remettre_matiere()"> <label id = "label_matiere" for="matiere">Matiere </label>';
+        }
+        else{
+            btn_rea.style.display = 'inline';
+            document.getElementById('label_matiere').style.display = 'inline';
+        }
+    }
+    else{
+        const btn_rea = document.getElementById('matiere');
+        if (btn_rea != null) {
+            document.getElementById('grp3').style.display = 'table-cell';
+            document.getElementById('matiere').style.display = 'none';
+            document.getElementById('label_matiere').style.display = 'none';
+            document.getElementById('matiere').checked = false;
+        }
+        
+
+    }
+
+}
+function remettre_matiere(){
+    document.getElementById('mat').checked = false;
+    cache_matiere();
+}
+
+
+// ---------------------
+
+
+
+function cache_commentaire() {
+    var comm = document.getElementsByClassName('comm');
+    for (var i = 0; i < comm.length; i++) {
+        // si le checkbox est coché alors on cache la colonne
+        if (document.getElementById('comm').checked) {
+            comm[i].style.display = 'none';
+            document.getElementById('grp4').style.display = 'none';
+            // ajout de la checkbox ailleurs
+            
+        }
+        else{
+            comm[i].style.display = 'table-cell';
+        }
+
+    }
+    if(document.getElementById('comm').checked){
+        const btn_rea = document.getElementById('commentaire');
+        if (btn_rea == null) {
+            document.getElementById("tableau").innerHTML += '<input type="checkbox" id="commentaire" name="commentaire" value="comm" onclick="remettre_commentaire()"> <label id = "label_commentaire" for="commentaire">Commentaire </label>';
+        }
+        else{
+            btn_rea.style.display = 'inline';
+            document.getElementById('label_commentaire').style.display = 'inline';
+        }
+    }
+    else{
+        const btn_rea = document.getElementById('commentaire');
+        if (btn_rea != null) {
+            document.getElementById('grp4').style.display = 'table-cell';
+            document.getElementById('commentaire').style.display = 'none';
+            document.getElementById('label_commentaire').style.display = 'none';
+            document.getElementById('commentaire').checked = false;
+        }
+        
+
+    }
+
+}
+function remettre_commentaire(){
+    document.getElementById('comm').checked = false;
+    cache_commentaire();
 }

@@ -21,6 +21,7 @@ body{
 
 main{
     display: flex;
+    margin-top: 3% ;
 }
 
 aside{
