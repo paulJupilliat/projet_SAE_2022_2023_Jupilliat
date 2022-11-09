@@ -5,8 +5,10 @@
     <script src="../JS/suivie_gen_etu.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
+
+   
     <link rel="stylesheet" href="../static/filtres.css">
+    <link rel="stylesheet" href="../static/nav.css">
     <title>Suivi Etudiant</title>
 </head>
 <body>
@@ -39,66 +41,68 @@
 
         </div>
     </nav>
-    <aside>
-        <div id="aside_filtres">
-            <h2>Filtres</h2>
-            <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
-        </div>
-        <section id="groupe_filtre"> 
-        <select name="semaines" id="selec-sem">
-            <option value="">Semaine 43</option>
-            <option value="">Semaine 44</option>
-            <option value="">Semaine 45</option>
-            <option value="">Semaine 46</option>
-            <option value="">Semaine 47</option>
-        </select>
-        <div id="aside_grp">
-            <h3>Groupes</h3>
-            <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
-        </div>
-        <ul id="grps_filtres">
-            <li>
-                <input type="checkbox" name="11A" id="11A">
-                <label for="11A">11A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="11B" id="11B">
-                <label for="11B">11B</label>
-            </li>
-            <li>
-                <input type="checkbox" name="12A" id="12A">
-                <label for="12A">12A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="12B" id="12B">
-                <label for="12B">12B</label>
-            </li>
-            <li>
-                <input type="checkbox" name="13A" id="13A">
-                <label for="13A">13A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="13B" id="13B">
-                <label for="13B">13B</label>
-            </li>
-            <li>
-                <input type="checkbox" name="14A" id="14A">
-                <label for="14A">14A</label>
-            </li>
-            <li>
-                <input type="checkbox" name="14B" id="14B">
-                <label for="14B">14B</label>
-            </li>
-        </ul>
-        <div id="aside_rec">
-            <h3>Recherche</h3>
-            <input type="text" name="recherche" id="recherche">
-        </div>
-        </section>
-    </aside>
+
     <main>
+        <aside>
+            <div id="aside_filtres">
+                <h2>Filtres</h2>
+                <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+                    <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
+            </div>
+            <section id="groupe_filtre"> 
+            <select name="semaines" id="selec-sem">
+                <option value="">Semaine 43</option>
+                <option value="">Semaine 44</option>
+                <option value="">Semaine 45</option>
+                <option value="">Semaine 46</option>
+                <option value="">Semaine 47</option>
+            </select>
+            <div id="aside_grp">
+                <h3>Groupes</h3>
+                <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+                    <img src="../img/deplie.png" alt="plie" id="dep"/></button>
+            </div>
+            <ul id="grps_filtres">
+                <li>
+                    <input type="checkbox" name="11A" id="11A">
+                    <label for="11A">11A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="11B" id="11B">
+                    <label for="11B">11B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12A" id="12A">
+                    <label for="12A">12A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12B" id="12B">
+                    <label for="12B">12B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13A" id="13A">
+                    <label for="13A">13A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13B" id="13B">
+                    <label for="13B">13B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14A" id="14A">
+                    <label for="14A">14A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14B" id="14B">
+                    <label for="14B">14B</label>
+                </li>
+            </ul>
+            <div id="aside_rec">
+                <h3>Recherche</h3>
+                <input type="text" name="recherche" id="recherche">
+            </div>
+            </section>
+        </aside>
+    
         <table class="scrolable">
             <tr class="colonnes">
                 <th class="noms">Etudiant</th>
