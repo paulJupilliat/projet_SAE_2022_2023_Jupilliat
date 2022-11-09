@@ -55,6 +55,13 @@ table {
   text-align: center; 
   border: 1px solid #333;   
 }
+
+#tableaugen td, #tableaugen th{
+  padding: 0.5em;
+  width: 10em;
+  text-align: center; 
+  border: 1px solid #333;   
+}
 thead,
 tfoot{
     background-color: #333;
@@ -120,7 +127,7 @@ aside{
 
 
 
-#tableauqcm , #tableaudispo{
+#tableauqcm , #tableaudispo, #tableaugen{
   display:flex;
   flex-direction: column;
 }
@@ -137,5 +144,10 @@ aside{
   width: fit-content;
   align-self: center;
 }
-
+#tableaugen table{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
+}
 
