@@ -101,4 +101,10 @@
     background-color: aliceblue;
     flex-grow: 1;
   }
-  
+
+  main{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-left: 2%;
+  }
