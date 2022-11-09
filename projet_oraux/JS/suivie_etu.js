@@ -11,4 +11,15 @@ function plie_deplie_matieres() {
         img.src = "../img/plie.png";
     }
 };
-
+function collapse(){
+    // this.classList.toggle("active");
+    var content = document.getElementById("content");
+    var bt=document.getElementById("collapsible");
+    if (content.style.display === "block") {
+        content.style.display = "none";
+        bt.innerHTML='<img src="../img/plus.png" alt="+" height="10em">Tableau général';
+    } else {
+        content.style.display = "block";
+        bt.innerHTML='<img src="../img/moins.png" alt="-" height="10em">'
+    }
+  };
