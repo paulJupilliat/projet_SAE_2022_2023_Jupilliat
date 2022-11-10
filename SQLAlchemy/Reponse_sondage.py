@@ -1,17 +1,16 @@
 import Oraux
 import Eleve
 class Reponse_sondage:
-    def __init__(self, participation, matiere, commentaire, dateSondage, Eleve, idSondage, Oraux):
+    def __init__(self, participation, matiere, commentaire, dateSondage, Eleve, idSondage):
         self.participation = participation
         self.matiere = matiere
         self.commentaire = commentaire
         self.dateSondage = dateSondage
         self.Eleve = Eleve
         self.idSondage = idSondage
-        self.Oraux = Oraux
         
     def __repr__(self) -> str:
-        return "Participation : "+str(self.participation)+" Matiere : "+str(self.matiere)+" Commentaire : "+str(self.commentaire)+" Date : "+str(self.dateSondage)+" Eleve : "+str(self.Eleve)+" idSondage : "+str(self.idSondage)+" Oraux : "+str(self.Oraux)
+        return "Participation : "+str(self.participation)+" Matiere : "+str(self.matiere)+" Commentaire : "+str(self.commentaire)+" Date : "+str(self.dateSondage)+" Eleve : "+str(self.Eleve)+" idSondage : "+str(self.idSondage)
     
     def getParticipation(self):
         return self.participation
@@ -26,8 +25,6 @@ class Reponse_sondage:
         return self.Eleve
     def getIdSondage(self):
         return self.idSondage
-    def getOraux(self):
-        return self.Oraux
     def setParticipation(self,participation):
         self.participation=participation
     def setMatiere(self,matiere):
@@ -40,6 +37,4 @@ class Reponse_sondage:
         self.Eleve=eleve
     def setIdSondage(self,idSondage):
         self.idSondage=idSondage
-    def setOraux(self,oraux):
-        self.Oraux=oraux
     
