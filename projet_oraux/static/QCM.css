@@ -4,10 +4,21 @@
     flex-wrap: nowrap;
   }
   
-  #titre_tableau_sondage{
+#titre_tableau_sondage{
     flex-grow: 1;
-  }
+}
   
-  tr{
+tr{
     display: flex;
-  }
+}
+
+#tableauqcm{
+  display: flex;
+}
+
+.jsp{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}

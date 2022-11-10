@@ -114,12 +114,6 @@ aside{
 }
 
 
-
-#tableauqcm{
-  display:flex;
-  flex-direction: column;
-}
-
 #tableauqcm table{
   margin: 0;
   border-spacing: 0;
