@@ -1,9 +1,14 @@
-import connexion_BD
+import sys
+sys.path.append('./SQLAlchemy')
+from Reponse_sondage import Reponse_sondage
+from connexion_BD import ouvrir_connexion
+import fonction_BD
 from Eleve import Eleve
 from QCM import QCM
 
 def main(fichier_ouvrir):
-    for fic in fichier_ouvrir:
+    connexion = ouvrir_connexion("manach","manach","servinfo-mariadb","DBmanach")
+    for (idpartie,fic,date) in fichier_ouvrir:
         fichier = open("./Traitement_Selenium/"+fic,"r")
         entete = fichier.readline()
         ligne_en_tete = entete.split(",")
@@ -12,7 +17,6 @@ def main(fichier_ouvrir):
         idenfiant = 0
         note = 0
         sur_combien = 0
-        print(ligne_en_tete)
         if "Nom complet" in ligne_en_tete[0]:
             for partie in ligne_en_tete:
                 if "Consolidation" in partie:
@@ -25,12 +29,15 @@ def main(fichier_ouvrir):
                     idenfiant = ligne_en_tete.index(partie)
             for ligne in fichier:
                 separe = ligne.split(",")
+                try:
+                    fonction_BD.ajouter_reponse_sondage(connexion,Reponse_sondage(separe[consolidation],separe[matiere],separe[precision][:-1],date,separe[idenfiant],idpartie))
+                except:
+                    print("éleve inconnu")
                 print("l'étudiant d'identifiant " + separe[idenfiant] + " souhaite participer à la consolidation : " + separe[consolidation] )
                 if separe[consolidation] != "Non":
                     print("Dans la matière : "+ separe[matiere])
                 print("commentaire : " + separe[precision][:-1])
         else:
-            list_resultat = []
             for partie in ligne_en_tete:
                 if "Nom" in partie:
                     nom = ligne_en_tete.index(partie)
@@ -45,10 +52,8 @@ def main(fichier_ouvrir):
                 separe = ligne.split(",")
                 if "Moyenne globale" not in separe[0]:
                     if note != 0:
-                        print(separe[nom])
-                        print(separe[prenom])
-                        print(separe[idenfiant])
+                        fonction_BD.creation_existe(connexion,Eleve(separe[idenfiant],separe[nom],separe[prenom],None,None))
                         note_total = float(separe[note][1:]) + float(separe[note + 1][:-1])
-                        print((note_total/sur_combien)*20)
+                        fonction_BD.ajouter_resultat_eleve(connexion,separe[idenfiant],idpartie,(note_total/sur_combien)*20)
 
 # main(["SAE _QCM -Test QCM (26102022)-notes.csv"])

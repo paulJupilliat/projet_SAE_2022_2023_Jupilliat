@@ -1,4 +1,6 @@
+# coding = UTF-8
 import sqlalchemy
+#pip install Flask-SQLAlchemy pour relier Flask et SQLAlchemy
 import getpass
 
 def ouvrir_connexion(user,passwd,host,database):
@@ -19,17 +21,16 @@ def ouvrir_connexion(user,passwd,host,database):
     except Exception as err:
         print(err)
         raise err
-    print("connexion réussie")
     return cnx
 
 
-if __name__ == "__main__":
-    login="lemort"
-    passwd="lemort"
-    serveur="servinfo-mariadb"
-    bd="DB"+login
+# if __name__ == "__main__":
+#     login="lemort"
+#     passwd="lemort"
+#     serveur="servinfo-mariadb"
+#     bd="DB"+login
 
-    cnx = ouvrir_connexion(login,passwd,serveur,bd)
+#     cnx = ouvrir_connexion(login,passwd,serveur,bd)
 
 
     

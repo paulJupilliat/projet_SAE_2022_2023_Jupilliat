@@ -1,15 +1,24 @@
+import sys
+
+sys.path.append('./SQLAlchemy')
 from getpass import getpass
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import subprocess
-import os
-import traitement
+from connexion_BD import ouvrir_connexion
 import fonction_BD
+from QCM import QCM
+from Sondage import Sondage
+from Matiere import Matiere
+import subprocess
+import traitement
+import os
 os.environ['MOZ_HEADLESS'] = '1'
 
 user = input("Entrer votre nom utilisateur :")
 mdp = getpass("Entrer votre mot de passe :")
+
+connexion = ouvrir_connexion("manach","manach","servinfo-mariadb","DBmanach")
 
 list_telechargement = [["(BUT2)","QCM (26/10/2022)","Sondage (11/11/2022)"]]
 
@@ -36,7 +45,8 @@ try:
     for partie in list_telechargement:
 
         bouton_matiere = browser.find_element(By.PARTIAL_LINK_TEXT,partie[0])
-        nom_matiere = bouton_matiere.text.split("/n")[1]
+        id_matiere = fonction_BD.id_matiere(connexion,Matiere(0,bouton_matiere.text.split("\n")[1]))
+        bouton_matiere.click()
 
         for i in range(1,len(partie)):
             bouton_questionnaire = browser.find_element(By.PARTIAL_LINK_TEXT,partie[i])
@@ -44,24 +54,27 @@ try:
             bouton_questionnaire.click()
             if "QCM" in partie[i]:
                 nom_matiere = browser.find_element(By.XPATH,"/html/body/div[2]/div[4]/div/header/div/div[1]/div[1]/nav/ol/li[1]/a")
+                id_QCM = fonction_BD.id_QCM(connexion,QCM(0,nom_matiere.text,browser.current_url,id_matiere))
                 nom = nom_matiere.text +" -"+ nom_partie +"-notes.csv"
-                list_move.append(nom.replace("/",""))
+                list_move.insert(0,(id_QCM,nom.replace("/",""),None))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Résultats").click()
             else:
                 nom = nom_partie.split("\n")[0] + ".csv"
-                list_move.append(nom.replace("/",""))
+                id_sondage = fonction_BD.id_sondage(connexion,Sondage(0,browser.current_url))
+                list_move.append((id_sondage,nom.replace("/",""),nom.split("(")[-1][:-5]))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Réponses").click()
             browser.find_element(By.XPATH ,"//button[text()='Télécharger']").click()
             
             browser.back()
             browser.back()
         browser.back()
-except:
+except Exception as inst:
+    print(inst)
     print("erreur à la connexion")
 finally:
     browser.close()
 
-for elem in list_move:
+for (_,elem,_) in list_move:
     subprocess.run(["./Traitement_Selenium/move_document.sh",elem])
 
 traitement.main(list_move)
