@@ -2,7 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <script src="../JS/suivie_gen_etu.js"></script><script src="../JS/nav_adapte.js"></script>
+    <script src="../JS/suivie_gen_etu.js"></script>
+    <script src="../JS/nav_adapte.js"></script>
+    <script src="../JS/soutien.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/style.css">
@@ -16,7 +18,7 @@
     <nav id="menu"></nav>
     <main>
         <section id="haut_sout">
-            <select name="Semaine" id="sem-select">
+            <select name="Semaine" id="sem-select" onchange="load_data()">
                 <option value="">Semaine</option>
                 <!-- remplir avec le selenium -->
                 <option value="semaine1">semaine1</option>
@@ -44,209 +46,7 @@
             </thead>
         </table>
         <table class="scrolable" id="tab2">
-            <tbody>
-                    
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="./Suivie_etu.html">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                </tbody>
+            
         </table></section>
     </main>
 </body>
