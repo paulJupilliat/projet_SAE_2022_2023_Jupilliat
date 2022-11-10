@@ -1,0 +1,16 @@
+#titre_suivi{
+    background-color: #860061;
+    flex-wrap: nowrap;
+  }
+  
+  #titre_tableau_sondage{
+    flex-grow: 1;
+  }
+  
+  tr{
+    display: flex;
+  }
+  tr a{
+    text-decoration: none;
+    color: #000;
+  }

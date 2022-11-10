@@ -1,14 +1,13 @@
-
-#recup_données_btn, #save_sett{
-    margin-left: 4%;
-    margin-right: 4%;
+#recup_données_btn{
+    border-radius: 1em;
+    padding: 1em;
     background-color: #860061;
-    color: white;
-    
+    font-weight: bold;
+    font-size: 1em;
 }
 main{
     display: flex;
-    
+    justify-content: space-around;
 }
 
 .res_qcm{
@@ -21,10 +20,10 @@ main{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    
+    height:100%;
 }
 
-.info-acc, .info_par{
+.info-acc{
     display: flex;
 }
 
@@ -65,6 +64,7 @@ main{
     margin-bottom: 10px;
     flex-basis: 50%;
     flex-grow: 1;
+    height: 100%;
 
 }
 
