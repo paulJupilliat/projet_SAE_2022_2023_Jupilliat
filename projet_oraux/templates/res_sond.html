@@ -1,26 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <script src="../JS/res_sond.js"></script>
-    <script src="../JS/nav_adapte.js"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style_sond.css">
-    <link rel="stylesheet" href="../static/style.css">
-    
-    <title>Résultat sondages</title>
-</head>
-<body>
-    <nav id="menu"></nav>
-    <main>
-        <aside>
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style_sond.css')}}">
+
+{% endblock %}
+{% block aside %}
             <div id="aside_filtres">
                 <h2>Filtres</h2>
                 <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                <img src="../img/deplie.png" alt="deplie" id="dep2"/></button>
+                <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep2"/></button>
             </div>
             <section id="groupe_filtre">
             <select name="semaines" id="selec-sem">
@@ -33,7 +27,7 @@
             <div id="aside_grp">
                 <h3>Groupes</h3>
                 <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                    <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
             </div>
             <ul id="grps_filtres">
                 <li>
@@ -70,13 +64,8 @@
                 </li>
             </ul>
         </section>
-        </aside>
-
-
-
-
-
-
+{% endblock %}
+{% block center %}
         <div id="encadrer_table">
             <table id="tableau">
                 <thead>
@@ -150,6 +139,4 @@
                 </tbody>
             </table>
         </div>
-    </main>
-</body>
-</html>
+        {% endblock %}
