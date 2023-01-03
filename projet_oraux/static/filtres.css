@@ -1,0 +1,154 @@
+#aside_filtres , #aside_grp {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin:auto;
+}
+/* les puces des li n'apparaissent pas */
+#grps_filtres li {
+    list-style-type: none;
+    font-weight: bold;
+}
+#grps_filtres {
+    align-items: left;
+}
+#dep{
+    margin-top: 1em;
+    max-height: 2em;
+}
+
+
+#Dispo th{
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  background-color: white;
+  
+}
+#Dispo td {
+  border: 1px solid;
+  background-color: white;
+}
+
+table {
+  border-spacing: 0;
+}
+.scrolable {
+  width: 65em;
+  margin-right: 0%;
+  padding-right: 0%;
+  overflow-y: scroll;
+  display: block;
+  border-spacing: 0;
+  max-height: 30em;}
+
+
+#tableauqcm td, #tableauqcm th{
+    padding: 0.5em;
+    width: 10em;
+    text-align: center; 
+    border: 1px solid #333;   
+}
+#tableaudispo td, #tableaudispo th{
+  padding: 0.5em;
+  width: 10em;
+  text-align: center; 
+  border: 1px solid #333;   
+}
+
+#tableaugen td, #tableaugen th{
+  padding: 0.5em;
+  width: 10em;
+  text-align: center; 
+  border: 1px solid #333;   
+}
+thead,
+tfoot{
+    background-color: #333;
+    color: #fff;
+}
+.colonnes,.moyennes{
+    position: sticky;
+    top: 0;
+    background-color: #A0A0A0;
+    color: #860061;
+}
+
+.matières li {
+  list-style-type: none;
+  font-weight: bold;
+}
+#matieres_gauche {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: 0%;
+  padding-left: 0%;
+  margin-right: 0%;
+  padding-right: 0%;
+}
+#matieres_gauche > div {
+  margin-left: 0%;
+  padding-left: 0%;
+  margin-right: 0%;
+  padding-right: 0%;
+}
+
+
+#section_filtres , #section_grp {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin:auto;
+}
+#partie_gauche {
+  width: 30%;
+  margin: 1em;
+}
+#dates {
+  display: flex;
+}
+#dates > * {
+  margin-left: 1%;
+  padding-left: 1%;
+  margin-right: 1%;
+  padding-right: 1%;
+}
+
+tbody {
+  background-color: #d6d6d6;
+  white-space: normal;
+}
+
+aside{
+  margin: 2em;
+  flex-grow: 0;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
+
+
+
+#tableauqcm , #tableaudispo, #tableaugen{
+  display:flex;
+  flex-direction: column;
+}
+
+#tableauqcm table{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
+}
+#tableaudispo table{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
+}
+#tableaugen table{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
+}
+

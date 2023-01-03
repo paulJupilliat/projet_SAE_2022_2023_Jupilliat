@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <script src="../JS/res_qcm.js"></script>
+    <script src="../JS/nav_adapte.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/filtres.css">
+    <link rel="stylesheet" href="../static/QCM.css">
+    <link rel="stylesheet" href="../static/nav.css">
+    <title>Resultat QCM</title>
+</head>
+<body>
+    <nav id="menu"></nav>
+    <main>
+        <aside>
+            <div id="aside_filtres">
+                <h2>Filtres</h2>
+                <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+                <img src="../img/deplie.png" alt="deplie" id="dep2"/></button>
+            </div>
+            <section id="groupe_filtre">
+            <select name="semaines" id="selec-sem">
+                <option value="">Semaine 43</option>
+                <option value="">Semaine 44</option>
+                <option value="">Semaine 45</option>
+                <option value="">Semaine 46</option>
+                <option value="">Semaine 47</option>
+            </select>
+            <div id="aside_grp">
+                <h3>Groupes</h3>
+                <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+                    <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            </div>
+            <ul id="grps_filtres">
+                <li>
+                    <input type="checkbox" name="11A" id="11A">
+                    <label for="11A">11A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="11B" id="11B">
+                    <label for="11B">11B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12A" id="12A">
+                    <label for="12A">12A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="12B" id="12B">
+                    <label for="12B">12B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13A" id="13A">
+                    <label for="13A">13A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="13B" id="13B">
+                    <label for="13B">13B</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14A" id="14A">
+                    <label for="14A">14A</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="14B" id="14B">
+                    <label for="14B">14B</label>
+                </li>
+            </ul>
+        </section>
+        </aside>
+    
+        <section id="tableauqcm">
+        <div class="jsp">
+        <table id="labels">
+            <thead id="QCM">
+                <tr>
+                    <th id="titre_tableau_sondage" colspan="5"><H2>QCM</H2></th>
+                </tr>
+            </thead>
+            <tr class="colonnes">
+                <th class="noms">Etudiant</th>
+                <th class="noms">Groupe</th>
+                <th class="noms">matiere1</th>
+                <th class="noms">matiere2</th>
+                <th class="noms">Soutien</th>
+                <th class="noms">Voeu matiere</th>
+            </tr>
+            <tr id="moyennes">
+                <th class="moy">Moyenne</th>
+                <th class="moy">
+                    <select>
+                        <option value="gen">Generale</option>
+                        <option value="11A">11A</option>
+                        <option value="11B">11B</option>
+                        <option value="12A">12A</option>
+                        <option value="12B">12B</option>
+                        <option value="13A">13A</option>
+                        <option value="13B">13B</option>
+                        <option value="14A">14A</option>
+                        <option value="14B">14B</option>
+                    </select>
+                </th>
+                <th class="moy">12.5</th>
+                <th class="moy">12.5</th>
+            </tr>
+            </table>
+            <table class="scrolable">
+                <tbody>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr>
+                <tr>
+                    <td>Paul</td>
+                    <td>11A</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                    <td>12.5</td>
+                </tr></tbody>
+        </table></div></section>
+    </main>
+</body>
+</html>

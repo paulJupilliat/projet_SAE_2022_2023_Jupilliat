@@ -1,0 +1,81 @@
+#recup_données_btn{
+    border-radius: 1em;
+    padding: 1em;
+    background-color: #860061;
+    font-weight: bold;
+    font-size: 1em;
+}
+main{
+    display: flex;
+    justify-content: space-around;
+}
+
+.res_qcm{
+    background-color: lightgray;
+    border-radius: 10px;
+    margin-top: 3%;
+    padding: 3%;
+    text-align: center;
+    flex-basis: 50%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height:100%;
+}
+
+.info-acc{
+    display: flex;
+}
+
+.res_sond{
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 3%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 3%;
+    margin-top: 3%;
+}
+
+.dispo_en{
+    background-color: lightgray;
+    border-radius: 10px;
+    margin-top: 3%;
+    padding: 3%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.sond_dispo{
+    display: inline;
+    background-color: lightgray;
+    flex-basis: 10%;
+    flex-grow: 1;
+}
+.dispo_sond{
+    display: flex;
+    flex-direction: column;
+    margin-left: 4%;
+    margin-right: 4%;
+    padding: 3%;
+    margin-bottom: 10px;
+    flex-basis: 50%;
+    flex-grow: 1;
+    height: 100%;
+
+}
+
+/* les tab */
+table,
+td {
+    border: 1px solid #333;
+}
+
+thead,
+tfoot {
+    background-color: #860061;
+    color: #fff;
+}
