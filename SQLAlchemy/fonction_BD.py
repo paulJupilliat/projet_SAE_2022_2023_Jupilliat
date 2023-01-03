@@ -118,7 +118,9 @@ def creation_existe(connexion,etudiant:Eleve):
 
 def ajouter_reponse_sondage(connexion,rep_sondage: Reponse_sondage):
     nbsondage = connexion.execute("SELECT COUNT(participation) from REPSONDAGE where REPSONDAGE.numEtu=%s and REPSONDAGE.dateSondage=STR_TO_DATE(%s,'%s/%s/%s') and REPSONDAGE.idSondage=%s"%(rep_sondage.getEleve(),rep_sondage.getDateSondage(),"%d","%m","%Y",rep_sondage.getIdSondage()))
-    if nbsondage.first()[0] == 0:
+    res = nbsondage.first()
+    print(res[0])
+    if res[0] == 0:
         connexion.execute("INSERT INTO REPSONDAGE values ('%s','%s','%s',STR_TO_DATE('%s','%s/%s/%s'),%s,%s)"%(rep_sondage.getParticipation(),rep_sondage.getMatiere(),rep_sondage.getCommentaire(),rep_sondage.getDateSondage(),'%d',"%m","%Y",rep_sondage.getEleve(),rep_sondage.getIdSondage()))
     # else:
     #     connexion.execute("UPDATE REPONDAGE SET ")

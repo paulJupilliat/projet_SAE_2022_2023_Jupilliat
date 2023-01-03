@@ -1,6 +1,3 @@
-from calendar import c
-from matplotlib.pyplot import connect
-from more_itertools import first
 import sqlalchemy
 import getpass
 
