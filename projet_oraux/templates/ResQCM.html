@@ -5,10 +5,6 @@
 {% endif %}
 {% block styles %}
 {{ super() }}
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/dispo.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='QCM.css')}}">
@@ -17,7 +13,7 @@
     <div id="aside_filtres">
         <h2>Filtres</h2>
         <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-        <img src="../img/deplie.png" alt="deplie" id="dep2"/></button>
+        <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep2"/></button>
     </div>
     <section id="groupe_filtre">
     <select name="semaines" id="selec-sem">
@@ -30,7 +26,7 @@
     <div id="aside_grp">
         <h3>Groupes</h3>
         <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-            <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
+            <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
     </div>
     <ul id="grps_filtres">
         <li>
@@ -68,7 +64,7 @@
     </ul>
 </section>
 {% endblock %}
-{% block content %}
+{% block center %}
 <section id="tableauqcm">
     <div class="jsp">
     <table id="labels">

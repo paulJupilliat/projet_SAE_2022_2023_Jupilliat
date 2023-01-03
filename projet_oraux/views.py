@@ -59,7 +59,7 @@ from flask import render_template, request,url_for , redirect
 
 @app.route("/")
 def route():
-    return render_template("ResQCM.html",title="Projet soutien", admin=True)
+    return render_template("Soutien.html",title="Projet soutien", admin=True)
 # @app.route("/")
 # def home():
 #     return render_template(

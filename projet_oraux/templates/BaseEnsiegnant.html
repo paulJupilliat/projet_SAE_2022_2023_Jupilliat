@@ -36,23 +36,22 @@
         <!-- Your page content -->
         
         <main class="d-flex flex-shrink-0">
-        <aside class="p-4">
-            {% block aside %}
+            <aside class="p-4">
+                {% block aside %}
+                {% endblock %}
+            </aside>
+            <div id="div_main"class="container">
+            {% block center %}
             {% endblock %}
-        </aside>
-        <div class="container">
-        {% block content %}
-        {% endblock %}
-        </div>
-        </main>
-        <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-        <span class="text-muted">Books, authors and pictures are not my property</span>
-        </div>
-        </footer>
-        {% block scripts %}
-        <!-- Optional JavaScript -->
-        {{ bootstrap.load_js() }}
-        {% endblock %}
-    </body>
-</html>
+            </div>
+            <div id="content">
+            {% block right %}
+            {% endblock %}
+            </div>
+            </main>
+            {% block scripts %}
+            <!-- Optional JavaScript -->
+            {{ bootstrap.load_js() }}
+            {% endblock %}
+        </body>
+    </html>

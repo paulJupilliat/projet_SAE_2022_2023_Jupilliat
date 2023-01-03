@@ -51,10 +51,10 @@
     flex-wrap: wrap;
     margin:auto;
   }
-  #partie_gauche {
+  #aside {
     width: 30%;
   }
-  main {
+  #div_main {
     display: flex;
     flex-wrap: nowrap;
   }
