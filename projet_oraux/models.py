@@ -343,14 +343,6 @@ def disponibilites_enseignant(id_enseignant, date):
     dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).filter(EstDisponible.numEnseignant == id_enseignant).all()
     return dispo
 
-    str_js+="\tvar options = {\n"
-    str_js+="\tchart: {title: 'Ecart par rapport à la moyenne générale'},\n"
-    str_js+="\twidth: 900,\n"
-    str_js+="\theight: 500\n};\n"
-    str_js+="\tvar chart = new google.charts.Line(document.getElementById('linechart_material'));\n"
-    str_js+="\tchart.draw(data, google.charts.Line.convertOptions(options));\n"
-    str_js+="}\n"
-    
 def gen_soutien(num_sem,seuil):
     #genere les soutiens pour la semaine donnee
     sem=Semaine.query.filter(Semaine.numSemaine==num_sem).first()
