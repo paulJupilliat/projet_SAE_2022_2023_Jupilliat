@@ -192,104 +192,135 @@ def get_soutiens_etudiant(id_etu):
     soutiens = Oral.query.filter(Oral.numEtu == id_etu).all()
     return soutiens
 
+def get_resultats_qcm(semaine):
+    """fonction recuperant les resultats de QCM pour une date en renvoyant les moyennes par groupe et par matiere
+
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
+    res_qcm = QCM.query.filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).all()
+    return res_qcm
+
+def get_dispo_enseignant(semaine):
+    """fonction recuperant les disponibilites des enseignants pour une date
+
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
+    dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).all()
+    return dispo
+
+def get_res_sondage(semaine):
+    """fonction recuperant les resultats du sondage pour une date
+
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
+    res_sond = ReponseQuestionSondage.query.filter(ReponseQuestionSondage.question.dateQuestion >= sem.dateDebut).filter(ReponseQuestionSondage.question.dateQuestion <= sem.dateFin).all()
+    return res_sond
+    
 
 
 
 
 
-def get_book(id):
-    return Book.query.get(id)
-def get_books():
-    return Book.query.order_by(Book.title).all()
-def get_books_sample(nb_by_page, page):
-    return Book.query.order_by(Book.title).limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_books_sample_filtered(nb_by_page,page,author,genre,price_min,price_max,order):
-    query = Book.query.join(Author).join(BookGenre).join(Genre)
-    if author != "":
-        query = query.filter(Author.name.like("%"+author+"%"))
-    if genre != "":
-        query = query.filter(Genre.name.like("%"+genre+"%"))
-    if price_min != "":
-        query = query.filter(Book.price>=price_min)
-    if price_max != "":
-        query = query.filter(Book.price<=price_max)
-    if order == "":
-        order = "title"
-    if order == "title":
-        query = query.order_by(Book.title)
-    elif order == "price":
-        query = query.order_by(Book.price)
-    elif order == "author":
-        query = query.order_by(Author.name)
-    elif order == "genre":
-        query = query.order_by(Genre.name)
-    return query.limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_nb_books_filtered(nb_by_page,author,genre,price_min,price_max):
-    query = Book.query.join(Author).join(BookGenre).join(Genre)
-    if author is not None:
-        query = query.filter(Author.name.like("%"+author+"%"))
-    if genre is not None:
-        query = query.filter(Genre.name.like("%"+genre+"%"))
-    if price_min is not None:
-        query = query.filter(Book.price>=price_min)
-    if price_max is not None:
-        query = query.filter(Book.price<=price_max)
-    return int(query.count()/nb_by_page)+1
-def get_nb_pages(nb_by_page,types):
-    if types=="books":
-        return int(Book.query.count()/nb_by_page)+1
-    elif types=="authors":
-        return int(Author.query.count()/nb_by_page)+1
-    elif types=="genres":
-        return int(Genre.query.count()/nb_by_page)+1
-def get_nb_books():
-    return Book.query.count()
-def get_author(id):
-    return Author.query.get(id)
-def get_author_by_name(name):
-    return Author.query.filter_by(name=name).first()
-def get_authors():
-    return Author.query.order_by(Author.name).all()
-def get_authors_sample(nb_by_page, page):
-    #authors are ordered by name
-    return Author.query.order_by(Author.name).limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_nb_authors():
-    return Author.query.count()
-def get_genre(id):
-    return Genre.query.get(id)
-def get_genres():
-    return Genre.query.order_by(Genre.name).all()
-def get_genres_sample(nb_by_page, page):
-    return Genre.query.order_by(Genre.name).limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_genre_by_name(name):
-    return Genre.query.filter_by(name=name).first()
-def get_nb_genres():
-    return Genre.query.count()
-def get_book_genres(id):
-    genres=[]
-    for g in BookGenre.query.filter_by(book_id=id).all():
-        genres.append(get_genre(g.genre_id))
-    return genres
-def get_genre_books(id):
-    books=[]
-    for b in BookGenre.query.filter_by(genre_id=id).all():
-        books.append(get_book(b.book_id))
-    return books
-def get_nb_book_genres(id):
-    return BookGenre.query.filter_by(book_id=id).count()
-def add_genre_to_book(book_id, genre_id):
-    book_genre = BookGenre(id=get_nb_book_genres(book_id)+1, book_id=book_id, genre_id=genre_id)
-    db.session.add(book_genre)
-    db.session.commit()
-def remove_genre_from_book(book_id, genre_id):
-    book_genre = BookGenre.query.filter_by(book_id=book_id, genre_id=genre_id).first()
-    db.session.delete(book_genre)
-    db.session.commit()
-def supress_book_genres(book_id):
-    for book_genre in BookGenre.query.filter_by(book_id=book_id).all():
-        db.session.delete(book_genre)
-    db.session.commit()
 
-@login_manager.user_loader
-def load_user(username):
-    return User.query.get(username)
+# def get_book(id):
+#     return Book.query.get(id)
+# def get_books():
+#     return Book.query.order_by(Book.title).all()
+# def get_books_sample(nb_by_page, page):
+#     return Book.query.order_by(Book.title).limit(nb_by_page).offset((page-1)*nb_by_page).all()
+# def get_books_sample_filtered(nb_by_page,page,author,genre,price_min,price_max,order):
+#     query = Book.query.join(Author).join(BookGenre).join(Genre)
+#     if author != "":
+#         query = query.filter(Author.name.like("%"+author+"%"))
+#     if genre != "":
+#         query = query.filter(Genre.name.like("%"+genre+"%"))
+#     if price_min != "":
+#         query = query.filter(Book.price>=price_min)
+#     if price_max != "":
+#         query = query.filter(Book.price<=price_max)
+#     if order == "":
+#         order = "title"
+#     if order == "title":
+#         query = query.order_by(Book.title)
+#     elif order == "price":
+#         query = query.order_by(Book.price)
+#     elif order == "author":
+#         query = query.order_by(Author.name)
+#     elif order == "genre":
+#         query = query.order_by(Genre.name)
+#     return query.limit(nb_by_page).offset((page-1)*nb_by_page).all()
+# def get_nb_books_filtered(nb_by_page,author,genre,price_min,price_max):
+#     query = Book.query.join(Author).join(BookGenre).join(Genre)
+#     if author is not None:
+#         query = query.filter(Author.name.like("%"+author+"%"))
+#     if genre is not None:
+#         query = query.filter(Genre.name.like("%"+genre+"%"))
+#     if price_min is not None:
+#         query = query.filter(Book.price>=price_min)
+#     if price_max is not None:
+#         query = query.filter(Book.price<=price_max)
+#     return int(query.count()/nb_by_page)+1
+# def get_nb_pages(nb_by_page,types):
+#     if types=="books":
+#         return int(Book.query.count()/nb_by_page)+1
+#     elif types=="authors":
+#         return int(Author.query.count()/nb_by_page)+1
+#     elif types=="genres":
+#         return int(Genre.query.count()/nb_by_page)+1
+# def get_nb_books():
+#     return Book.query.count()
+# def get_author(id):
+#     return Author.query.get(id)
+# def get_author_by_name(name):
+#     return Author.query.filter_by(name=name).first()
+# def get_authors():
+#     return Author.query.order_by(Author.name).all()
+# def get_authors_sample(nb_by_page, page):
+#     #authors are ordered by name
+#     return Author.query.order_by(Author.name).limit(nb_by_page).offset((page-1)*nb_by_page).all()
+# def get_nb_authors():
+#     return Author.query.count()
+# def get_genre(id):
+#     return Genre.query.get(id)
+# def get_genres():
+#     return Genre.query.order_by(Genre.name).all()
+# def get_genres_sample(nb_by_page, page):
+#     return Genre.query.order_by(Genre.name).limit(nb_by_page).offset((page-1)*nb_by_page).all()
+# def get_genre_by_name(name):
+#     return Genre.query.filter_by(name=name).first()
+# def get_nb_genres():
+#     return Genre.query.count()
+# def get_book_genres(id):
+#     genres=[]
+#     for g in BookGenre.query.filter_by(book_id=id).all():
+#         genres.append(get_genre(g.genre_id))
+#     return genres
+# def get_genre_books(id):
+#     books=[]
+#     for b in BookGenre.query.filter_by(genre_id=id).all():
+#         books.append(get_book(b.book_id))
+#     return books
+# def get_nb_book_genres(id):
+#     return BookGenre.query.filter_by(book_id=id).count()
+# def add_genre_to_book(book_id, genre_id):
+#     book_genre = BookGenre(id=get_nb_book_genres(book_id)+1, book_id=book_id, genre_id=genre_id)
+#     db.session.add(book_genre)
+#     db.session.commit()
+# def remove_genre_from_book(book_id, genre_id):
+#     book_genre = BookGenre.query.filter_by(book_id=book_id, genre_id=genre_id).first()
+#     db.session.delete(book_genre)
+#     db.session.commit()
+# def supress_book_genres(book_id):
+#     for book_genre in BookGenre.query.filter_by(book_id=book_id).all():
+#         db.session.delete(book_genre)
+#     db.session.commit()
+
+# @login_manager.user_loader
+# def load_user(username):
+#     return User.query.get(username)
