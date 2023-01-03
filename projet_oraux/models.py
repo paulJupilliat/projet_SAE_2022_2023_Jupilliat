@@ -18,6 +18,7 @@ class Sondage(db.Model):
     __tablename__ = "sondage"
     idSond = db.Column(db.Integer, primary_key=True)
     urlSond = db.Column(db.String(500))
+    dateSondage = db.Column(db.String(500))
     def __repr__(self):
         return f"Sondage({self.idSond}, {self.urlSond})"
 class QuestionSondage(db.Model):
@@ -122,7 +123,7 @@ class RepSondage(db.Model):
     __tablename__ = "repsondage"
     idSondage = db.Column(db.Integer, db.ForeignKey("sondage.idSondage"), primary_key=True)
     numEtu = db.Column(db.Integer, db.ForeignKey("eleve.numEtu"), primary_key=True)
-    dateSondage = db.Column(db.String(500))
+    
     matiereVoulu = db.Column(db.String(100))
     volontaire = db.Column(db.String(50))
     #relation pour avoir le sondage d une reponse
@@ -342,6 +343,24 @@ def res_QCM(id_eleve, date):
     soutien = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
     return res_qcm, soutien
 
+def donnees_sondage(date):
+    """fonction recuperant les donnees du sondage pour une date
+
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    sondage = Sondage.query.filter(Sondage.dateSondage >= sem.dateDebut).filter(Sondage.dateSondage <= sem.dateFin).first()
+    reponses = RepSondage.query.join(Sondage).all()
+    question = QuestionSondage.query.filter(QuestionSondage.idSondage == sondage.idSondage).first()
+    
+    semestre = get_semestre(date)
+    order = Eleve.groupeS1.asc() if semestre.id == 1 else Eleve.groupeS2.asc()
+    reponses = RepSondage.query.join(Eleve)
+    if question is not None:
+        reponses.join(ReponseQuestionSondage).query.filter(ReponseQuestionSondage.idQuestion == question.idQuestion)
+    reponses.filter(RepSondage.idSondage == sondage.idSondage).order_by(order).all()
+
 def get_eleve(id_eleve):
     """fonction recuperant un eleve
 
@@ -350,7 +369,18 @@ def get_eleve(id_eleve):
     """
     eleve = Eleve.query.filter(Eleve.numEtu == id_eleve).first()
     return eleve
+def get_semestre(date):
+    """fonction recuperant le semestre pour une date
 
+    Args:
+        date (String): date du QCM
+    """
+    periode = Periode.query.filter(Periode.dateDebut <= date).filter(Periode.dateFin >= date).first()
+    if periode.id == 1 or periode.id == 2:
+        semestre = 1
+    else:
+        semestre = 2
+        
 def get_eleve(groupe, date):
     """fonction recuperant les eleves d un groupe pour une date
 
