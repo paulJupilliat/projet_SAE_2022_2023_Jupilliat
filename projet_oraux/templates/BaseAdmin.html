@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        {% block head %}
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+            <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+        {% endblock %}
+        <title>Ma bibliothèque SF</title>
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+        <!-- Fixed navbar -->
+        <nav>
+            <label for="toggle" class="label_nav">☰</label><input type="checkbox" id="toggle"><div class="main_pages">
+                <a href="./Acceuil.html" id="navbar_home"><img src="{{ url_for('static', filename='img/acceuil.png') }}" height="50em" alt="" height="60em"></a>
+                <a href="./ResQCM.html" class="navbar__links">Résultats QCM</a>
+                <a href="./res_sond.html" class="navbar__links">Sondages</a>
+                <a href="./Dispo.html" class="navbar__links">Disponibilités enseignants</a>
+                <a href="./Soutien.html" class="navbar__links">Voir le soutien</a>
+                <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
+                <a href="./paramAdm.html" class="navbar__links"> <img src="{{ url_for('static', filename='img/reglages.png') }}" height="50em" alt=""></a>
+                <a href="./index.html" class="navbar__links"><img src="{{ url_for('static', filename='img/deconnexion.png') }}" height="40em" alt=""></a></div>
+        </nav>
+            </header>
+        <!-- Your page content -->
+        
+        <main class="d-flex flex-shrink-0">
+        <aside class="p-4">
+            {% block aside %}
+            {% endblock %}
+        </aside>
+        <div id="div_main"class="container">
+        {% block content %}
+        {% endblock %}
+        </div>
+        </main>
+        {% block scripts %}
+        <!-- Optional JavaScript -->
+        {{ bootstrap.load_js() }}
+        {% endblock %}
+    </body>
+</html>

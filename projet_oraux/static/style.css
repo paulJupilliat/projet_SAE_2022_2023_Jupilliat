@@ -40,7 +40,7 @@ table{
     padding:2em;
     
 }
-main{
+#div_main{
     display: flex;
     justify-content: space-between;
     margin-top: 3% ;
