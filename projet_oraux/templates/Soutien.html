@@ -1,23 +1,16 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <script src="../JS/suivie_gen_etu.js"></script>
-    <script src="../JS/nav_adapte.js"></script>
-    <script src="../JS/soutien.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/suiviGen.css">
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/soutien.css">
-    <title>Soutien</title>
-</head>
-<body>
-    <nav id="menu"></nav>
-    <main>
-        <section id="haut_sout">
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='suiviGen.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='soutien.css')}}">
+ {% endblock %}
+{% block center %}
             <select name="Semaine" id="sem-select" onchange="load_data()">
                 <option value="">Semaine</option>
                 <!-- remplir avec le selenium -->
@@ -28,8 +21,6 @@
                 <option value="semaine5">semaine5</option>
                 <option value="semaine6">semaine6</option>
             </select>
-            </section>
-        <section id="tableaugen">
         <table id="labels">
             <thead id="titre_suivi">
                 <tr>
@@ -46,8 +37,5 @@
             </thead>
         </table>
         <table class="scrolable" id="tab2">
-            
-        </table></section>
-    </main>
-</body>
-</html>
+        </table>
+        {% endblock %}

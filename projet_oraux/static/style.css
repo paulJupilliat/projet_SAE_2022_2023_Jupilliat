@@ -46,5 +46,9 @@ table{
     margin-top: 3% ;
 }
 
+main {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3% ;}
 
 
