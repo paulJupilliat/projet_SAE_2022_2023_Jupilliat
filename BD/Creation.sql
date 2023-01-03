@@ -6,6 +6,7 @@ DROP TABLE RESULTAT;
 DROP TABLE ORAUX;
 DROP TABLE PROF;
 DROP TABLE ELEVE;
+DROP TABLE USER;
 DROP TABLE QCM;
 DROP TABLE MATIERE;
 DROP TABLE SONDAGE;
@@ -51,6 +52,13 @@ CREATE TABLE PROF (
     Primary Key (idProf)
 );
 
+CREATE TABLE USER(
+    username VARCHAR(255),
+    pswd VARCHAR(255),
+    estAdmin boolean,
+    Primary KEY (username)
+);
+
 
 CREATE TABLE ORAUX (
     idOral INT,
@@ -63,8 +71,6 @@ CREATE TABLE ORAUX (
     FOREIGN KEY (idMatiere) REFERENCES MATIERE(idMatiere),
     FOREIGN KEY (idProf) REFERENCES PROF(idProf)
 );
-
--- Rajouter l'année pour le resultat et pour les réponses sondages 
 
 CREATE TABLE RESULTAT (
     note DECIMAL (6,2),
@@ -82,8 +88,10 @@ CREATE TABLE REPSONDAGE (
     dateSondage DATE,
     numEtu INT,
     idSondage INT,
-    Primary Key(numEtu,idSondage,dateSondage),
-    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu)
+    idOral INT,
+    Primary Key(numEtu,idSondage),
+    FOREIGN KEY(numEtu) REFERENCES ELEVE(numEtu),
+    FOREIGN KEY (idOral) REFERENCES ORAUX(idOral)
 );
 
 CREATE TABLE PARTICIPE (
@@ -166,7 +174,14 @@ BEGIN
     end if ;
     if new.idProf is not null then 
         select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
-        if prof is not null then
+        if prof is null then
+            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
+            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+        end if;
+    end if ;
+    if new.idProf is not null then 
+        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
+        if prof is null then
             set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
             signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
         end if;
@@ -186,33 +201,33 @@ delimiter ;
 -- trigger pour verifier qu'un commentaire doit etre redige par le prof qui a cree l'oral
 
 delimiter |
--- create or replace trigger prof_commentaire before insert on REPSONDAGE for each row
--- BEGIN 
---     declare messa VARCHAR(100) default '';
---     declare fini boolean DEFAULT false;
---     declare nomProfActu VARCHAR(100);
---     declare peut_faire boolean default false;
---     declare idProfOral int;
---     declare lesProf cursor for
---         select idProf from ORAUX where new.idOral = ORAUX.idOral;
---     declare continue handler for not found set fini = true;
---     open lesProf;
+create or replace trigger prof_commentaire before insert on REPSONDAGE for each row
+BEGIN 
+    declare messa VARCHAR(100) default '';
+    declare fini boolean DEFAULT false;
+    declare nomProfActu VARCHAR(100);
+    declare peut_faire boolean default false;
+    declare idProfOral int;
+    declare lesProf cursor for
+        select idProf from ORAUX where new.idOral = ORAUX.idOral;
+    declare continue handler for not found set fini = true;
+    open lesProf;
 
---     while not fini do
---         fetch lesProf into idProfOral;
---         if not fini then
---             if idProfOral = new.numEtu then
---                 set peut_faire = true;
---             end if;
---         end if;
---     end while;
---     close lesProf;
---     select nomProf into nomProfActu from PROF where PROF.idProf = new.numEtu;
---     if not peut_faire then 
---         set messa = concat("le professeur ",nomProfActu,"  n'a pas cree cet oral ");
---         signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
---     end if ;
--- end |
+    while not fini do
+        fetch lesProf into idProfOral;
+        if not fini then
+            if idProfOral = new.numEtu then
+                set peut_faire = true;
+            end if;
+        end if;
+    end while;
+    close lesProf;
+    select nomProf into nomProfActu from PROF where PROF.idProf = new.numEtu;
+    if not peut_faire then 
+        set messa = concat("le professeur ",nomProfActu,"  n'a pas cree cet oral ");
+        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
+    end if ;
+end |
 delimiter ;
 -- trigger pour que le prof faisant l'oral soit dispo
 -- trigger
