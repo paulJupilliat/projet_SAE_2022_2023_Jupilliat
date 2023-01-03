@@ -1,24 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <script src="../JS/suivie_gen_etu.js"></script><script src="../JS/nav_adapte.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/suiviGen.css">
-    <link rel="stylesheet" href="../static/nav.css">
-    <title>Suivi Etudiant</title>
-</head>
-<body>
-    <nav id="menu"></nav>
-    <main>
-        <aside>
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='suiviGen.css')}}">
+
+{% endblock %}
+{% block aside %}
             <div id="aside_filtres">
                 <h2>Filtres</h2>
                 <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                    <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep2"/></button>
             </div>
             <section id="groupe_filtre"> 
             <select name="semaines" id="selec-sem">
@@ -31,7 +27,7 @@
             <div id="aside_grp">
                 <h3>Groupes</h3>
                 <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                    <img src="../img/deplie.png" alt="plie" id="dep"/></button>
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
             </div>
             <ul id="grps_filtres">
                 <li>
@@ -72,7 +68,8 @@
                 <input type="text" name="recherche" id="recherche">
             </div>
             </section>
-        </aside>
+{% endblock %}
+{% block center %}
         <section id="tableaugen">
         <table id="labels">
             <thead id="titre_suivi">
@@ -294,6 +291,4 @@
                 </tr>
                 </tbody>
         </table></section>
-    </main>
-</body>
-</html>
+{% endblock %}
