@@ -18,19 +18,19 @@
         <main id="page_connexion">
             {% block main %}
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo">
-            <div id="conteneur">
+            <form id="conteneur" action="">
                 <div id="ident">
-                <label>Identifiant</label>
-                <input type="text" name="identifiant" id="identifiant">
+                    <label>Identifiant</label>
+                    <input type="text" name="identifiant" id="identifiant">
                 </div>
                 <div id="mdp">
-                <label>Mot de passe</label>
-                <input type="password" name="mdp" id="motdp">
+                    <label>Mot de passe</label>
+                    <input type="password" name="mdp" id="motdp">
                 </div>
-                 <button id="connexion" type="button" ><a href="{{ url_for ('Acceuil') }}">Se connecter</a></button> 
+                <button id="connexion" type="submit">Se connecter</button> 
             </div>
-                <button id="retour" type="button"><a href="{{url_for ('route')}}"><img src="{{ url_for('static', filename='img/retour_util.png') }}" alt="retour" height="10em">Retour au choix utilisateur</a></button>
-                {% endblock %}
+            <button id="retour" type="button"><a href="{{url_for ('route')}}"><img src="{{ url_for('static', filename='img/retour_util.png') }}" alt="retour" height="10em">Retour au choix utilisateur</a></button>
+            {% endblock %}
             </main>
     </body>
 </html>
