@@ -227,8 +227,24 @@ def get_graphe_etudiant(id_etu,date_deb,date_fin,liste_mat):
                 ecart=note-moyenne
                 liste_sem.append(ecart)
         str_js+="\tdata.addRow("+liste_sem+");"
-    
-def get_resultats_qcm_accueil(date, groupe):
+
+def get_moyenne_groupe(groupe,id_qcm,semestre):
+    #recupere la moyenne du groupe pour un qcm
+    qcm = QCM.query.filter(QCM.idQCM == id_qcm).first()
+    qcm_eleves = ResultatQCM.query.filter(ResultatQCM.idQCM == id_qcm).all()
+    moyenne = 0
+    for qcm_eleve in qcm_eleves:
+        eleve=Eleve.query.filter(Eleve.numEtu == qcm_eleve.numEtu).first()
+        if semestre == 1:
+            if eleve.groupeS1 == groupe:
+                moyenne += qcm_eleve.note
+        else:
+            if eleve.groupeS2 == groupe:
+                moyenne += qcm_eleve.note
+    moyenne = moyenne / len(qcm_eleves)
+    return moyenne
+
+def get_resultats_qcm_accueil(date):
     """fonction recuperant les resultats de QCM pour une date en renvoyant les moyennes par groupe et par matiere
 
     Args:
@@ -236,9 +252,35 @@ def get_resultats_qcm_accueil(date, groupe):
     """
     #on regarde dans quelle semaine on est
     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
-    #on recupere les resulatats de qcm de la semaine avec le groupe
-    resultat_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).filter(ResultatQCM.eleve.groupeS1 == groupe).all()
-    return resultat_qcm
+    #calcul periode
+    periode = Periode.query.filter(Periode.dateDebut <= sem.dateDebut).filter(Periode.dateFin >= sem.dateFin).first()
+    if periode.idPeriode == 1 or periode.idPeriode == 2:
+        semestre="S1"
+    else:
+        semestre="S2"
+    #recup groupes
+    eleves=Eleve.query.all()
+    groupes=[]
+    for eleve in eleves:
+        if semestre == "S1":
+            groupe=eleve.groupeS1
+        else:
+            groupe=eleve.groupeS2
+        if groupe not in groupes:
+            groupes.append(groupe)
+    #recup qcms
+    qcms=QCM.query.filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).all()
+    #recup moyennes
+    moyennes={}
+    for qcm in qcms:
+        nom_matiere=Matiere.query.filter(Matiere.idMatiere == qcm.idMatiere).first().nomMatiere
+        moyennes[nom_matiere]={}
+        for groupe in groupes:
+            moyennes[nom_matiere][groupe]=get_moyenne_groupe(groupe,qcm.idQCM,semestre)   
+        #ajout moyenne generale
+        moyennes[nom_matiere]["generale"]=get_moyenne_generale(qcm.idQCM)
+    return moyennes
+
     
 
 def get_dispo_enseignant_accueil(semaine):
@@ -251,14 +293,28 @@ def get_dispo_enseignant_accueil(semaine):
     dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).all()
     return dispo
 
-# def get_res_sondage_accueil(date):
-#     """fonction recuperant les resultats du sondage pour une date
+def get_res_sondage_accueil(date):
+    """fonction recuperant les resultats du sondage pour une date
 
-#     Args:
-#         date (String): date du QCM
-#     """
-#     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
-#     res = RepSondage.query.join(Matiere).join(ResultatQCM).filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).count()
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    matieres_demandées={}
+    rep_sondage = RepSondage.query.filter(RepSondage.sondage.dateSondage >= sem.dateDebut).filter(RepSondage.sondage.dateSondage <= sem.dateFin).all()
+    for r in rep_sondage:
+        if r.matiereVoulu in matieres_demandées:
+            matieres_demandées[r.matiereVoulu]["nb"]+=1
+        else:
+            matieres_demandées[r.matiereVoulu]={"nb":1,"Moyenne":None}
+    for nom_m in matieres_demandées:
+        mat=Matiere.query.filter(Matiere.nomMatiere==nom_m).first()
+        if mat is not None:
+            qcm=QCM.query.filter(QCM.idMatiere==mat.idMatiere).filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).first()
+            if qcm is not None:
+                moyenne=get_moyenne_generale(qcm.idQCM)
+                matieres_demandées[nom_m]["Moyenne"]=moyenne
+    return matieres_demandées
 
 def moyenne_qcm(idQCM):
     """fonction calculant la moyenne d un qcm
