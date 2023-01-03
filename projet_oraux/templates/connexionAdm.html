@@ -18,14 +18,14 @@
         <main id="page_connexion">
             {% block main %}
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo">
-            <form id="conteneur" action="">
+            <form id="conteneur" action="{{ url_for('Connexion', origin ='Admin') }}">
                 <div id="ident">
                     <label>Identifiant</label>
-                    <input type="text" name="identifiant" id="identifiant">
+                    <input type="text" name="identifiant" id="Username">
                 </div>
                 <div id="mdp">
                     <label>Mot de passe</label>
-                    <input type="password" name="mdp" id="motdp">
+                    <input type="password" name="mdp" id="Password">
                 </div>
                 <button id="connexion" type="submit">Se connecter</button> 
             </div>

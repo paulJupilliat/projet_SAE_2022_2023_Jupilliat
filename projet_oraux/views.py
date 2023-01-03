@@ -3,11 +3,11 @@
 from .app import app
 from flask import render_template, request,url_for , redirect
 # from .models import *
-# from flask_wtf import FlaskForm
-# from wtforms import StringField , HiddenField,PasswordField
+from flask_wtf import FlaskForm
+from wtforms import StringField , HiddenField,PasswordField
 # from wtforms.validators import DataRequired
-# from hashlib import sha256
-# from flask_login import login_user , current_user,logout_user
+from hashlib import sha256
+from flask_login import login_user , current_user,logout_user
 
 # class AuthorForm(FlaskForm):
 #     id = HiddenField("id")
@@ -31,19 +31,22 @@ from flask import render_template, request,url_for , redirect
 #     price_max = StringField("Price max")
 #     order = StringField("Order(by title, author, genre, price)")
 
-# class LoginForm ( FlaskForm ):
-#     username = StringField("Username")
-#     password = PasswordField("Password")
-#     next = HiddenField()
-#     id = HiddenField()
-#     def get_authenticated_user(self):
-#         user = User.query.get(self.username.data)
-#         if user is None:
-#             return None
-#         m = sha256()
-#         m.update(self.password.data.encode())
-#         passwd = m.hexdigest()
-#         return user if passwd == user.password else None
+class LoginForm ( FlaskForm ):
+    username = StringField("Username")
+    password = PasswordField("Password")
+    
+    def get_authenticated_user(self):
+        # user = User.query.get(self.username.data)
+        user = None
+        if self.username.data == "celine":
+            m = sha256()
+            user = {"password" : m.update("01234")}
+        if user is None:
+            return None
+        m = sha256()
+        m.update(self.password.data.encode())
+        passwd = m.hexdigest()
+        return user if passwd == user.password else None
 
 # class RegisterForm ( FlaskForm ):
 #     username = StringField("Username")
@@ -105,6 +108,15 @@ def Suivie_etu():
 def SuivieGenEtu():
     return render_template("SuiviGenEtu.html",title="Suivie général étudiant", admin=True)
 
-@app.route("/Connexion", method = ("POST",))
-def Connexion():
-    return redirect("connexionAdm")
+@app.route("/Connexion/<origin>", method = ("POST",))
+def Connexion(origin):
+    f = LoginForm()
+    if f.validate_on_submit():
+        user = f.get_authenticated_user()
+        if user:
+            login_user(user)
+            return redirect(url_for("Acceuil"))
+    if origin == "Admin":
+        return redirect(url_for("connexionAdm"))
+    else:
+        return redirect(url_for("connexionProf"))
