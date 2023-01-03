@@ -18,8 +18,8 @@
             {% block main %}
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo" height="10em">
             <div id="conteneur">
-                <a href="./connexionAdm.html"><button class="bgen" type="button">Administrateur</button></a>
-                <a href="./connexionProf.html"><button class="bgen" type="button">Professeur</button></a>
+                <a href="{{url_for ('connexionAdm')}}"><button class="bgen" type="button">Administrateur</button></a>
+                <a href="{{url_for ('connexionProf')}}"><button class="bgen" type="button">Professeur</button></a>
             </div>
             {% endblock %}
         </main>
