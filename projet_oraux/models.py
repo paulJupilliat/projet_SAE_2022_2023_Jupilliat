@@ -278,11 +278,12 @@ def get_eleve(soutien, date):
     """fonction recuperant les eleves qui ont besoin de soutien pour une date
 
     Args:
-        soutien (String): besoin de soutien
+        soutien (String): "oui" ou "non" ou "~"
         date (String): date du QCM
     """
+    #select eleve from Eleve NJ repSondage where repSondage.participation = "Oui" and eleve.dateDebut >= sem.dateDebut and eleve.dateDebut <= sem.dateFin
     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
-    eleves = Eleve.query.filter(Eleve.soutien == soutien).filter(Eleve.dateDebut >= sem.dateDebut).filter(Eleve.dateDebut <= sem.dateFin).all()
+    eleves = Eleve.query.join(RepSondage).join(Semaine).filter(RepSondage.participation == soutien).filter(Semaine.dateDebut >= sem.dateDebut).filter(Semaine.dateDebut <= sem.dateFin).all()
     return eleves
 
 def res_sond(id_eleve, date):
