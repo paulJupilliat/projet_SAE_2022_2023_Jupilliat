@@ -14,9 +14,9 @@ def mkpath (p):
             os.path. dirname ( __file__ ),
             p))
 
-# app.config['SQLALCHEMY_DATABASE_URI']=(
-#     'sqlite:///'+ mkpath('../projet_oraux/myapp.db'))
-# db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI']=(
+    'mysql+mysqlconnector://lidec:lidec@localhost/DBlidec')
+db = SQLAlchemy(app)
 
 app.config['SECRET_KEY']="020d884c-1cf8-475f-b4b5-2a56787a12c5"
 
