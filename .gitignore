@@ -2,3 +2,5 @@
 *.pyc
 *.csv
 settings.json
+venv/
+venv/bin/

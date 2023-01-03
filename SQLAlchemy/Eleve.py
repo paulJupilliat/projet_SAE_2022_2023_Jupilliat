@@ -32,3 +32,4 @@ class Eleve:
 
     def set_groupeS2(self, groupeS2):
         self._groupeS2 = groupeS2
+        

@@ -26,3 +26,4 @@ class QCM:
         self._urlQCM = urlQCM
     def set_matiere(self,idmatiere):
         self._idmatiere = idmatiere
+        
