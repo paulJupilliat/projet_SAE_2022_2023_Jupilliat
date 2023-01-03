@@ -192,17 +192,20 @@ def get_soutiens_etudiant(id_etu):
     soutiens = Oral.query.filter(Oral.numEtu == id_etu).all()
     return soutiens
 
-def get_resultats_qcm(semaine):
+def get_resultats_qcm_accueil(date, groupe):
     """fonction recuperant les resultats de QCM pour une date en renvoyant les moyennes par groupe et par matiere
 
     Args:
         date (String): date du QCM
     """
-    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
-    res_qcm = QCM.query.filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).all()
-    return res_qcm
+    #on regarde dans quelle semaine on est
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    #on recupere les resulatats de qcm de la semaine avec le groupe
+    resultat_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).filter(ResultatQCM.eleve.groupeS1 == groupe).all()
+    return resultat_qcm
+    
 
-def get_dispo_enseignant(semaine):
+def get_dispo_enseignant_accueil(semaine):
     """fonction recuperant les disponibilites des enseignants pour une date
 
     Args:
@@ -212,16 +215,49 @@ def get_dispo_enseignant(semaine):
     dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).all()
     return dispo
 
-def get_res_sondage(semaine):
+def get_res_sondage_accueil(date):
     """fonction recuperant les resultats du sondage pour une date
 
     Args:
         date (String): date du QCM
     """
-    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
     res_sond = ReponseQuestionSondage.query.filter(ReponseQuestionSondage.question.dateQuestion >= sem.dateDebut).filter(ReponseQuestionSondage.question.dateQuestion <= sem.dateFin).all()
     return res_sond
     
+def res_QCM(id_eleve, date):
+    """fonction recuperant les resultats du QCM pour un eleve et une date
+
+    Args:
+        id_eleve (int): id de l eleve
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    res_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).filter(ResultatQCM.numEtu == id_eleve).all()
+    soutien = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
+    return res_qcm, soutien
+
+def res_sond(id_eleve, date):
+    """fonction recuperant les resultats du sondage pour un eleve et une date
+
+    Args:
+        id_eleve (int): id de l eleve
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    res_sond = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
+    return res_sond
+    
+def disponibilites_enseignant(id_enseignant, date):
+    """fonction recuperant les disponibilites d un enseignant pour une date
+
+    Args:
+        id_enseignant (int): id de l enseignant
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).filter(EstDisponible.numEnseignant == id_enseignant).all()
+    return dispo
 
 
 
