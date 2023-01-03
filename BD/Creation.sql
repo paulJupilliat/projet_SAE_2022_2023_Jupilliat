@@ -6,6 +6,7 @@ DROP TABLE RESULTAT;
 DROP TABLE ORAUX;
 DROP TABLE PROF;
 DROP TABLE ELEVE;
+DROP TABLE USER;
 DROP TABLE QCM;
 DROP TABLE MATIERE;
 DROP TABLE SONDAGE;
@@ -49,6 +50,13 @@ CREATE TABLE PROF (
     prenomProf VARCHAR(255),
     emailProf VARCHAR(255),
     Primary Key (idProf)
+);
+
+CREATE TABLE USER(
+    username VARCHAR(255),
+    pswd VARCHAR(255),
+    estAdmin boolean,
+    Primary KEY (username)
 );
 
 
