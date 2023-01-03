@@ -1,6 +1,6 @@
 ##views permet de definir les routes de l app donc des differents pages
 
-from .app import app,db
+from .app import app
 from flask import render_template, request,url_for , redirect
 from .models import *
 from flask_wtf import FlaskForm
@@ -59,8 +59,8 @@ class EditUserForm ( FlaskForm ):
 @app.route("/")
 def home():
     return render_template(
-        "home.html",
-        title="My Books !",
+        "index.html",
+        title="Projet soutien",
         books=get_books(),authors=get_authors(),genres=get_genres())
 @app.route("/books/<int:id>",methods=("POST","GET"))
 def books(id):
