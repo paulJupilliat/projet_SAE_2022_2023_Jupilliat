@@ -74,8 +74,8 @@ class Oral(db.Model):
     __tablename__ = "oraux"
     idOral = db.Column(db.Integer, primary_key=True)
     dateOral = db.Column(db.String(500))
-    nomOral = db.Column(db.String(500))
-    nbElMax = db.Column(db.Integer)
+    heureOral = db.Column(db.String(500))
+    nbEls = db.Column(db.Integer)
     #relation pour avoir la matiere d un oral
     idMatiere = db.Column(db.Integer, db.ForeignKey("matiere.idMatiere"))
     #relation inverse pour avoir les oraux d une matiere
@@ -99,6 +99,7 @@ class ParticipantsOral(db.Model):
     __tablename__ = "participantsoral"
     idOral = db.Column(db.Integer, db.ForeignKey("oral.idOralz"), primary_key=True)
     numEtu = db.Column(db.Integer, db.ForeignKey("eleve.numEtu"), primary_key=True)
+    commentaire = db.Column(db.String(800))
     #relation pour avoir l oral d un participant
     oral= db.relationship(Oral, backref=db.backref("oraux", cascade="all, delete-orphan"),overlaps="oral,eleve")
     #relation pour avoir l eleve d un participant
@@ -119,13 +120,11 @@ class ResultatQCM(db.Model):
 
 class RepSondage(db.Model):
     __tablename__ = "repsondage"
-    participation = db.Column(db.String(500))
     idSondage = db.Column(db.Integer, db.ForeignKey("sondage.idSondage"), primary_key=True)
     numEtu = db.Column(db.Integer, db.ForeignKey("eleve.numEtu"), primary_key=True)
     dateSondage = db.Column(db.String(500))
-    matiereVoulu = db.Column(db.String(500))
-    commentaire = db.Column(db.String(800))
-
+    matiereVoulu = db.Column(db.String(100))
+    volontaire = db.Column(db.String(50))
     #relation pour avoir le sondage d une reponse
     sondage = db.relationship(Sondage, backref=db.backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
@@ -180,6 +179,16 @@ class ReponseQuestionSondage(db.Model):
     def __repr__(self):
         return f"ReponseQuestionSondage({self.numEtu}, {self.idQuestion}, {self.reponse})"
 
+def get_moyenne_generale(id_qcm):
+    #recupere la moyenne de la classe pour un qcm
+    qcm = QCM.query.filter(QCM.idQCM == id_qcm).first()
+    qcm_eleves = ResultatQCM.query.filter(ResultatQCM.idQCM == id_qcm).all()
+    moyenne = 0
+    for qcm_eleve in qcm_eleves:
+        moyenne += qcm_eleve.note
+    moyenne = moyenne / len(qcm_eleves)
+    return moyenne
+
 def get_recap_etudiant(id_etu,num_semaine):
     #recupere les qcms et le soutien eventuel de l etudiant pour la semaine donnée
     sem=Semaine.query.filter(Semaine.numSemaine==num_semaine).first()
@@ -192,104 +201,117 @@ def get_soutiens_etudiant(id_etu):
     soutiens = Oral.query.filter(Oral.numEtu == id_etu).all()
     return soutiens
 
+def get_graphe_etudiant(id_etu,date_deb,date_fin,liste_mat):
+    str_js="google.charts.load('current', {'packages':['line']});\n"
+    str_js+="google.charts.setOnLoadCallback(drawChart);\n"
+    str_js+="function drawChart() {\n"
+    str_js+="\tvar data = new google.visualization.DataTable();\n"
+    str_js+="\tdata.addColumn('number', 'Semaine');\n"
+    for matiere in liste_mat:
+        str_js+="\tdata.addColumn('number', '"+matiere+"');\n"
+    semaines = Semaine.query.filter(Semaine.dateDebut >= date_deb).filter(Semaine.dateFin <= date_fin).all()
+    for sem in semaines:
+        liste_sem=[sem.numSemaine]
+        for mat in liste_mat:
+            #recupere la note si elle existe pour la semaine et la matiere
+            idmat=Matiere.query.filter(Matiere.nomMatiere==mat).first().idMatiere
+            qcm=QCM.query.filter(QCM.numEtu == id_etu).filter(QCM.idMatiere == idmat).filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).first()
+            if note is None:
+                liste_sem.append(0)
+            else:
+                #recupere la moyenne generale
+                moyenne=get_moyenne_generale(qcm.idQCM)
+                #recupere la note de l etudiant
+                note=ResultatQCM.query.filter(ResultatQCM.idQCM == qcm.idQCM).filter(ResultatQCM.numEtu == id_etu).first().note
+                #calcule l ecart
+                ecart=note-moyenne
+                liste_sem.append(ecart)
+        str_js+="\tdata.addRow("+liste_sem+");"
+    
 
+    str_js+="\tvar options = {\n"
+    str_js+="\tchart: {title: 'Ecart par rapport à la moyenne générale'},\n"
+    str_js+="\twidth: 900,\n"
+    str_js+="\theight: 500\n};\n"
+    str_js+="\tvar chart = new google.charts.Line(document.getElementById('linechart_material'));\n"
+    str_js+="\tchart.draw(data, google.charts.Line.convertOptions(options));\n"
+    str_js+="}\n"
+    
+def gen_soutien(num_sem,seuil):
+    #genere les soutiens pour la semaine donnee
+    sem=Semaine.query.filter(Semaine.numSemaine==num_sem).first()
+    qcms_trouve=False
+    while not qcms_trouve:
+        #cherche une semaine avec des qcms
+        qcms=QCM.query.filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).all()
+        if len(qcms)==0:
+            sem=Semaine.query.filter(Semaine.numSemaine==num_sem-1).first()
+            num_sem-=1
+        else:
+            qcms_trouve=True
+    eleves_besoin=[]
+    non_retenus=[]
+    retenus={}
+    for qcm in qcms:
+        moyenne=get_moyenne_generale(qcm.idQCM)
 
+        eleves_volontaires_besoin=ResultatQCM.join(RepSondage,ResultatQCM.numEtu==RepSondage.numEtu)
+        eleves_volontaires_besoin.join(QCM,ResultatQCM.idQCM==QCM.idQCM).join(Matiere,QCM.idMatiere==Matiere.idMatiere)
+        eleves_volontaires_besoin.join(Eleve,ResultatQCM.numEtu==Eleve.numEtu).filter(ResultatQCM.idQCM == qcm.idQCM)
+        eleves_volontaires_besoin.filter(ResultatQCM.note < seuil*moyenne).filter(RepSondage.volontaire=='oui')
+        eleves_volontaires_besoin.filter(Matiere.nomMatiere==qcm.matiere.nomMatiere).order_by(ResultatQCM.note).all()
 
+        eleves_hesitants=ResultatQCM.join(RepSondage,ResultatQCM.numEtu==RepSondage.numEtu)
+        eleves_hesitants.join(QCM,ResultatQCM.idQCM==QCM.idQCM).join(Matiere,QCM.idMatiere==Matiere.idMatiere)
+        eleves_hesitants.join(Eleve,ResultatQCM.numEtu==Eleve.numEtu).filter(ResultatQCM.idQCM == qcm.idQCM)
+        eleves_hesitants.filter(ResultatQCM.note < seuil*moyenne).filter(RepSondage.volontaire=='~')
+        eleves_hesitants.filter(Matiere.nomMatiere==qcm.matiere.nomMatiere).order_by(ResultatQCM.note).all()
+        possibles=eleves_volontaires_besoin+eleves_hesitants
+        if len(eleves_volontaires_besoin+eleves_hesitants)>=3:
+            retenus_mat=[]
+            while len(retenus_mat)<5 or len(possibles)!=0:
+                retenus_mat.append(possibles.pop(0))
+            retenus[qcm.matiere.nomMatiere]=retenus_mat
+        non_retenus+=possibles
 
+        eleves_besoin+=ResultatQCM.join(RepSondage,ResultatQCM.numEtu==RepSondage.numEtu)
+        eleves_besoin.join(QCM,ResultatQCM.idQCM==QCM.idQCM).join(Matiere,QCM.idMatiere==Matiere.idMatiere)
+        eleves_besoin.join(Eleve,ResultatQCM.numEtu==Eleve.numEtu)
+        eleves_besoin.filter(ResultatQCM.idQCM == qcm.idQCM)
+        eleves_besoin.filter(ResultatQCM.note < seuil*moyenne).filter(RepSondage.volontaire=='non')
+        eleves_besoin.order_by(ResultatQCM.note).all()
+        
+    return retenus,eleves_besoin,non_retenus
 
-def get_book(id):
-    return Book.query.get(id)
-def get_books():
-    return Book.query.order_by(Book.title).all()
-def get_books_sample(nb_by_page, page):
-    return Book.query.order_by(Book.title).limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_books_sample_filtered(nb_by_page,page,author,genre,price_min,price_max,order):
-    query = Book.query.join(Author).join(BookGenre).join(Genre)
-    if author != "":
-        query = query.filter(Author.name.like("%"+author+"%"))
-    if genre != "":
-        query = query.filter(Genre.name.like("%"+genre+"%"))
-    if price_min != "":
-        query = query.filter(Book.price>=price_min)
-    if price_max != "":
-        query = query.filter(Book.price<=price_max)
-    if order == "":
-        order = "title"
-    if order == "title":
-        query = query.order_by(Book.title)
-    elif order == "price":
-        query = query.order_by(Book.price)
-    elif order == "author":
-        query = query.order_by(Author.name)
-    elif order == "genre":
-        query = query.order_by(Genre.name)
-    return query.limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_nb_books_filtered(nb_by_page,author,genre,price_min,price_max):
-    query = Book.query.join(Author).join(BookGenre).join(Genre)
-    if author is not None:
-        query = query.filter(Author.name.like("%"+author+"%"))
-    if genre is not None:
-        query = query.filter(Genre.name.like("%"+genre+"%"))
-    if price_min is not None:
-        query = query.filter(Book.price>=price_min)
-    if price_max is not None:
-        query = query.filter(Book.price<=price_max)
-    return int(query.count()/nb_by_page)+1
-def get_nb_pages(nb_by_page,types):
-    if types=="books":
-        return int(Book.query.count()/nb_by_page)+1
-    elif types=="authors":
-        return int(Author.query.count()/nb_by_page)+1
-    elif types=="genres":
-        return int(Genre.query.count()/nb_by_page)+1
-def get_nb_books():
-    return Book.query.count()
-def get_author(id):
-    return Author.query.get(id)
-def get_author_by_name(name):
-    return Author.query.filter_by(name=name).first()
-def get_authors():
-    return Author.query.order_by(Author.name).all()
-def get_authors_sample(nb_by_page, page):
-    #authors are ordered by name
-    return Author.query.order_by(Author.name).limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_nb_authors():
-    return Author.query.count()
-def get_genre(id):
-    return Genre.query.get(id)
-def get_genres():
-    return Genre.query.order_by(Genre.name).all()
-def get_genres_sample(nb_by_page, page):
-    return Genre.query.order_by(Genre.name).limit(nb_by_page).offset((page-1)*nb_by_page).all()
-def get_genre_by_name(name):
-    return Genre.query.filter_by(name=name).first()
-def get_nb_genres():
-    return Genre.query.count()
-def get_book_genres(id):
-    genres=[]
-    for g in BookGenre.query.filter_by(book_id=id).all():
-        genres.append(get_genre(g.genre_id))
-    return genres
-def get_genre_books(id):
-    books=[]
-    for b in BookGenre.query.filter_by(genre_id=id).all():
-        books.append(get_book(b.book_id))
-    return books
-def get_nb_book_genres(id):
-    return BookGenre.query.filter_by(book_id=id).count()
-def add_genre_to_book(book_id, genre_id):
-    book_genre = BookGenre(id=get_nb_book_genres(book_id)+1, book_id=book_id, genre_id=genre_id)
-    db.session.add(book_genre)
+def ajouter_eleve_oral(nom_etu,prenom_etu,nom_mat,nom_prof,date_sout,heure_sout):
+    etu=Eleve.query.filter(Eleve.nom==nom_etu).filter(Eleve.prenom==prenom_etu).first()
+    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
+    prof=Professeur.query.filter(Professeur.nom==nom_prof).first()
+    oral=Oral.query.filter(Oral.idMatiere==matiere.idMatiere).filter(Oral.idProf==prof.idProf).first()
+    if oral is None:
+        oral=Oral(idMatiere=matiere.idMatiere,idProf=prof.idProf,dateSout=date_sout,heureSout=heure_sout)
+        db.session.add(oral)
+        db.session.commit()
+    if etu not in oral.eleves:
+        oral.eleves.append(etu)
+        db.session.commit()
+    
+def ajouter_commentaire(idOral,numEtu,commentaire):
+    oral=Oral.query.filter(Oral.idOral==idOral).first()
+    etu=Eleve.query.filter(Eleve.numEtu==numEtu).first()
+    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
+    part.commentaire=commentaire
     db.session.commit()
-def remove_genre_from_book(book_id, genre_id):
-    book_genre = BookGenre.query.filter_by(book_id=book_id, genre_id=genre_id).first()
-    db.session.delete(book_genre)
-    db.session.commit()
-def supress_book_genres(book_id):
-    for book_genre in BookGenre.query.filter_by(book_id=book_id).all():
-        db.session.delete(book_genre)
-    db.session.commit()
 
+def ajouter_dispo(idOral,idProf):
+    oral=Oral.query.filter(Oral.idOral==idOral).first()
+    prof=Professeur.query.filter(Professeur.idProf==idProf).first()
+    dispo=EstDisponible.query.filter(EstDisponible.idOral==oral.idOral).filter(EstDisponible.idProf==prof.idProf).first()
+    if dispo is None:
+        dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
+        db.session.add(dispo)
+        db.session.commit()
+        
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)
