@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/parametres.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paramètres</title>
-</head>
-<body>
-    <script src="../JS/nav_adapte.js"></script>
-    <nav id="menu"></nav>
-    <main>
+{% extends 'BaseAdmin.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='parametres.css') }}">
+{% endblock %}
+{% block top %}
         <section class="bouts_gen">
         <select name="Semaine" id="sem-select">
             <option value="">Semaine</option>
@@ -28,7 +20,8 @@
         </section>
 
     
-   
+{% endblock %}
+{% block center %}
     <section class="infos_par" style="width:45%">
         <div class="gest_mat">
             <h3 class="titre_div">Gestion des matières</h3>
@@ -45,15 +38,13 @@
                 <label for="p4">P4</label>
                 </fieldset>
                 <button id="poubelle">
-                    <img src="../img/poubelle.png" alt="supprimer" height="30em">
+                    <img src="{{url_for('static', filename='img/poubelle.png')}}" alt="supprimer" height="30em">
                 </button>
             </div>
             <button id="ajt_mat">
-                <img src="../img/plus.png" alt="ajouter" height="10em">
+                <img src="{{url_for('static', filename='img/plus.png')}} alt="ajouter" height="10em">
                 Ajouter une matière
             </button>
         </div>        
     </section>
-</main>
-</body>
-</html>
+{% endblock %}

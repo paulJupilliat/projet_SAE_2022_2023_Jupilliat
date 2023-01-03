@@ -1,24 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <script src="../JS/dispo.js"></script><script src="../JS/nav_adapte.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/dispo.css">
-    <title>Disponibilités enseignants</title>
-</head>
-<body>
-    <nav id="menu"></nav>
-    <main>
-        <aside>
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='dispo.css')}}">
+
+{% endblock %}
+{% block aside %}
             <div id="aside_filtres">
                 <h2>Filtres</h2>
                 <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                    <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep2"/></button>
             </div>
             <section id="groupe_filtre">
             <select name="semaines" id="selec-sem">
@@ -31,7 +27,7 @@
             <div id="aside_grp">
                 <h3>Matières</h3>
                 <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                    <img src="../img/deplie.png" alt="plie" id="dep"/></button>
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
             </div>
             <ul id="grps_filtres">
                 <li>
@@ -56,8 +52,8 @@
                 </li>
             </ul>
             </section>
-        </aside>
-        <section></section>
+{% endblock %}
+{% block center%}
         <section id="tableaudispo">
             <table id="labels">
                 <thead id="Dispo_nom">
@@ -201,7 +197,7 @@
                         <td>12.5</td>
                         <td>12.5</td>
                     </tr></tbody>
-            </table></section>
-    </main>
-</body>
-</html>
+            </table>
+
+        </section>  
+{% endblock %}

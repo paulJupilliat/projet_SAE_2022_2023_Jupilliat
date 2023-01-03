@@ -5,7 +5,7 @@
     font-weight: bold;
     font-size: 1em;
 }
-main{
+#div_main{
     display: flex;
     justify-content: space-around;
 }
@@ -23,8 +23,10 @@ main{
     height:100%;
 }
 
-.info-acc{
+#div_main{
     display: flex;
+    padding-top: 0%;
+    margin-top: 0%;
 }
 
 .res_sond{
@@ -78,4 +80,11 @@ thead,
 tfoot {
     background-color: #860061;
     color: #fff;
+}
+
+/* met le top au centre */
+#top {
+    margin-top: 10%;
+    text-align: center;
+    margin-bottom: 0%;
 }

@@ -228,6 +228,120 @@ def get_graphe_etudiant(id_etu,date_deb,date_fin,liste_mat):
                 liste_sem.append(ecart)
         str_js+="\tdata.addRow("+liste_sem+");"
     
+def get_resultats_qcm_accueil(date, groupe):
+    """fonction recuperant les resultats de QCM pour une date en renvoyant les moyennes par groupe et par matiere
+
+    Args:
+        date (String): date du QCM
+    """
+    #on regarde dans quelle semaine on est
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    #on recupere les resulatats de qcm de la semaine avec le groupe
+    resultat_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).filter(ResultatQCM.eleve.groupeS1 == groupe).all()
+    return resultat_qcm
+    
+
+def get_dispo_enseignant_accueil(semaine):
+    """fonction recuperant les disponibilites des enseignants pour une date
+
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
+    dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).all()
+    return dispo
+
+# def get_res_sondage_accueil(date):
+#     """fonction recuperant les resultats du sondage pour une date
+
+#     Args:
+#         date (String): date du QCM
+#     """
+#     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+#     res = RepSondage.query.join(Matiere).join(ResultatQCM).filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).count()
+
+def moyenne_qcm(idQCM):
+    """fonction calculant la moyenne d un qcm
+
+    Args:
+        idQCM (int): id du qcm
+    """
+    qcm = QCM.query.filter(QCM.idQCM == idQCM).first()
+    res = ResultatQCM.query.filter(ResultatQCM.idQCM == idQCM).all()
+    moyenne = 0
+    for r in res:
+        moyenne += r.note
+    moyenne = moyenne / len(res)
+    return moyenne
+
+def res_QCM(id_eleve, date):
+    """fonction recuperant les resultats du QCM pour un eleve et une date
+
+    Args:
+        id_eleve (int): id de l eleve
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    res_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).filter(ResultatQCM.numEtu == id_eleve).all()
+    soutien = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
+    return res_qcm, soutien
+
+def get_eleve(id_eleve):
+    """fonction recuperant un eleve
+
+    Args:
+        id_eleve (int): id de l eleve
+    """
+    eleve = Eleve.query.filter(Eleve.numEtu == id_eleve).first()
+    return eleve
+
+def get_eleve(groupe, date):
+    """fonction recuperant les eleves d un groupe pour une date
+
+    Args:
+        groupe (String): groupe de l eleve
+        date (String): date du QCM
+    """
+    
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    #on verifie si on est en periode 1 ou 2
+    if Periode.query.filter(Periode.dateDebut <= date).filter(Periode.dateFin >= date).first().numPeriode == 1:
+        eleves = Eleve.query.filter(Eleve.groupeS1 == groupe).filter(Eleve.dateDebut >= sem.dateDebut).filter(Eleve.dateDebut <= sem.dateFin).all()
+    eleves = Eleve.query.filter(Eleve.groupeS2 == groupe).filter(Eleve.dateFin >= sem.dateDebut).filter(Eleve.dateFin <= sem.dateFin).all()
+    return eleves
+
+def get_eleve(soutien, date):
+    """fonction recuperant les eleves qui ont besoin de soutien pour une date
+
+    Args:
+        soutien (String): besoin de soutien
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    eleves = Eleve.query.filter(Eleve.soutien == soutien).filter(Eleve.dateDebut >= sem.dateDebut).filter(Eleve.dateDebut <= sem.dateFin).all()
+    return eleves
+
+def res_sond(id_eleve, date):
+    """fonction recuperant les resultats du sondage pour un eleve et une date
+
+    Args:
+        id_eleve (int): id de l eleve
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    res_sond = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
+    return res_sond
+    
+def disponibilites_enseignant(id_enseignant, date):
+    """fonction recuperant les disponibilites d un enseignant pour une date
+
+    Args:
+        id_enseignant (int): id de l enseignant
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).filter(EstDisponible.numEnseignant == id_enseignant).all()
+    return dispo
 
     str_js+="\tvar options = {\n"
     str_js+="\tchart: {title: 'Ecart par rapport à la moyenne générale'},\n"

@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
+        {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Index</title>
-        <link rel="stylesheet" href="../static/style.css">
-        <link rel="stylesheet" href="../static/index.css">
+        {% block styles %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        {% endblock %}
+        <title>Index</title>
+        {% endblock %}
     </head>
     <body>
         <main id="page_connexion">
-            <img src="../img/logo.png" alt="logo" id="logo" height="10em">
+            {% block main %}
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo" height="10em">
             <div id="conteneur">
                 <a href="./connexionAdm.html"><button class="bgen" type="button">Administrateur</button></a>
                 <a href="./connexionProf.html"><button class="bgen" type="button">Professeur</button></a>
             </div>
+            {% endblock %}
         </main>
     </body>
 </html>

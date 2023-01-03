@@ -31,8 +31,8 @@ def main(fichier_ouvrir):
                 separe = ligne.split(",")
                 try:
                     fonction_BD.ajouter_reponse_sondage(connexion,Reponse_sondage(separe[consolidation],separe[matiere],separe[precision][:-1],date,separe[idenfiant],idpartie))
-                except:
-                    print("éleve inconnu")
+                except Exception as e:
+                    print(e)
                 print("l'étudiant d'identifiant " + separe[idenfiant] + " souhaite participer à la consolidation : " + separe[consolidation] )
                 if separe[consolidation] != "Non":
                     print("Dans la matière : "+ separe[matiere])
