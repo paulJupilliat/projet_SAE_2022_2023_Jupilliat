@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/parametres.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paramètres</title>
-</head>
-<body>
-    <script src="../JS/nav_adapte.js"></script>
-    <nav id="menu"></nav>
-    <main>
+{% extends 'BaseAdmin.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='parametres.css') }}">
+{% endblock %}
+{% block top %}
         <section class="bouts_gen">
         <select name="Semaine" id="sem-select">
             <option value="">Semaine</option>
@@ -28,7 +20,8 @@
         </section>
 
     
-    
+{% endblock %}
+{% block center %}
     <section class="infos_par">
         <div class="gest_heures">
             <h3 class="titre_div">Gestion des heures de soutien</h3>
@@ -59,6 +52,4 @@
                 <input type="date" id="cgt_sem" name="cgt_s"></div>
         </div>
     </section>
-</main>
-</body>
-</html>
+{% endblock %}

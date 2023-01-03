@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="../static/nav.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/style_acc.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceuil</title>
-</head>
-<body><script src="../JS/nav_adapte.js"></script>
-    <nav id="menu"></nav>
-    <main>
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style_acc.css') }}">
+{% endblock %}
+{% block top %}
         <select name="Semaine" id="sem-select">
             <option value="">Semaine</option>
             <!-- remplir avec le selenium -->
@@ -26,11 +23,8 @@
             <input id="recup_données_btn" type="button" value="Recuperer les données">
             
             <p id="text_mail"> les mails ont été envoyer pour la semaine 3</p> <!-- remplir avec le selenium -->
-        </section>
-
-    
-    </main>
-    <section class="info-acc">
+{% endblock %}
+{% block center %}
         <div class="res_qcm">
             <h2>Resultat QCM</h2>
             <table>
@@ -128,8 +122,5 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </section>    
-    </section>
-</body>
-</html>
+            </div>  
+{% endblock %}
