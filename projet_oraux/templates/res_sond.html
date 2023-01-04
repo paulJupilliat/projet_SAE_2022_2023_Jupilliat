@@ -5,9 +5,9 @@
 {% endif %}
 {% block styles %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style_sond.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_sond.css')}}">
 
 {% endblock %}
 {% block aside %}
@@ -142,5 +142,5 @@
         </div>
         {% endblock %}
         {% block scripts %}
-<script src="{{ url_for('static', filename='js/res_sond.js') }}"></script>
+<script src="{{ url_for('static', filename='JS/res_sond.js') }}"></script>
 {% endblock %}
