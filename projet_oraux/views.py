@@ -2,7 +2,7 @@
 
 from .app import app
 from flask import render_template, request,url_for , redirect
-# from .models import *
+from .models import *
 from flask_wtf import FlaskForm
 from wtforms import StringField , HiddenField,PasswordField
 # from wtforms.validators import DataRequired
@@ -484,7 +484,7 @@ def search():
 #     return redirect(url_for('home'))
 
 
-@app.route("/Connexion/<origin>", method = ("POST",))
+@app.route("/Connexion/<origin>", methods = ("POST",))
 def Connexion(origin):
     f = LoginForm()
     if f.validate_on_submit():
