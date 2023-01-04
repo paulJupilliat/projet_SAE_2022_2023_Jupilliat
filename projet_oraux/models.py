@@ -600,7 +600,18 @@ def gen_soutien(num_sem:int,seuil:float)->dict:
         eleves_besoin.filter(ResultatQCM.note < seuil*moyenne).filter(RepSondage.volontaire=='non')
         eleves_besoin.order_by(ResultatQCM.note).all()
     return retenus,eleves_besoin,non_retenus
-
+def ajouter_eleve_oral(nom_etu,prenom_etu,nom_mat,nom_prof,date_sout,heure_sout):
+    etu=Eleve.query.filter(Eleve.nom==nom_etu).filter(Eleve.prenom==prenom_etu).first()
+    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
+    prof=Professeur.query.filter(Professeur.nom==nom_prof).first()
+    oral=Oral.query.filter(Oral.idMatiere==matiere.idMatiere).filter(Oral.idProf==prof.idProf).first()
+    if oral is None:
+        oral=Oral(idMatiere=matiere.idMatiere,idProf=prof.idProf,dateSout=date_sout,heureSout=heure_sout)
+        db.session.add(oral)
+        db.session.commit()
+    if etu not in oral.eleves:
+        oral.eleves.append(etu)
+  
 def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str)->None:
     """fonction ajoutant une reponse a un sondage
 
@@ -618,6 +629,20 @@ def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, 
                         matiere_voulue = matiere_voulu, commentaire = commentaire)
         db.session.add(rep)
         db.session.commit()
+ def ajouter_commentaire(idOral,numEtu,commentaire):
+    oral=Oral.query.filter(Oral.idOral==idOral).first()
+    etu=Eleve.query.filter(Eleve.numEtu==numEtu).first()
+    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
+    part.commentaire=commentaire
+    db.session.commit()
+
+def ajouter_dispo(idOral,idProf):
+    oral=Oral.query.filter(Oral.idOral==idOral).first()
+    prof=Professeur.query.filter(Professeur.idProf==idProf).first()
+    dispo=EstDisponible.query.filter(EstDisponible.idOral==oral.idOral).filter(EstDisponible.idProf==prof.idProf).first()
+    if dispo is None:
+        dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
+        db.session.add(dispo)
     else:
         pass
 
