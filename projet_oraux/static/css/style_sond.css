@@ -37,4 +37,6 @@ input[type=checkbox]:checked + label {
     display: none;}
 
 
-
+.in_filtres{
+    appearance: none;
+}

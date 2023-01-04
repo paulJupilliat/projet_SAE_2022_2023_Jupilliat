@@ -17,9 +17,9 @@ function collapse(){
     var bt=document.getElementById("collapsible");
     if (content.style.display === "block") {
         content.style.display = "none";
-        bt.innerHTML='<img src="../img/plus.png" alt="+" height="10em">Tableau général';
+        bt.innerHTML='<img src="static/img/plus.png" alt="+" height="10em">'
     } else {
         content.style.display = "block";
-        bt.innerHTML='<img src="../img/moins.png" alt="-" height="10em">'
+        bt.innerHTML='<img src="static/img/moins.png" alt="-" height="10em">'
     }
   };
