@@ -19,43 +19,19 @@
     <button id="dep_fil" type="button" onclick="plie_deplie_matieres()">
         <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
 </div>
-<section id="matieres_gauche">
-    <div>
-    <ul class="matières">
-        <li>
-            <input type="checkbox" name="Python" id="Python">
-            <label for="Python">Python</label>
-        </li>
-        <li>
-            <input type="checkbox" name="BDD" id="BDD">
-            <label for="BDD">BDD</label>
-        </li>
-    </ul>
-    </div>
-    <div>
-        <ul class="matières">
-            <li>
-                <input type="checkbox" name="Java" id="Java">
-                <label for="Java">Java</label>
+<section id="matieres_gauche">   
+        {% for couple in matieres %}
+            <div>
+            <ul class="matières">
+            {% for matiere in couple %}
+            <li >
+                <input type="checkbox" id="{{ matiere.nom_matiere }}" name="{{ matiere.nom_matiere }}" value="{{ matiere.nom_matiere }}">
+                <label for="{{ matiere.nom_matiere }}">{{ matiere.nom_matiere }}</label>
             </li>
-            <li>
-                <input type="checkbox" name="Bash" id="Bash">
-                <label for="Bash">Bash</label>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <ul class="matières">
-            <li>
-                <input type="checkbox" name="Maths" id="Maths">
-                <label for="Maths">Maths</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Eco" id="Eco">
-                <label for="Eco">Eco</label>
-            </li>
-        </ul>
-    </div>
+            {% endfor %}
+            </ul>
+            </div>
+        {% endfor %}
 </section>
 <section id="dates">
             <label for="date_debut">De</label>
@@ -66,31 +42,30 @@
 <section id="semaines_choix">
     <div id="selec_sem">
     <select name="semaines" id="selec-sem">
-        <option value="">Semaine 43</option>
-        <option value="">Semaine 44</option>
-        <option value="">Semaine 45</option>
-        <option value="">Semaine 46</option>
-        <option value="">Semaine 47</option>
+        {% for semaine in semaines %}
+            <option value="{{ semaine.id_semaine }}">{{ semaine.id_semaine }}</option>
+        {% endfor %}
     </select>
     </div>
     <section id="para_qcm">
         <h2>QCMs:</h2>
         <div id="qcm">
-            <p>QCM1</p>
-            <p>QCM2</p>
-            <p>QCM3</p>
-            <p>QCM4</p>
-            <p>QCM5</p>
+           {% for qcm in qcms %}
+           <p>{qcm.nom_qcm} : {qcm.note_qcm}</p>
+           {% endfor %}
         </div>
     </section>
     <section id="para_soutien">
         <h2>SOUTIEN</h2>
         <div id="soutien">
-            <p>Soutien1</p>
-            <p>Soutien2</p>
-            <p>Soutien3</p>
-            <p>Soutien4</p>
-            <p>Soutien5</p>
+            <p>Volontaire: {soutien.volontaire} </p>
+            <p>Matiere souhaitée: {soutien.matiere_voulue} </p>
+        {% if questions is not None %}
+        {% for question in questions %}
+            <p>Question: {question.question} </p>
+            <p>Réponse: {question.reponse} </p>
+        {% endfor %}
+        {% endif %}
         </div>
     </section>
 </section> 
@@ -110,31 +85,19 @@
             <th id="noms">Matière</th>
             <th id="noms">Commentaire</th>
         </tr>
+        {% for oral,semaine in oraux %}
         <tr>
-            <td>Arsouze</td>
-            <td>Python</td>
-            <td>Java</td>
+            {% if oral is None %}
+            <td>{{ semaine.id_semaine }}</td>
+            <td>-</td>
+            <td>-</td>
+            {% else %}
+            <td>{{ semaine.id_semaine }}</td>
+            <td>{{ oral.nom_matiere }}</td>
+            <td>{{ oral.commentaire }}</td>
+            {% endif %}
         </tr>
-        <tr>
-            <td>Paul</td>
-            <td>Python</td>
-            <td>Java</td>
-        </tr>
-        <tr>
-            <td>Paul</td>
-            <td>Python</td>
-            <td>Java</td>
-        </tr>
-        <tr>
-            <td>Paul</td>
-            <td>Python</td>
-            <td>Java</td>
-        </tr>
-        <tr>
-            <td>Paul</td>
-            <td>Python</td>
-            <td>Java</td>
-        </tr>
+        {% endfor %}
     </table>
     </div>
 <button type="button" id="collapsible" onclick="collapse()">
@@ -144,6 +107,8 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script src="{{ url_for('static', filename='JS/suivi_etu.js') }}"></script>
+{script_js}
+<script src="{{ url_for('static', filename='JS/suivi_etu.js') }}">
+</script>
 {% endblock %}
  

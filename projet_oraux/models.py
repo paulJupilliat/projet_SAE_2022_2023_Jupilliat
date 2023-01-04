@@ -148,6 +148,7 @@ class RepSondage(db.Model):
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     matiere_voulue = db.Column(db.String(100))
     volontaire = db.Column(db.String(50))
+    commentaire = db.Column(db.String(800))
     #relation pour avoir le sondage d une reponse
     sondage = db.relationship(Sondage, backref=db.backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
@@ -250,7 +251,39 @@ def get_recap_etudiant(id_etu:int,num_semaine:int)->tuple:
     sem=Semaine.query.filter(Semaine.numSemaine==num_semaine).first().id_semaine
     qcms=get_res_QCM_eleve(id_etu,sem)
     soutien=get_soutiens_etudiant(id_etu,sem)
-    return qcms,soutien
+    sondage=get_sondage_etudiant(id_etu,sem)
+    return qcms,soutien,sondage
+
+def get_res_QCM_eleve(id_etu:int,id_semaine:int)->list:
+    """fonction qui recupere les qcms de l etudiant
+    Args:
+        id_etu: l id de l etudiant
+        id_semaine: l id de la semaine
+    Return:
+        qcms: les qcms de l etudiant"""
+    ids_qcms = ResultatQCM.query.filter(ResultatQCM.num_etu == id_etu).filter(ResultatQCM.id_semaine==id_semaine).all()
+    qcms = []
+    for id_qcm in ids_qcms:
+        qcm=QCM.query.join(ResultatQCM).filter(QCM.id_qcm == id_qcm.id_qcm).first()
+        qcms.append(qcm)
+    return qcms
+
+def get_sondage_etudiant(id_etu:int,id_semaine:int)->list:
+    """fonction qui recupere les sondages de l etudiant
+    Args:
+        id_etu: l id de l etudiant
+        id_semaine: l id de la semaine
+    Return:
+        sondage: les reponses au sondage de l etudiant"""
+    sem=Semaine.query.filter(Semaine.id_semaine==id_semaine).first()
+    sondage_sem=Sondage.query.filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+    question_sondage=QuestionSondage.query.filter(QuestionSondage.id_sondage==sondage_sem.id_sondage).all()
+    reponse=RepSondage.query.filter(RepSondage.id_quest==sondage_sem.id_sondage).filter(RepSondage.num_etu==id_etu).first()
+    if question_sondage is not None:
+        reponse_quest=ReponseQuestionSondage.query.join(QuestionSondage).filter(ReponseQuestionSondage.id_quest==question_sondage.id_quest).filter(ReponseQuestionSondage.num_etu==id_etu).first()
+    else:
+        reponse_quest=None
+    return reponse,reponse_quest
 
 def get_soutiens_etudiant(id_etu:int)->list:
     """fonction qui recupere les soutiens de l etudiant
@@ -261,8 +294,8 @@ def get_soutiens_etudiant(id_etu:int)->list:
     ids_oraux = ParticipantsOral.query.filter(ParticipantsOral.num_etu == id_etu).all()
     oraux = []
     for id_oral in ids_oraux:
-        oral=Oral.query.join(ParticipantsOral).filter(Oral.id_oral == id_oral.id_oral).first()
-        semaine=Semaine.query.filter(Semaine.date_debut <= oral.date).filter(Semaine.date_fin >= oral.date).first()
+        oral=Oral.query.join(ParticipantsOral).join(Matiere).filter(Oral.id_oral == id_oral.id_oral).first()
+        semaine=Semaine.query.filter(Semaine.date_debut <= oral.date).filter(Semaine.date_fin >= oral.date).first().id_semaine
         oraux.append((oral,semaine))
     return oraux
 
@@ -275,7 +308,7 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
         liste_mat: la liste des matieres
     Return:
         str_js: le code javascript pour le graphe"""
-    str_js="google.charts.load('current', {'packages':['line']});\n"
+    str_js="<script>google.charts.load('current', {'packages':['line']});\n"
     str_js+="google.charts.setOnLoadCallback(drawChart);\n"
     str_js+="function drawChart() {\n"
     str_js+="\tvar data = new google.visualization.DataTable();\n"
@@ -299,7 +332,7 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
                 #calcule l ecart
                 ecart=note-moyenne
                 liste_sem.append(ecart)
-        str_js+="\tdata.addRow("+liste_sem+");"
+        str_js+="\tdata.addRow("+liste_sem+");\n"
     str_js+= "var options = {\n"
     str_js+=" chart: {\n"
     str_js+=" title: 'Ecart par rapport à la moyenne de la promo',\n"
@@ -310,9 +343,17 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
     str_js+=" };\n"
     str_js+=" var chart = new google.charts.Line(document.getElementById('linechart_material'));\n"
     str_js+=" chart.draw(data, google.charts.Line.convertOptions(options));\n"
-    str_js+=" }"
+    str_js+=" }</script>"
     return str_js
 
+def get_matieres_etu(id_etu):
+    """fonction qui recupere les matieres d un etudiant
+    Args:
+        id_etu: l id de l etudiant
+    Return:
+        liste_matieres: la liste des matieres"""
+    liste_qcms=QCM.query.filter(QCM.num_etu == id_etu).all()
+    return Matiere.query.filter(Matiere.id_matiere.in_(liste_qcms)).all()
 
 def get_moyenne_groupe(groupe:str,id_qcm:int)->float:
     """fonction qui recupere la moyenne d un groupe pour un qcm

@@ -124,7 +124,72 @@ def Soutien():
 
 @app.route("/Suivie_etu")
 def Suivie_etu():
-    return render_template("Suivie_etu.html",title="Suivie étudiant", admin=True)
+    liste_matieres=["Python","Java","C++","BDD","Reseau","IHM","Web"]
+    liste_modif=[]
+    cpt=0
+    while len(liste_matieres)<0:
+        if cpt %2 ==0:
+            liste_modif.append([liste_matieres[cpt]])
+        else:
+            liste_modif[-1].append(liste_matieres[cpt])
+        cpt+=1
+    semaines=[37,38,39,40,41,42,43,44,45,46,47,48]
+    #cree une liste de 3 qcms avec les resultats
+    qcms=[]
+    for i in range(len(liste_matieres)):
+        mat=Matiere(id_matiere=i,nom_matiere=liste_matieres[i])
+        qcm=QCM(id_qcm=i, id_mat=mat.id_matiere)
+        res = ResultatQCM(id_qcm = i, num_etu = 22107932, note = 10+i)
+        qcm.jointure.append(res)
+        qcms.append(qcm)
+    soutien=RepSondage(id_sondage=1,num_etu=22107932,matiere_voulue="Python",volontaire="oui",commentaire="Je veux du soutien")
+    questions=None
+    oraux =[]
+    for i in range(len(semaines)):
+        if i%3!=0:
+            oral = Oral(id_oral=i,id_matiere=i%len(liste_matieres),date_oral="2020-10-10",heure_oral="10:00")
+            part=ParticipantsOral(id_oral=i,id_matiere=i%len(liste_matieres),num_etu=22107932,commentaire=liste_matieres[i%len(liste_matieres)]+" oral")
+            oral.jointure.append(part)
+            oraux.append(oral,i)
+        else:
+            oraux.append(None,i)
+    str_js="<script>google.charts.load('current', {'packages':['line']});\n"
+    str_js+="google.charts.setOnLoadCallback(drawChart);\n"
+    str_js+="function drawChart() {\n"
+    str_js+="\tvar data = new google.visualization.DataTable();\n"
+    str_js+="\tdata.addColumn('number', 'Day');\n"
+    str_js+="\tdata.addColumn('number', 'Guardians of the Galaxy');\n"
+    str_js+="\tdata.addColumn('number', 'The Avengers');\n"
+    str_js+="\tdata.addColumn('number', 'Transformers: Age of Extinction');\n"
+    str_js+="\tdata.addRows([\n"
+    str_js+="\t\t[1,37.8,80.8,41.8],\n"
+    str_js+="\t\t[2,30.9,69.5,32.4],\n"
+    str_js+="\t\t[3,25.4,57,25.7],\n"
+    str_js+="\t\t[4,11.7,18.8,10.5],\n"
+    str_js+="\t\t[5,11.9,17.6,10.4],\n"
+    str_js+="\t\t[6,8.8,13.6,7.7],\n"
+    str_js+="\t\t[7,7.6,12.3,9.6],\n"
+    str_js+="\t\t[8,12.3,29.2,10.6],\n"
+    str_js+="\t\t[9,16.9,42.9,14.8],\n"
+    str_js+="\t\t[10,12.8,30.9,11.6],\n"
+    str_js+="\t\t[11,5.3,7.9,4.7],\n"
+    str_js+="\t\t[12,6.6,8.4,5.2]\n"
+    str_js+="\t]);\n"
+    str_js+= "var options = {\n"
+    str_js+=" chart: {\n"
+    str_js+=" title: 'Ecart par rapport à la moyenne de la promo',\n"
+    str_js+=" subtitle: 'en nombre'\n"
+    str_js+=" },\n"
+    str_js+=" width: 900,\n"
+    str_js+=" height: 500\n"
+    str_js+=" };\n"
+    str_js+=" var chart = new google.charts.Line(document.getElementById('linechart_material'));\n"
+    str_js+=" chart.draw(data, google.charts.Line.convertOptions(options));\n"
+    str_js+=" }</script>"
+    return render_template("Suivie_etu.html",title="Suivie étudiant",
+        admin=True,matieres=liste_modif,qcms=qcms,
+        soutien=soutien,questions=questions,oraux=oraux,
+        semaines=semaines,script_js=str_js)
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():
