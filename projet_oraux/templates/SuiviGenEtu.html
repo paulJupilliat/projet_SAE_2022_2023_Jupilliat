@@ -64,9 +64,14 @@
                 </li>
             </ul>
             <div id="aside_rec">
-                <h3>Recherche</h3>
-                <input type="text" name="recherche" id="recherche">
+                <form action="{{ url_for('search') }}" method="post" class="recherche_eleve" role="search" >
+                    <h3>Recherche</h3>
+                    <input type="search" name="recherche" id="recherche" placeholder="Search" aria-label="Search">
+                    <button type="submit" id="submit_recherche"></button>
+                </form>
+                
             </div>
+            <input id="liaison_bd" class="btn_valide" value="Valider" type="button"></input>
             </section>
 {% endblock %}
 {% block center %}
