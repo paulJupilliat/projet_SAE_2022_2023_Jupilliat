@@ -82,7 +82,7 @@ def connexionProf():
 
 @app.route("/Dispo")
 def Dispo():
-    return render_template("Dispo.html",title="Disponibilité", admin=True)
+    return render_template("Dispo.html",title="Disponibilité", admin=False)
 
 @app.route("/paramAdm")
 def paramAdm():
