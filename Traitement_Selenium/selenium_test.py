@@ -6,46 +6,50 @@ from selenium.webdriver.common.by import By
 import subprocess
 import traitement
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
-engine = create_engine('mysql+mysqlconnector://lidec:lidec@localhost/enginelidec')
+from sqlalchemy.orm import declarative_base, Session, relationship, backref
+engine = create_engine('mysql+mysqlconnector://lidec:lidec@localhost/enginelidec', echo=True, future=True)
+session = Session(engine)
+Base = declarative_base()
 
-class Sondage(engine.Model):
+class Sondage(Base):
     __tablename__ = "sondage"
-    idSond = engine.Column(engine.Integer, primary_key=True)
-    urlSond = engine.Column(engine.String(500))
-    dateSondage = engine.Column(engine.String(500))
+    idSond = Column(Integer, primary_key=True)
+    urlSond = Column(String(500))
+    dateSondage = Column(String(500))
     def __repr__(self):
         return f"Sondage({self.idSond}, {self.urlSond})"
 
-class Matiere(engine.Model):
+class Matiere(Base):
     __tablename__ = "matiere"
-    idMatiere = engine.Column(engine.Integer, primary_key=True)
-    nomMatiere = engine.Column(engine.String(50))
+    idMatiere = Column(Integer, primary_key=True)
+    nomMatiere = Column(String(50))
     def __repr__(self):
         return f"Matiere({self.idMatiere}, {self.nomMatiere})"
 
-class QCM(engine.Model):
+class QCM(Base):
     __tablename__ = "qcm"
-    idQCM = engine.Column(engine.Integer, primary_key=True)
-    nomQCM = engine.Column(engine.String(50))
-    urlQCM = engine.Column(engine.String(500))
+    idQCM = Column(Integer, primary_key=True)
+    nomQCM = Column(String(50))
+    urlQCM = Column(String(500))
     #relation pour avoir la matiere d un qcm
-    idMatiere = engine.Column(engine.Integer, engine.ForeignKey("matiere.idMatiere"))
+    idMatiere = Column(Integer, ForeignKey("matiere.idMatiere"))
     #relation inverse pour avoir les qcm d une matiere
-    matiere = engine.relationship("Matiere", backref=engine.backref("qcm", lazy="dynamic"))
-    dateDebut = engine.Column(engine.String(500))
-    dateFin = engine.Column(engine.String(500))
+    matiere = relationship("Matiere", backref=backref("qcm", lazy="dynamic"))
+    dateDebut = Column(String(500))
+    dateFin = Column(String(500))
     def __repr__(self):
         return f"QCM({self.idQCM}, {self.nomQCM}, {self.urlQCM}, {self.dateDebut}, {self.dateFin})"
+
 def get_id_QCM(nom_matiere, url, id_matiere):
     id_qcm = 0
     res = QCM.query.filter(urlQCM = url).count()
     if res == 0:
         id_qcm = get_id_QCM_max() + 1
         qcm = QCM(idQCM = id_qcm, nomQCM = nom_matiere, urlQCM = url, idMatiere = id_matiere)
-        engine.session.add(qcm)
-        engine.session.commit()
+        session.add(qcm)
+        session.commit()
     else:
         id_qcm = QCM.query.filter(urlQCM = url).first().idQCM
     return id_qcm
@@ -56,8 +60,8 @@ def get_id_sondage(url):
     if res == 0:
         id = get_id_sondage_max() + 1
         sondage = Sondage(idSond = id, urlQCM = url)
-        engine.session.add(sondage)
-        engine.session.commit()
+        session.add(sondage)
+        session.commit()
         return id
     else:
         id = Sondage.query.filter(urlQCM = url).first().idSond
@@ -69,21 +73,21 @@ def get_id_matiere(nom_matiere):
     if res == 0:
         id = get_id_matiere_max() + 1
         matiere = Matiere(idMatiere = id, Matiere = nom_matiere)
-        engine.session.add(matiere)
-        engine.session.commit()
+        session.add(matiere)
+        session.commit()
         return id
     else:
         id = Matiere.query.filter(Matiere = nom_matiere).first().idMatiere
     return id
         
 def get_id_matiere_max():
-    return engine.session.query(func.max(Matiere.idMatiere)).scalar()
+    return session.query(func.max(Matiere.idMatiere)).scalar()
         
 def get_id_QCM_max():
-    return engine.session.query(func.max(QCM.idQCM)).scalar()
+    return session.query(func.max(QCM.idQCM)).scalar()
         
 def get_id_sondage_max():
-    return engine.session.query(func.max(Sondage.idSond)).scalar()
+    return session.query(func.max(Sondage.idSond)).scalar()
 # os.environ['MOZ_HEADLESS'] = '1'
 
 user = input("Entrer votre nom utilisateur :")

@@ -507,7 +507,7 @@ def ajouter_dispo(idOral,idProf):
         db.session.commit()
 
 def ajouter_resultat_eleve(id_QCM,num_etu,note):
-    nb_rep = ResultatQCM.quety.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    nb_rep = ResultatQCM.query.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
     if nb_rep == 0:
         res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
         db.session.add(res)
@@ -516,7 +516,7 @@ def ajouter_resultat_eleve(id_QCM,num_etu,note):
         pass
 
 def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
-    nb_rep = RepSondage.quety.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    nb_rep = RepSondage.query.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
     if nb_rep == 0:
         rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
                         matiereVoulu = matiere_voulu, commentaire = commentaire)

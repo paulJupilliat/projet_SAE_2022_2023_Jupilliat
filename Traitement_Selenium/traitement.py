@@ -1,92 +1,93 @@
-from sqlalchemy import create_engine
-from sqlalchemy import func
-from sqlalchemy.orm import declarative_base
-engine = create_engine('mysql+mysqlconnector://lidec:lidec@localhost/enginelidec')
 
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import func
+from sqlalchemy.orm import declarative_base, Session, relationship, backref
+engine = create_engine('mysql+mysqlconnector://lidec:lidec@localhost/enginelidec')
+session = Session(engine)
 Base = declarative_base()
 
 class Sondage(Base):
     __tablename__ = "sondage"
-    idSond = engine.Column(engine.Integer, primary_key=True)
-    urlSond = engine.Column(engine.String(500))
-    dateSondage = engine.Column(engine.String(500))
+    idSond = Column(Integer, primary_key=True)
+    urlSond = Column(String(500))
+    dateSondage = Column(String(500))
     def __repr__(self):
         return f"Sondage({self.idSond}, {self.urlSond})"
 
 class Matiere(Base):
     __tablename__ = "matiere"
-    idMatiere = engine.Column(engine.Integer, primary_key=True)
-    nomMatiere = engine.Column(engine.String(50))
+    idMatiere = Column(Integer, primary_key=True)
+    nomMatiere = Column(String(50))
     def __repr__(self):
         return f"Matiere({self.idMatiere}, {self.nomMatiere})"
 
 class QCM(Base):
     __tablename__ = "qcm"
-    idQCM = engine.Column(engine.Integer, primary_key=True)
-    nomQCM = engine.Column(engine.String(50))
-    urlQCM = engine.Column(engine.String(500))
+    idQCM = Column(Integer, primary_key=True)
+    nomQCM = Column(String(50))
+    urlQCM = Column(String(500))
     #relation pour avoir la matiere d un qcm
-    idMatiere = engine.Column(engine.Integer, engine.ForeignKey("matiere.idMatiere"))
+    idMatiere = Column(Integer, ForeignKey("matiere.idMatiere"))
     #relation inverse pour avoir les qcm d une matiere
-    matiere = engine.relationship("Matiere", backref=engine.backref("qcm", lazy="dynamic"))
-    dateDebut = engine.Column(engine.String(500))
-    dateFin = engine.Column(engine.String(500))
+    matiere = relationship("Matiere", backref=backref("qcm", lazy="dynamic"))
+    dateDebut = Column(String(500))
+    dateFin = Column(String(500))
     def __repr__(self):
         return f"QCM({self.idQCM}, {self.nomQCM}, {self.urlQCM}, {self.dateDebut}, {self.dateFin})"
 
 class Eleve(Base):
     __tablename__ = "eleve"
-    numEtu = engine.Column(engine.Integer, primary_key=True)
-    nom = engine.Column(engine.String(50))
-    prenom = engine.Column(engine.String(50))
-    groupeS1 = engine.Column(engine.String(50))
-    groupeS2 = engine.Column(engine.String(50))
+    numEtu = Column(Integer, primary_key=True)
+    nom = Column(String(50))
+    prenom = Column(String(50))
+    groupeS1 = Column(String(50))
+    groupeS2 = Column(String(50))
     def __repr__(self):
         return f"Eleve({self.nom}, {self.prenom}, {self.groupeS1}, {self.groupeS2})"
 
 class ResultatQCM(Base):
     __tablename__ = "resultatqcm"
-    idQCM = engine.Column(engine.Integer, engine.ForeignKey("qcm.idQCM"), primary_key=True)
-    numEtu = engine.Column(engine.Integer, engine.ForeignKey("eleve.numEtu"), primary_key=True)
-    note = engine.Column(engine.Integer)
+    idQCM = Column(Integer, ForeignKey("qcm.idQCM"), primary_key=True)
+    numEtu = Column(Integer, ForeignKey("eleve.numEtu"), primary_key=True)
+    note = Column(Integer)
     #un eleve peut avoir qu'une seule note pour un qcm
-    eleve = engine.relationship(Eleve, backref=engine.backref("eleves", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    eleve = relationship(Eleve, backref=backref("eleves", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     #un qcm peut avoir qu'une seule note pour un eleve
-    qcm = engine.relationship(QCM, backref=engine.backref("qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    qcm = relationship(QCM, backref=backref("qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     def __repr__(self):
         return f"ResultatQCM({self.idQCM}, {self.numEtu}, {self.note})"
 
 class RepSondage(Base):
     __tablename__ = "repsondage"
-    idSondage = engine.Column(engine.Integer, engine.ForeignKey("sondage.idSondage"), primary_key=True)
-    numEtu = engine.Column(engine.Integer, engine.ForeignKey("eleve.numEtu"), primary_key=True)
+    idSondage = Column(Integer, ForeignKey("sondage.idSondage"), primary_key=True)
+    numEtu = Column(Integer, ForeignKey("eleve.numEtu"), primary_key=True)
     
-    matiereVoulu = engine.Column(engine.String(100))
-    volontaire = engine.Column(engine.String(50))
+    matiereVoulu = Column(String(100))
+    volontaire = Column(String(50))
     #relation pour avoir le sondage d une reponse
-    sondage = engine.relationship(Sondage, backref=engine.backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    sondage = relationship(Sondage, backref=backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
-    eleve = engine.relationship(Eleve, backref=engine.backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    eleve = relationship(Eleve, backref=backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve")
 
     def __repr__(self):
         return f"RepSondage({self.participation}, {self.idSondage}, {self.numEtu}, {self.dateSondage}, {self.matiereVoulu}, {self.commentaire})"
 
 def ajouter_resultat_eleve(id_QCM,num_etu,note):
-    nb_rep = ResultatQCM.quety.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    nb_rep = ResultatQCM.query.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
     if nb_rep == 0:
         res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
-        engine.session.add(res)
-        engine.session.commit()
+        session.add(res)
+        session.commit()
     else:
         pass
 
 def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
-    nb_rep = RepSondage.quety.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    nb_rep = RepSondage.query.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
     if nb_rep == 0:
         rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
                         matiereVoulu = matiere_voulu, commentaire = commentaire)
-        engine.session.add(rep)
-        engine.session.commit()
+        session.add(rep)
+        session.commit()
     else:
         pass
 
@@ -94,8 +95,8 @@ def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
     res = Eleve.query.filter(numEtu = num_etu).count()
     if res == 0:
         eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
-        engine.session.add(eleve)
-        engine.session.commit()
+        session.add(eleve)
+        session.commit()
 
 
 def main(fichier_ouvrir):
