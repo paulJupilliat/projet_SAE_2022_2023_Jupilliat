@@ -70,7 +70,7 @@ def ResQCM():
 
 @app.route("/Acceuil")
 def Acceuil():
-    return render_template("Acceuil.html",title="Acceuil", admin=True)
+    return render_template("Acceuil.html",title="Acceuil", admin=False)
 
 @app.route("/connexionAdm")
 def connexionAdm():
@@ -91,10 +91,14 @@ def paramAdm():
 @app.route("/save/paramAdm",methods=("POST",))
 def save_paramAdm():
     return render_template("paramAdm.html",title="Paramètres Administrateur")
+
 @app.route("/paramEns")
 def paramEns():
     return render_template("paramEns.html",title="Paramètres Enseignant")
 
+@app.route("/save/paramEns",methods=("POST",))
+def save_paramEns():
+    return render_template("paramEns.html",title="Paramètres Enseignant")
 @app.route("/res_sond")
 def res_sond():
     return render_template("res_sond.html",title="Resultat sondage", admin=True)
