@@ -6,9 +6,9 @@ function plie_deplie_filtres() {
         document.getElementById("grps_filtres").style.display = "none";
     }
     if (img.src.match("../img/plie.png")) {
-        img.src = "../img/deplie.png";
+        img.src = "{{ url_for('static', filename='img/deplie.png') }}";
     } else {
-        img.src = "../img/plie.png";
+        img.src = "{{ url_for('static', filename='img/plie.png') }}";
     }
 };
 
