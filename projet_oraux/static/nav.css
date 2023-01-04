@@ -3,6 +3,7 @@ body{
     display: flex;
     flex-direction: column;
 }
+
 nav{
     
     height: 100px;
@@ -71,3 +72,4 @@ nav a:hover
         display: flex;
         color:black;
     }}
+
