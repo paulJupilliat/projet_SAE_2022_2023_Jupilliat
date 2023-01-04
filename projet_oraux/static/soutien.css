@@ -5,3 +5,15 @@ main{justify-content: space-around;
 section{
     margin: 1em;
 }
+/* alignement du tableau et de son entete */
+table,
+td {
+    border: 1px solid #333;
+    text-align: center;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}

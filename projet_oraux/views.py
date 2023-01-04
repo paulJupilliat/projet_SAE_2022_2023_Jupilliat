@@ -65,22 +65,22 @@ def ResQCM():
     return render_template("ResQCM.html",title="Resultat QCM", admin=True)
 @app.route("/Acceuil")
 def Acceuil():
-    return render_template("Acceuil.html",title="Acceuil", admin=True)
+    return render_template("Acceuil.html",title="Acceuil", admin=False)
 @app.route("/connexionAdm")
 def connexionAdm():
-    return render_template("connexionAdm.html",title="Connexion Administrateur")
+    return render_template("connexionAdm.html",title="Connexion Administrateur",admin = False)
 @app.route("/connexionProf")
 def connexionProf():
-    return render_template("connexionProf.html",title="Connexion Professeur")
+    return render_template("connexionProf.html",title="Connexion Professeur",admin = False)
 @app.route("/Dispo")
 def Dispo():
     return render_template("Dispo.html",title="Disponibilité", admin=True)
 @app.route("/paramAdm")
 def paramAdm():
-    return render_template("paramAdm.html",title="Paramètres Administrateur")
+    return render_template("paramAdm.html",title="Paramètres Administrateur",admin = False)
 @app.route("/paramEns")
 def paramEns():
-    return render_template("paramEns.html",title="Paramètres Enseignant")
+    return render_template("paramEns.html",title="Paramètres Enseignant", admin = False)
 @app.route("/res_sond")
 def res_sond():
     return render_template("res_sond.html",title="Resultat sondage", admin=True)
