@@ -4,6 +4,7 @@
 from .app import db
 from flask_login import UserMixin
 from .app import login_manager
+from sqlalchemy import func
 
 class Eleve(db.Model):
     __tablename__ = "eleve"
@@ -504,7 +505,63 @@ def ajouter_dispo(idOral,idProf):
         dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
         db.session.add(dispo)
         db.session.commit()
+
+def ajouter_resultat_eleve(id_QCM,num_etu,note):
+    nb_rep = ResultatQCM.quety.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    if nb_rep == 0:
+        res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
+        db.session.add(res)
+        db.session.commit()
+    else:
+        pass
+
+def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
+    nb_rep = RepSondage.quety.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    if nb_rep == 0:
+        rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
+                        matiereVoulu = matiere_voulu, commentaire = commentaire)
+        db.session.add(rep)
+        db.session.commit()
+    else:
+        pass
+
+def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
+    res = Eleve.query.filter(numEtu = num_etu).count()
+    if res == 0:
+        eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
+        db.session.add(eleve)
+        db.session.commit()
+
+def get_id_QCM(nom_matiere, url, id_matiere):
+    id = 0
+    res = QCM.query.filter(urlQCM = url).count()
+    if res == 0:
+        id = get_id_QCM_max() + 1
+        qcm = QCM(idQCM = id, nomQCM = nom_matiere,urlQCM = id_matiere)
+        db.session.add(qcm)
+        db.session.commit()
+        return id
+    else:
+        id = QCM.query.filter(urlQCM = url).first().idQCM
+    return id
+
+def get_id_sondage(nom_matiere, url, id_matiere):
+    id = 0
+    res = QCM.query.filter(urlQCM = url).count()
+    if res == 0:
+        id = get_id_QCM_max() + 1
+        qcm = QCM(idQCM = id, nomQCM = nom_matiere,urlQCM = id_matiere)
+        db.session.add(qcm)
+        db.session.commit()
+        return id
+    else:
+        id = QCM.query.filter(urlQCM = url).first().idQCM
+    return id
         
+def get_id_QCM_max():
+    return db.session.query(func.max(QCM.id)).scalar()
+
+
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)

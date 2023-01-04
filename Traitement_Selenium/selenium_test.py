@@ -56,7 +56,7 @@ try:
             bouton_questionnaire.click()
             if "QCM" in partie[i]:
                 nom_matiere = browser.find_element(By.XPATH,"/html/body/div[2]/div[4]/div/header/div/div[1]/div[1]/nav/ol/li[1]/a")
-                id_QCM = fonction_BD.get_id_QCM(connexion,QCM(0,nom_matiere.text,browser.current_url,id_matiere))
+                id_QCM = models.get_id_QCM(nom_matiere.text,browser.current_url,id_matiere)
                 nom = nom_matiere.text +" -"+ nom_partie +"-notes.csv"
                 list_move.insert(0,(id_QCM,nom.replace("/",""),None))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Résultats").click()
