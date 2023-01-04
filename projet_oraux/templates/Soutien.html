@@ -39,3 +39,6 @@
         <table class="scrolable" id="tab2">
         </table>
         {% endblock %}
+        {% block scripts %}
+<script src="{{ url_for('static', filename='js/soutien.js') }}"></script>
+{% endblock %}
