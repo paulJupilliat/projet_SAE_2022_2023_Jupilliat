@@ -70,10 +70,22 @@ def ResQCM():
 
 @app.route("/Acceuil")
 def Acceuil():
-    return render_template("Acceuil.html",title="Acceuil", admin=False
-    ,qcms=get_resultats_qcm_accueil, sondages=get_res_sondage_accueil,
-    disponibilites_enseignant=get_dispo_enseignant_accueil,
-    semaines=get_semaines)
+    #moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
+    qcms= {"generale":{"Python": 12, "Java": 15, "C++": 18},
+    "11A":{"Python": 12, "Java": 15, "C++": 18},
+    "12A":{"Python": 12, "Java": 15, "C++": 18},
+    "11B":{"Python": 12, "Java": 15, "C++": 18},
+    "12B":{"Python": 12, "Java": 15, "C++": 18},
+    "11C":{"Python": 12, "Java": 15, "C++": 18},
+    "12C":{"Python": 12, "Java": 15, "C++": 18}}
+    #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
+    sondage = {"Python": { "nb": 10, "Moyenne": 15}, "BDD": { "nb": 8, "Moyenne": 11}, "Java": { "nb": 4, "Moyenne": 13}}
+    matieres=["Python","Java","C++"]
+    possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"]}
+    semaines=[37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    return render_template(
+        "Acceuil.html",title="Acceuil", admin=False,qcm=qcms, matieres_demandées=sondage,
+        matieres=matieres, possibles=possibles,semaines=semaines)
 
 @app.route("/connexionAdm")
 def connexionAdm():

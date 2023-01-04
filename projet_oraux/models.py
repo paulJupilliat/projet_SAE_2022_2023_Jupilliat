@@ -399,11 +399,6 @@ def get_dispo_enseignant_accueil(semaine:int):
             possibles[p].append(m.nom_matiere)
             if m.nom_matiere not in matieres_tot:
                 matieres_tot.append(m.nom_matiere)
-    #mise a 0 des matieres non possibles
-    for p in profs_dispo:
-        for m in matieres_tot:
-            if m not in possibles[p]:
-                possibles[p].append(m)
     return possibles,matieres_tot
 
 def get_res_sondage_accueil(date:str)->dict:
