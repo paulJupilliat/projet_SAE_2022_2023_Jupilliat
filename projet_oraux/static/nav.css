@@ -30,11 +30,15 @@ nav .main_pages a
     color: black;
 }
  
-nav a:hover 
+nav a:hover
 {
     color:purple;
 }
-
+/* garder la couleur du bouton une fois sur la page */
+nav a:active
+{
+    color:purple;
+}
 .label_nav, #toggle
 {
     display: none;

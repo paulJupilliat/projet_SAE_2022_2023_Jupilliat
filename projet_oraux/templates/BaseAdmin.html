@@ -20,7 +20,7 @@
         <nav>
             <label for="toggle" class="label_nav">☰</label><input type="checkbox" id="toggle"><div class="main_pages">
                 <a href="{{url_for ('Acceuil')}}" id="navbar_home"><img src="{{ url_for('static', filename='img/acceuil.png') }}" height="50em" alt="" height="60em"></a>
-                <a href="{{url_for ('ResQCM')}}" class="navbar__links">Résultats QCM</a>
+                <a href="{{url_for ('ResQCM')}}" id="resQCM" class="navbar__links">Résultats QCM</a>
                 <a href="{{url_for ('res_sond')}}" class="navbar__links">Sondages</a>
                 <a href="{{url_for ('Dispo')}}" class="navbar__links">Disponibilités enseignants</a>
                 <a href="{{url_for ('Soutien')}}" class="navbar__links">Voir le soutien</a>
