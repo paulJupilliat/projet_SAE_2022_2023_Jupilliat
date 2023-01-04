@@ -59,7 +59,42 @@ from flask import render_template, request,url_for , redirect
 
 @app.route("/")
 def route():
-    return render_template("SuiviGenEtu.html",title="Projet soutien", admin=True)
+    return render_template("index.html",title="Projet soutien", admin=True)
+@app.route("/ResQCM")
+def ResQCM():
+    return render_template("ResQCM.html",title="Resultat QCM", admin=True)
+@app.route("/Acceuil")
+def Acceuil():
+    return render_template("Acceuil.html",title="Acceuil", admin=True)
+@app.route("/connexionAdm")
+def connexionAdm():
+    return render_template("connexionAdm.html",title="Connexion Administrateur")
+@app.route("/connexionProf")
+def connexionProf():
+    return render_template("connexionProf.html",title="Connexion Professeur")
+@app.route("/Dispo")
+def Dispo():
+    return render_template("Dispo.html",title="Disponibilité", admin=True)
+@app.route("/paramAdm")
+def paramAdm():
+    return render_template("paramAdm.html",title="Paramètres Administrateur")
+@app.route("/paramEns")
+def paramEns():
+    return render_template("paramEns.html",title="Paramètres Enseignant")
+@app.route("/res_sond")
+def res_sond():
+    return render_template("res_sond.html",title="Resultat sondage", admin=True)
+@app.route("/Soutien")
+def Soutien():
+    return render_template("Soutien.html",title="Soutien", admin=True)
+@app.route("/Suivie_etu")
+def Suivie_etu():
+    return render_template("Suivie_etu.html",title="Suivie étudiant", admin=True)
+@app.route("/SuivieGenEtu")
+def SuivieGenEtu():
+    return render_template("SuiviGenEtu.html",title="Suivie général étudiant", admin=True)
+
+
 # @app.route("/")
 # def home():
 #     return render_template(
