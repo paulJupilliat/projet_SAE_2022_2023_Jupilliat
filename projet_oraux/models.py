@@ -90,11 +90,11 @@ class Oral(db.Model):
 
 class Semaine(db.Model):
     __tablename__ = "semaine"
-    idSemaine = db.Column(db.Integer, primary_key=True)
+    id_semaine = db.Column(db.Integer, primary_key=True)
     dateDebut = db.Column(db.String(500))
     dateFin = db.Column(db.String(500))
     def __repr__(self):
-        return f"Semaine({self.idSemaine}, {self.dateDebut}, {self.dateFin})"
+        return f"Semaine({self.id_semaine}, {self.dateDebut}, {self.dateFin})"
 
 class ParticipantsOral(db.Model):
     __tablename__ = "participantsoral"
@@ -274,12 +274,12 @@ def get_resultats_qcm_accueil(date):
     #recup moyennes
     moyennes={}
     for qcm in qcms:
+        moyennes[groupe]={}
         nom_matiere=Matiere.query.filter(Matiere.idMatiere == qcm.idMatiere).first().nomMatiere
-        moyennes[nom_matiere]={}
         for groupe in groupes:
-            moyennes[nom_matiere][groupe]=get_moyenne_groupe(groupe,qcm.idQCM,semestre)   
+            moyennes[groupe][nom_matiere]=get_moyenne_groupe(groupe,qcm.idQCM,semestre)   
         #ajout moyenne generale
-        moyennes[nom_matiere]["generale"]=get_moyenne_generale(qcm.idQCM)
+        moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.idQCM)
     return moyennes
 
     
@@ -291,8 +291,28 @@ def get_dispo_enseignant_accueil(semaine):
         date (String): date du QCM
     """
     sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
-    dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).all()
-    return dispo
+    dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).all()
+    #recup les profs qui sont dispo sans doublons
+    profs_dispo=[]
+    for d in dispo:
+        if d.id_prof not in profs_dispo:
+            profs_dispo.append(d.id_prof)    
+    #recup des matieres par prof
+    possibles={}
+    matieres_tot=[]
+    for p in profs_dispo:
+        possibles[p]=[]
+        matieres_prof=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == p).all()
+        for m in matieres_prof:
+            possibles[p].append(m.nomMatiere)
+            if m.nomMatiere not in matieres_tot:
+                matieres_tot.append(m.nomMatiere)
+    #mise a 0 des matieres non possibles
+    for p in profs_dispo:
+        for m in matieres_tot:
+            if m not in possibles[p]:
+                possibles[p].append(m)
+    return possibles,matieres_tot
 
 def get_res_sondage_accueil(date):
     """fonction recuperant les resultats du sondage pour une date
