@@ -533,35 +533,52 @@ def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
         db.session.commit()
 
 def get_id_QCM(nom_matiere, url, id_matiere):
-    id = 0
+    id_qcm = 0
     res = QCM.query.filter(urlQCM = url).count()
     if res == 0:
-        id = get_id_QCM_max() + 1
-        qcm = QCM(idQCM = id, nomQCM = nom_matiere,urlQCM = id_matiere)
+        id_qcm = get_id_QCM_max() + 1
+        qcm = QCM(idQCM = id_qcm, nomQCM = nom_matiere, urlQCM = url, idMatiere = id_matiere)
         db.session.add(qcm)
+        db.session.commit()
+    else:
+        id_qcm = QCM.query.filter(urlQCM = url).first().idQCM
+    return id_qcm
+
+def get_id_sondage(url):
+    id = 0
+    res = Sondage.query.filter(urlQCM = url).count()
+    if res == 0:
+        id = get_id_sondage_max() + 1
+        sondage = Sondage(idSond = id, urlQCM = url)
+        db.session.add(sondage)
         db.session.commit()
         return id
     else:
-        id = QCM.query.filter(urlQCM = url).first().idQCM
+        id = Sondage.query.filter(urlQCM = url).first().idSond
     return id
 
-def get_id_sondage(nom_matiere, url, id_matiere):
+def get_id_matiere(nom_matiere):
     id = 0
-    res = QCM.query.filter(urlQCM = url).count()
+    res = Matiere.query.filter(Matiere = nom_matiere).count()
     if res == 0:
-        id = get_id_QCM_max() + 1
-        qcm = QCM(idQCM = id, nomQCM = nom_matiere,urlQCM = id_matiere)
-        db.session.add(qcm)
+        id = get_id_matiere_max() + 1
+        matiere = Matiere(idMatiere = id, Matiere = nom_matiere)
+        db.session.add(matiere)
         db.session.commit()
         return id
     else:
-        id = QCM.query.filter(urlQCM = url).first().idQCM
+        id = Matiere.query.filter(Matiere = nom_matiere).first().idMatiere
     return id
         
+def get_id_matiere_max():
+    return db.session.query(func.max(Matiere.idMatiere)).scalar()
+        
 def get_id_QCM_max():
-    return db.session.query(func.max(QCM.id)).scalar()
-
+    return db.session.query(func.max(QCM.idQCM)).scalar()
+        
+def get_id_sondage_max():
+    return db.session.query(func.max(Sondage.idSond)).scalar()
 
 @login_manager.user_loader
 def load_user(username):
-    return User.query.get(username)
+    return User.get(username).first()

@@ -108,7 +108,7 @@ def Suivie_etu():
 def SuivieGenEtu():
     return render_template("SuiviGenEtu.html",title="Suivie général étudiant", admin=True)
 
-@app.route("/Connexion/<origin>", method = ("POST",))
+@app.route("/Connexion/<origin>", methods = ("POST",))
 def Connexion(origin):
     f = LoginForm()
     if f.validate_on_submit():

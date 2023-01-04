@@ -1,16 +1,10 @@
 import sys
 
-sys.path.append('./SQLAlchemy')
 sys.path.append('./projet_oraux')
 from getpass import getpass
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from connexion_BD import ouvrir_connexion
-import fonction_BD
-from QCM import QCM
-from Sondage import Sondage
-from Matiere import Matiere
 import models
 import subprocess
 import traitement
@@ -19,8 +13,6 @@ os.environ['MOZ_HEADLESS'] = '1'
 
 user = input("Entrer votre nom utilisateur :")
 mdp = getpass("Entrer votre mot de passe :")
-
-connexion = ouvrir_connexion("manach","manach","servinfo-mariadb","DBmanach")
 
 list_telechargement = [["(BUT2)","QCM (26/10/2022)","Sondage (11/11/2022)"]]
 
@@ -47,7 +39,7 @@ try:
     for partie in list_telechargement:
 
         bouton_matiere = browser.find_element(By.PARTIAL_LINK_TEXT,partie[0])
-        id_matiere = fonction_BD.id_matiere(connexion,Matiere(0,bouton_matiere.text.split("\n")[1]))
+        id_matiere = models.get_id_matiere(bouton_matiere.text.split("\n")[1])
         bouton_matiere.click()
 
         for i in range(1,len(partie)):
@@ -62,7 +54,7 @@ try:
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Résultats").click()
             else:
                 nom = nom_partie.split("\n")[0] + ".csv"
-                id_sondage = fonction_BD.id_sondage(connexion,Sondage(0,browser.current_url))
+                id_sondage = models.get_id_sondage(browser.current_url)
                 list_move.append((id_sondage,nom.replace("/",""),nom.split("(")[-1][:-5]))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Réponses").click()
             browser.find_element(By.XPATH ,"//button[text()='Télécharger']").click()
