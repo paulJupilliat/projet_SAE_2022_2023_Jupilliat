@@ -5,8 +5,8 @@
 {% endif %}
 {% block styles %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style_acc.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_acc.css') }}">
 {% endblock %}
 {% block top %}
         <select name="Semaine" id="sem-select">

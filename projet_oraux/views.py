@@ -74,7 +74,8 @@ def connexionProf():
     return render_template("connexionProf.html",title="Connexion Professeur",admin = False)
 @app.route("/Dispo")
 def Dispo():
-    return render_template("Dispo.html",title="Disponibilité", admin=True)
+    return render_template("Dispo.html",title="Disponibilité", admin=False)
+
 @app.route("/paramAdm")
 def paramAdm():
     return render_template("paramAdm.html",title="Paramètres Administrateur",admin = False)
@@ -466,4 +467,23 @@ def search():
 # @app.route("/logout/")
 # def logout():
 #     logout_user()
+<<<<<<< HEAD
 #     return redirect(url_for('home'))
+=======
+#     return redirect(url_for('home'))
+
+
+@app.route("/Connexion/<origin>", methods = ("POST",))
+def Connexion(origin):
+    f = LoginForm()
+    if f.validate_on_submit():
+        user = f.get_authenticated_user()
+        if user:
+            login_user(user)
+            return redirect(url_for("Acceuil"))
+    if origin == "Admin":
+        return redirect(url_for("connexionAdm"))
+    else:
+        return redirect(url_for("connexionProf"))
+
+>>>>>>> d3746fee27027f594a96bd2dae6896b8dd16a7a2
