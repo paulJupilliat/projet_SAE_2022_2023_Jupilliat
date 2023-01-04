@@ -18,6 +18,7 @@ class Sondage(db.Model):
     __tablename__ = "sondage"
     idSond = db.Column(db.Integer, primary_key=True)
     urlSond = db.Column(db.String(500))
+    dateSondage = db.Column(db.String(500))
     def __repr__(self):
         return f"Sondage({self.idSond}, {self.urlSond})"
 class QuestionSondage(db.Model):
@@ -75,7 +76,6 @@ class Oral(db.Model):
     idOral = db.Column(db.Integer, primary_key=True)
     dateOral = db.Column(db.String(500))
     heureOral = db.Column(db.String(500))
-    nbEls = db.Column(db.Integer)
     #relation pour avoir la matiere d un oral
     idMatiere = db.Column(db.Integer, db.ForeignKey("matiere.idMatiere"))
     #relation inverse pour avoir les oraux d une matiere
@@ -86,14 +86,6 @@ class Oral(db.Model):
     professeur = db.relationship("Professeur", backref=db.backref("oral", lazy="dynamic"))
     def __repr__(self):
         return f"Oraux({self.idOral}, {self.dateOral}, {self.nomOral}, {self.nbElMax})"
-
-class Semaine(db.Model):
-    __tablename__ = "semaine"
-    idSemaine = db.Column(db.Integer, primary_key=True)
-    dateDebut = db.Column(db.String(500))
-    dateFin = db.Column(db.String(500))
-    def __repr__(self):
-        return f"Semaine({self.idSemaine}, {self.dateDebut}, {self.dateFin})"
 
 class ParticipantsOral(db.Model):
     __tablename__ = "participantsoral"
@@ -122,7 +114,6 @@ class RepSondage(db.Model):
     __tablename__ = "repsondage"
     idSondage = db.Column(db.Integer, db.ForeignKey("sondage.idSondage"), primary_key=True)
     numEtu = db.Column(db.Integer, db.ForeignKey("eleve.numEtu"), primary_key=True)
-    dateSondage = db.Column(db.String(500))
     matiereVoulu = db.Column(db.String(100))
     volontaire = db.Column(db.String(50))
     #relation pour avoir le sondage d une reponse
@@ -137,8 +128,19 @@ class Periode(db.Model):
     idPeriode = db.Column(db.Integer, primary_key=True)
     dateDebut = db.Column(db.String(500))
     dateFin = db.Column(db.String(500))
+    semestre = db.Column(db.Integer)
     def __repr__(self):
         return f"Periode({self.idPeriode}, {self.dateDebut}, {self.dateFin})"
+class Semaine(db.Model):
+    __tablename__ = "semaine"
+    idSemaine = db.Column(db.Integer, primary_key=True)
+    dateDebut = db.Column(db.String(500))
+    dateFin = db.Column(db.String(500))
+    #ajout de la periode pour faciliter la recherche
+    idPeriode = db.Column(db.Integer, db.ForeignKey("periode.idPeriode"))
+    periode = db.relationship("Periode", backref=db.backref("semaine", lazy="dynamic"))
+    def __repr__(self):
+        return f"Semaine({self.idSemaine}, {self.dateDebut}, {self.dateFin})"
 
 class PossibiliteSoutien(db.Model):
     __tablename__ = "possibilitesoutien"
@@ -168,7 +170,6 @@ class EstDisponible(db.Model):
 
 class ReponseQuestionSondage(db.Model):
     __tablename__ = "reponsequestionsondage"
-    
     numEtu = db.Column(db.Integer, db.ForeignKey("eleve.numEtu"), primary_key=True)
     idQuestion = db.Column(db.Integer, db.ForeignKey("questionSondage.idQuestion"), primary_key=True)
     reponse = db.Column(db.String(500))
@@ -181,7 +182,6 @@ class ReponseQuestionSondage(db.Model):
 
 def get_moyenne_generale(id_qcm):
     #recupere la moyenne de la classe pour un qcm
-    qcm = QCM.query.filter(QCM.idQCM == id_qcm).first()
     qcm_eleves = ResultatQCM.query.filter(ResultatQCM.idQCM == id_qcm).all()
     moyenne = 0
     for qcm_eleve in qcm_eleves:
@@ -191,15 +191,20 @@ def get_moyenne_generale(id_qcm):
 
 def get_recap_etudiant(id_etu,num_semaine):
     #recupere les qcms et le soutien eventuel de l etudiant pour la semaine donnée
-    sem=Semaine.query.filter(Semaine.numSemaine==num_semaine).first()
-    qcms = QCM.query.filter(QCM.numEtu == id_etu).filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).all()
-    soutien = Oral.query.filter(Oral.numEtu == id_etu).filter(Oral.dateOral >= sem.dateDebut).filter(Oral.dateOral <= sem.dateFin).all()
+    sem=Semaine.query.filter(Semaine.numSemaine==num_semaine).first().idSemaine
+    qcms=get_res_QCM_eleve(id_etu,sem)
+    soutien=get_soutiens_etudiant(id_etu,sem)
     return qcms,soutien
 
 def get_soutiens_etudiant(id_etu):
     #recupere les soutiens de l etudiant
-    soutiens = Oral.query.filter(Oral.numEtu == id_etu).all()
-    return soutiens
+    ids_oraux = ParticipantsOral.query.filter(ParticipantsOral.numEtu == id_etu).all()
+    oraux = []
+    for id_oral in ids_oraux:
+        oral=Oral.query.join(ParticipantsOral).filter(Oral.idOral == id_oral.idOral).first()
+        semaine=Semaine.query.filter(Semaine.dateDebut <= oral.date).filter(Semaine.dateFin >= oral.date).first()
+        oraux.append((oral,semaine))
+    return oraux
 
 def get_graphe_etudiant(id_etu,date_deb,date_fin,liste_mat):
     str_js="google.charts.load('current', {'packages':['line']});\n"
@@ -228,10 +233,12 @@ def get_graphe_etudiant(id_etu,date_deb,date_fin,liste_mat):
                 liste_sem.append(ecart)
         str_js+="\tdata.addRow("+liste_sem+");"
 
-def get_moyenne_groupe(groupe,id_qcm,semestre):
-    #recupere la moyenne du groupe pour un qcm
-    qcm = QCM.query.filter(QCM.idQCM == id_qcm).first()
+
+def get_moyenne_groupe(groupe,id_qcm):
     qcm_eleves = ResultatQCM.query.filter(ResultatQCM.idQCM == id_qcm).all()
+    dateqcm = QCM.query.filter(QCM.idQCM == id_qcm).first().dateFin
+    periode = Periode.query.filter(Periode.dateDebut <= dateqcm).filter(Periode.dateFin >= dateqcm).first()
+    semestre = periode.semestre
     moyenne = 0
     for qcm_eleve in qcm_eleves:
         eleve=Eleve.query.filter(Eleve.numEtu == qcm_eleve.numEtu).first()
@@ -253,12 +260,8 @@ def get_resultats_qcm_accueil(date):
     #on regarde dans quelle semaine on est
     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
     #calcul periode
-    periode = Periode.query.filter(Periode.dateDebut <= sem.dateDebut).filter(Periode.dateFin >= sem.dateFin).first()
-    if periode.idPeriode == 1 or periode.idPeriode == 2:
-        semestre="S1"
-    else:
-        semestre="S2"
-    #recup groupes
+    periode = Periode.query.filter(Periode.idPeriode == sem.idPeriode).first()
+    semestre="S"+str(periode.semestre)
     eleves=Eleve.query.all()
     groupes=[]
     for eleve in eleves:
@@ -281,8 +284,6 @@ def get_resultats_qcm_accueil(date):
         moyennes[nom_matiere]["generale"]=get_moyenne_generale(qcm.idQCM)
     return moyennes
 
-    
-
 def get_dispo_enseignant_accueil(semaine):
     """fonction recuperant les disponibilites des enseignants pour une date
 
@@ -301,7 +302,7 @@ def get_res_sondage_accueil(date):
     """
     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
     matieres_demandées={}
-    rep_sondage = RepSondage.query.filter(RepSondage.sondage.dateSondage >= sem.dateDebut).filter(RepSondage.sondage.dateSondage <= sem.dateFin).all()
+    rep_sondage = RepSondage.query.join(Sondage).filter(Sondage.dateSondage >= sem.dateDebut).filter(Sondage.dateSondage <= sem.dateFin).all()
     for r in rep_sondage:
         if r.matiereVoulu in matieres_demandées:
             matieres_demandées[r.matiereVoulu]["nb"]+=1
@@ -316,32 +317,78 @@ def get_res_sondage_accueil(date):
                 matieres_demandées[nom_m]["Moyenne"]=moyenne
     return matieres_demandées
 
-def moyenne_qcm(idQCM):
-    """fonction calculant la moyenne d un qcm
+def get_res_QCMs(semaine,liste_groupes=[]):
+    """fonction recuperant les resultats de QCM pour une date
 
     Args:
-        idQCM (int): id du qcm
+        date (String): date du QCM
     """
-    qcm = QCM.query.filter(QCM.idQCM == idQCM).first()
-    res = ResultatQCM.query.filter(ResultatQCM.idQCM == idQCM).all()
-    moyenne = 0
-    for r in res:
-        moyenne += r.note
-    moyenne = moyenne / len(res)
-    return moyenne
+    sem = Semaine.query.filter(Semaine.idSemaine == semaine).first()
+    qcms=QCM.query.filter(QCM.dateFin >= sem.dateDebut).filter(QCM.dateFin <= sem.dateFin).all()
+    resultats=[]
+    if len(liste_groupes)==0:
+        for qcm in qcms:
+            res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.idQCM==qcm.idQCM).all()
+            resultats.append(res_QCM)
+    else:
+        semestre="S"+str(Periode.query.filter(Periode.idPeriode == sem.idPeriode).first().semestre)
+        if semestre == "S1":
+            for qcm in qcms:
+                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.idQCM==qcm.idQCM).filter(Eleve.groupeS1.in_(liste_groupes)).all()
+                resultats.append(res_QCM)
+        else:
+            for qcm in qcms:
+                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.idQCM==qcm.idQCM).filter(Eleve.groupeS2.in_(liste_groupes)).all()
+                resultats.append(res_QCM)
+    return resultats
 
-def res_QCM(id_eleve, date):
+def get_res_sondages(semaine,liste_groupes=[]):
+    """fonction recuperant les resultats de sondage pour une date
+
+    Args:
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.idSemaine == semaine).first()
+    sondages=Sondage.query.filter(Sondage.dateSondage >= sem.dateDebut).filter(Sondage.dateSondage <= sem.dateFin).all()
+    resultats=[]
+    if len(liste_groupes)==0:
+        for sondage in sondages:
+            res_sondage=RepSondage.query.join(Eleve).filter(RepSondage.idSondage==sondage.idSondage).all()
+            resultats.append(res_sondage)
+    else:
+        semestre="S"+str(Periode.query.filter(Periode.idPeriode == sem.idPeriode).first().semestre)
+        if semestre == "S1":
+            for sondage in sondages:
+                res_sondage=RepSondage.query.join(Eleve).filter(RepSondage.idSondage==sondage.idSondage).filter(Eleve.groupeS1.in_(liste_groupes)).all()
+                resultats.append(res_sondage)
+        else:
+            for sondage in sondages:
+                res_sondage=RepSondage.query.join(Eleve).filter(RepSondage.idSondage==sondage.idSondage).filter(Eleve.groupeS2.in_(liste_groupes)).all()
+                resultats.append(res_sondage)
+    return resultats
+
+
+def get_res_QCM_eleve(id_eleve, id_sem):
     """fonction recuperant les resultats du QCM pour un eleve et une date
 
     Args:
         id_eleve (int): id de l eleve
         date (String): date du QCM
     """
-    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
+    sem = Semaine.query.filter(Semaine.idSemaine == id_sem).first()
     res_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.dateFin >= sem.dateDebut).filter(ResultatQCM.qcm.dateFin <= sem.dateFin).filter(ResultatQCM.numEtu == id_eleve).all()
-    soutien = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
-    return res_qcm, soutien
+    return res_qcm
 
+def get_res_sond_eleve(id_eleve, id_sem):
+    """fonction recuperant les resultats du sondage pour un eleve et une date
+
+    Args:
+        id_eleve (int): id de l eleve
+        date (String): date du QCM
+    """
+    sem = Semaine.query.filter(Semaine.idSemaine == id_sem).first()
+    res_sond = RepSondage.query.join(Sondage).join(ReponseQuestionSondage).filter(RepSondage.numEtu == id_eleve).filter(Sondage.dateSondage >= sem.dateDebut).filter(Sondage.dateSondage <= sem.dateFin).all()
+    return res_sond
 def get_eleve(id_eleve):
     """fonction recuperant un eleve
 
@@ -351,42 +398,19 @@ def get_eleve(id_eleve):
     eleve = Eleve.query.filter(Eleve.numEtu == id_eleve).first()
     return eleve
 
-def get_eleve(groupe, date):
+def get_eleves(groupe, date):
     """fonction recuperant les eleves d un groupe pour une date
 
     Args:
         groupe (String): groupe de l eleve
         date (String): date du QCM
     """
-    
     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
     #on verifie si on est en periode 1 ou 2
-    if Periode.query.filter(Periode.dateDebut <= date).filter(Periode.dateFin >= date).first().numPeriode == 1:
+    if Periode.query.filter(Periode.idPeriode==sem.idPeriode).first().semestre==1:
         eleves = Eleve.query.filter(Eleve.groupeS1 == groupe).filter(Eleve.dateDebut >= sem.dateDebut).filter(Eleve.dateDebut <= sem.dateFin).all()
     eleves = Eleve.query.filter(Eleve.groupeS2 == groupe).filter(Eleve.dateFin >= sem.dateDebut).filter(Eleve.dateFin <= sem.dateFin).all()
     return eleves
-
-def get_eleve(soutien, date):
-    """fonction recuperant les eleves qui ont besoin de soutien pour une date
-
-    Args:
-        soutien (String): besoin de soutien
-        date (String): date du QCM
-    """
-    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
-    eleves = Eleve.query.filter(Eleve.soutien == soutien).filter(Eleve.dateDebut >= sem.dateDebut).filter(Eleve.dateDebut <= sem.dateFin).all()
-    return eleves
-
-def res_sond(id_eleve, date):
-    """fonction recuperant les resultats du sondage pour un eleve et une date
-
-    Args:
-        id_eleve (int): id de l eleve
-        date (String): date du QCM
-    """
-    sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
-    res_sond = RepSondage.query.filter(RepSondage.question.dateQuestion >= sem.dateDebut).filter(RepSondage.question.dateQuestion <= sem.dateFin).filter(RepSondage.numEtu == id_eleve).all()
-    return res_sond
     
 def disponibilites_enseignant(id_enseignant, date):
     """fonction recuperant les disponibilites d un enseignant pour une date
@@ -396,7 +420,7 @@ def disponibilites_enseignant(id_enseignant, date):
         date (String): date du QCM
     """
     sem = Semaine.query.filter(Semaine.dateDebut <= date).filter(Semaine.dateFin >= date).first()
-    dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).filter(EstDisponible.numEnseignant == id_enseignant).all()
+    dispo = EstDisponible.query.join(Oral).filter(Oral.dateOral >= sem.dateDebut).filter(Oral.dateOral <= sem.dateFin).filter(EstDisponible.idProf == id_enseignant).all()
     return dispo
 
 def gen_soutien(num_sem,seuil):
@@ -445,17 +469,57 @@ def gen_soutien(num_sem,seuil):
         
     return retenus,eleves_besoin,non_retenus
 
-def ajouter_eleve_oral(nom_etu,prenom_etu,nom_mat,nom_prof,date_sout,heure_sout):
+def get_profs_dispos(semaine,liste_mat=[]):
+    """fonction recuperant les enseignants disponibles pour une semaine
+
+    Args:
+        semaine (int): numero de la semaine
+        liste_mat (list, optional): liste des matieres. Defaults to [].
+    """
+    sem=Semaine.query.filter(Semaine.numSemaine==semaine).first()
+    dispo=EstDisponible.query.join(Oral).filter(Oral.dateOral >= sem.dateDebut).filter(Oral.dateOral <= sem.dateFin).all()
+    profs_dispos={}
+    for d in dispo:
+        prof=Professeur.query.filter(Professeur.idProf==d.idProf).first()
+        mats=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.idProf==prof.idProf).all()
+        if prof not in profs_dispos:
+            profs_dispos[prof.nomProf+" "+prof.prenomProf]=[]
+        for mat in mats:
+            if mat.matiere.nomMatiere in liste_mat:
+                profs_dispos[prof.nomProf+" "+prof.prenomProf].append(mat.matiere.nomMatiere)
+    return profs_dispos
+
+def get_suivi_etu(num_etu):
+    suivi={"nbPart":0,"moyGen":0}
+    oraux=ParticipantsOral.query.filter(ParticipantsOral.numEtu==num_etu).all()
+    suivi["nbPart"]=len(oraux)
+    qcms=ResultatQCM.query.filter(ResultatQCM.numEtu==num_etu).all()
+    if len(qcms)!=0:
+        for qcm in qcms:
+            suivi["moyGen"]+=qcm.note
+        suivi["moyGen"]/=len(qcms)
+    return suivi
+
+def get_suivi_etu_gen(liste_groupes=[]):
+    suivi_etu={}
+    if len(liste_groupes)==0:
+        eleves=Eleve.query.all()
+        for eleve in eleves:
+            suivi_etu[eleve.nom+" "+eleve.prenom]=get_suivi_etu(eleve.numEtu)
+    else:
+        for groupe in liste_groupes:
+            eleves=Eleve.query.filter(Eleve.groupe==groupe).all()
+            for eleve in eleves:
+                suivi_etu[eleve.nom+" "+eleve.prenom]=get_suivi_etu(eleve.numEtu)
+    return suivi_etu
+
+def ajouter_eleve_oral(nom_etu,prenom_etu,id_oral):
     etu=Eleve.query.filter(Eleve.nom==nom_etu).filter(Eleve.prenom==prenom_etu).first()
-    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
-    prof=Professeur.query.filter(Professeur.nom==nom_prof).first()
-    oral=Oral.query.filter(Oral.idMatiere==matiere.idMatiere).filter(Oral.idProf==prof.idProf).first()
-    if oral is None:
-        oral=Oral(idMatiere=matiere.idMatiere,idProf=prof.idProf,dateSout=date_sout,heureSout=heure_sout)
-        db.session.add(oral)
-        db.session.commit()
-    if etu not in oral.eleves:
-        oral.eleves.append(etu)
+    oral = Oral.query.filter(Oral.idOral==id_oral).first()
+    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
+    if part is None:
+        part=ParticipantsOral(idOral=oral.idOral,numEtu=etu.numEtu)
+        db.session.add(part)
         db.session.commit()
     
 def ajouter_commentaire(idOral,numEtu,commentaire):
@@ -473,7 +537,49 @@ def ajouter_dispo(idOral,idProf):
         dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
         db.session.add(dispo)
         db.session.commit()
-        
+
+def ajouter_possibilite_soutien(id_periode,id_prof,nom_mat):
+    periode=Periode.query.filter(Periode.idPeriode==id_periode).first()
+    prof=Professeur.query.filter(Professeur.idProf==id_prof).first()
+    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
+    possibilite=PossibiliteSoutien.query.filter(PossibiliteSoutien.idPeriode==periode.idPeriode).filter(PossibiliteSoutien.idProf==prof.idProf).filter(PossibiliteSoutien.idMatiere==matiere.idMatiere).first()
+    if possibilite is None:
+        possibilite=PossibiliteSoutien(idPeriode=periode.idPeriode,idProf=prof.idProf,idMatiere=matiere.idMatiere)
+        db.session.add(possibilite)
+        db.session.commit()
+
+def creer_oral(heure,date):
+    if Oral.query.filter(Oral.heureOral==heure).filter(Oral.dateOral==date).first() is None:
+        soutien=Oral(heureOral=heure,dateOral=date)
+        db.session.add(soutien)
+        db.session.commit()
+
+def creer_periode(date_debut,date_fin,id):
+    if Periode.query.filter(Periode.idPeriode==id).first() is None:
+        if id == 1 or id == 2:
+            semestre=1
+        else:
+            semestre=2
+        periode=Periode(idPeriode=id,dateDebut=date_debut,dateFin=date_fin,semestre=semestre)
+        db.session.add(periode)
+        db.session.commit()
+
+def suppr_possibilité_soutien(id_periode,id_prof,nom_mat):
+    periode=Periode.query.filter(Periode.idPeriode==id_periode).first()
+    prof=Professeur.query.filter(Professeur.idProf==id_prof).first()
+    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
+    possibilite=PossibiliteSoutien.query.filter(PossibiliteSoutien.idPeriode==periode.idPeriode).filter(PossibiliteSoutien.idProf==prof.idProf).filter(PossibiliteSoutien.idMatiere==matiere.idMatiere).first()
+    if possibilite is not None:
+        db.session.delete(possibilite)
+        db.session.commit()
+
+def suppression_oral(date,heure):
+    oral=Oral.query.filter(Oral.dateOral==date).filter(Oral.heureOral==heure).first()
+    if oral is not None:
+        db.session.delete(oral)
+        db.session.commit()
+
+
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)
