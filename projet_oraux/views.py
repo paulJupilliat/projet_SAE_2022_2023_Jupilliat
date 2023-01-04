@@ -88,6 +88,9 @@ def Dispo():
 def paramAdm():
     return render_template("paramAdm.html",title="Paramètres Administrateur")
 
+@app.route("/save/paramAdm",methods=("POST",))
+def save_paramAdm():
+    return render_template("paramAdm.html",title="Paramètres Administrateur")
 @app.route("/paramEns")
 def paramEns():
     return render_template("paramEns.html",title="Paramètres Enseignant")

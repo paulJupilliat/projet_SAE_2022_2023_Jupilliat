@@ -43,23 +43,25 @@
             <div class="default_sett">
                 <div class="zone_st">
                 <label for="jour">Jour de soutien</label>
-                <input type="text" id="jour" name="jourS"></div>
+                <input type="text" id="jour" name="jourS" value="Mercredi"></div>
                 <div class="zone_st">
                 <label for="heure">Heure de soutien</label>
-                <input type="time" id="heure" name="heureS"></div>
+                <input type="time" value="14:00" time_format="24" id="heure" name="heureS"></div>
                 <div class="zone_st"><label for="seuil">Seuil pour les groupes</label>
-                <input type="number" id="seuil" name="seuil"></div>
+                <input type="number" id="seuil" name="seuil" min="0" max="1"></div>
                 <div class="zone_st"><label for="cgt_p1">Date fin P1</label>
-                <input type="date" id="cgt_p1" name="cgt_p1"></div>
+                <input type="date" id="cgt_p1" name="cgt_p1" value="2022-10-21"></div>
                 <div class="zone_st"><label for="cgt_p2">Date fin P2</label>
-                <input type="date" id="cgt_p2" name="cgt_p2"></div>
+                <input type="date" id="cgt_p2" name="cgt_p2" value="2023-01-21"></div>
                 <div class="zone_st"><label for="cgt_p3">Date fin P3</label>
-                <input type="date" id="cgt_p3" name="cgt_p3"></div>
+                <input type="date" id="cgt_p3" name="cgt_p3" value="2023-04-21"></div>
         </div>
     </section>
     <footer>
-        </select>
-        <input id="save_sett" type="button" value="Sauvegarder les modifications">
-        </section>
+        <form class="d-flex" method ="POST" role="save" action ="{{ url_for('save_paramAdm',) }}">
+            <section class="bouts_gen">
+                <input id="save_sett" type="submit" value="Sauvegarder les modifications">
+            </section>
+        </form>
     </footer>
 {% endblock %}
