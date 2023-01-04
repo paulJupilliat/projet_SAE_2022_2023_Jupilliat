@@ -10,18 +10,11 @@
 {% endblock %}
 {% block top %}
         <select name="Semaine" id="sem-select">
-            <option value="">Semaine</option>
-            <!-- remplir avec le selenium -->
-            <option value="semaine1">semaine1</option>
-            <option value="semaine2">semaine2</option>
-            <option value="semaine3">semaine3</option>
-            <option value="semaine4">semaine4</option>
-            <option value="semaine5">semaine5</option>
-            <option value="semaine6">semaine6</option>
+            {% for semaine in semaines %}
+                <option value="{{ semaine.id }}">{{ semaine.id_semaine }}</option>
+            {% endfor %}
         </select>
-
             <input id="recup_données_btn" type="button" value="Recuperer les données">
-            
             <p id="text_mail"> les mails ont été envoyer pour la semaine 3</p> <!-- remplir avec le selenium -->
 {% endblock %}
 {% block center %}
@@ -36,23 +29,18 @@
                 <tbody>
                     <tr>
                         <th id="Groupe">Groupe</td>
-                        <th id="QCM1">QCM1</td>
-                        <th id="QCM2" >QCM2</td>
-                        <th id="QCM3"> QCM3 </td>
+                        {% for matiere in qcm["generale"].keys() %}
+                            <th id="{{ matiere }}">{{ matiere }}</td>
+                        {% endfor %}
                     </tr>
-                    <tr>
-                        <td>A</td>
-                        <td>web</td>
-                        <td>python</td>
-                        <td>BD</td>
-                    </tr>
-
-                    <tr>
-                        <td>A</td>
-                        <td>web</td>
-                        <td>python</td>
-                        <td>BD</td>
-                    </tr>
+                    {% for groupe in qcm.keys() %}
+                        <tr>
+                            <td>{{ groupe }}</td>
+                            {% for matiere in qcm[groupe].keys() %}
+                                <td>{{ qcm[groupe][matiere] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -68,25 +56,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th id="Groupe">Groupe</td>
-                            <th id="QCM1">QCM1</td>
-                            <th id="QCM2" >QCM2</td>
-                            <th id="QCM3"> QCM3 </td>
+                            <th id="MatDem">Matiere demandée</td>
+                            <th id="NBDem">Nombre demandes</td>
+                            <th id="MoyGen">Moyenne generale</td>
                         </tr>
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-
+                        {% for matiere in matieres_demandées.keys() %}
+                            <tr>
+                                <td>{{ matiere }}</td>
+                                <td>{{ matieres_demandées[matiere]["nb"] }}</td>
+                                <td>{{ matieres_demandées[matiere]["Moyenne"] }}</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 
@@ -102,24 +82,23 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th id="Groupe">Groupe</td>
-                            <th id="QCM1">QCM1</td>
-                            <th id="QCM2" >QCM2</td>
-                            <th id="QCM3"> QCM3 </td>
+                            <th id="Prof">Prof</td>
+                            {% for matiere in matieres %}
+                                <th id="{{ matiere }}">{{ matiere }}</td>
+                            {% endfor %}
                         </tr>
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
-
-                        <tr>
-                            <td>A</td>
-                            <td>web</td>
-                            <td>python</td>
-                            <td>BD</td>
-                        </tr>
+                         <!-- possibles[p].append(m.nomMatiere) -->
+                        {% for prof in possibles.keys() %}
+                            <tr>
+                                <td>{{ prof }}</td>
+                                {% for matiere in matieres %}
+                                    {% if matiere in possibles[prof] %}
+                                        <td>Oui</td>
+                                    {% else %}
+                                        <td>Non</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
                     </tbody>
                 </table>
             </div>  

@@ -70,7 +70,10 @@ def ResQCM():
 
 @app.route("/Acceuil")
 def Acceuil():
-    return render_template("Acceuil.html",title="Acceuil", admin=False)
+    return render_template("Acceuil.html",title="Acceuil", admin=False
+    ,qcms=get_resultats_qcm_accueil, sondages=get_res_sondage_accueil,
+    disponibilites_enseignant=get_dispo_enseignant_accueil,
+    semaines=get_semaines)
 
 @app.route("/connexionAdm")
 def connexionAdm():
