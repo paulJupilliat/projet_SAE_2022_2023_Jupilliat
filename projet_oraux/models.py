@@ -92,6 +92,7 @@ class User(db.Model, UserMixin):
         """representation de l objet User"""
         return f"User({self.username}, {self.password}, {self.est_admin()})"
 
+
 class Oral(db.Model):
     """classe Oral qui contient les oraux(soutien)
     """
