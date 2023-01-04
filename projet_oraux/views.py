@@ -1,5 +1,6 @@
 ##views permet de definir les routes de l app donc des differents pages
 
+import os
 from .app import app
 from flask import render_template, request,url_for , redirect
 # from .models import *
@@ -62,6 +63,7 @@ class LoginForm ( FlaskForm ):
 
 @app.route("/")
 def route():
+    os.system("python3 ./Traitement_Selenium/selenium_test.py")
     return render_template("index.html",title="Projet soutien", admin=True)
 
 @app.route("/ResQCM")

@@ -21,5 +21,3 @@ app.config['SQLALCHEMY_DATABASE_URI']=(
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
-
-app.config['SECRET_KEY'] = "41001fb5-a88c-477-ac84-0baf15daffdc"
