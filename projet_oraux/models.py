@@ -423,6 +423,14 @@ def disponibilites_enseignant(id_enseignant, date):
     dispo = EstDisponible.query.join(Oral).filter(Oral.dateOral >= sem.dateDebut).filter(Oral.dateOral <= sem.dateFin).filter(EstDisponible.idProf == id_enseignant).all()
     return dispo
 
+def ajouter_resultat_eleve(id_QCM,num_etu,note):
+    nb_rep = ResultatQCM.quety.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    if nb_rep == 0:
+        res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
+        db.session.add(res)
+        db.session.commit()
+    else:
+        pass
 def gen_soutien(num_sem,seuil):
     #genere les soutiens pour la semaine donnee
     sem=Semaine.query.filter(Semaine.numSemaine==num_sem).first()
@@ -466,118 +474,28 @@ def gen_soutien(num_sem,seuil):
         eleves_besoin.filter(ResultatQCM.idQCM == qcm.idQCM)
         eleves_besoin.filter(ResultatQCM.note < seuil*moyenne).filter(RepSondage.volontaire=='non')
         eleves_besoin.order_by(ResultatQCM.note).all()
-        
     return retenus,eleves_besoin,non_retenus
-
-def get_profs_dispos(semaine,liste_mat=[]):
-    """fonction recuperant les enseignants disponibles pour une semaine
-
-    Args:
-        semaine (int): numero de la semaine
-        liste_mat (list, optional): liste des matieres. Defaults to [].
-    """
-    sem=Semaine.query.filter(Semaine.numSemaine==semaine).first()
-    dispo=EstDisponible.query.join(Oral).filter(Oral.dateOral >= sem.dateDebut).filter(Oral.dateOral <= sem.dateFin).all()
-    profs_dispos={}
-    for d in dispo:
-        prof=Professeur.query.filter(Professeur.idProf==d.idProf).first()
-        mats=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.idProf==prof.idProf).all()
-        if prof not in profs_dispos:
-            profs_dispos[prof.nomProf+" "+prof.prenomProf]=[]
-        for mat in mats:
-            if mat.matiere.nomMatiere in liste_mat:
-                profs_dispos[prof.nomProf+" "+prof.prenomProf].append(mat.matiere.nomMatiere)
-    return profs_dispos
-
-def get_suivi_etu(num_etu):
-    suivi={"nbPart":0,"moyGen":0}
-    oraux=ParticipantsOral.query.filter(ParticipantsOral.numEtu==num_etu).all()
-    suivi["nbPart"]=len(oraux)
-    qcms=ResultatQCM.query.filter(ResultatQCM.numEtu==num_etu).all()
-    if len(qcms)!=0:
-        for qcm in qcms:
-            suivi["moyGen"]+=qcm.note
-        suivi["moyGen"]/=len(qcms)
-    return suivi
-
-def get_suivi_etu_gen(liste_groupes=[]):
-    suivi_etu={}
-    if len(liste_groupes)==0:
-        eleves=Eleve.query.all()
-        for eleve in eleves:
-            suivi_etu[eleve.nom+" "+eleve.prenom]=get_suivi_etu(eleve.numEtu)
+def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
+    nb_rep = RepSondage.quety.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    if nb_rep == 0:
+        rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
+                        matiereVoulu = matiere_voulu, commentaire = commentaire)
+        db.session.add(rep)
+        db.session.commit()
     else:
-        for groupe in liste_groupes:
-            eleves=Eleve.query.filter(Eleve.groupe==groupe).all()
-            for eleve in eleves:
-                suivi_etu[eleve.nom+" "+eleve.prenom]=get_suivi_etu(eleve.numEtu)
-    return suivi_etu
-
-def ajouter_eleve_oral(nom_etu,prenom_etu,id_oral):
-    etu=Eleve.query.filter(Eleve.nom==nom_etu).filter(Eleve.prenom==prenom_etu).first()
-    oral = Oral.query.filter(Oral.idOral==id_oral).first()
-    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
-    if part is None:
-        part=ParticipantsOral(idOral=oral.idOral,numEtu=etu.numEtu)
-        db.session.add(part)
-        db.session.commit()
+        pass
     
-def ajouter_commentaire(idOral,numEtu,commentaire):
-    oral=Oral.query.filter(Oral.idOral==idOral).first()
-    etu=Eleve.query.filter(Eleve.numEtu==numEtu).first()
-    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
-    part.commentaire=commentaire
-    db.session.commit()
 
-def ajouter_dispo(idOral,idProf):
-    oral=Oral.query.filter(Oral.idOral==idOral).first()
-    prof=Professeur.query.filter(Professeur.idProf==idProf).first()
-    dispo=EstDisponible.query.filter(EstDisponible.idOral==oral.idOral).filter(EstDisponible.idProf==prof.idProf).first()
-    if dispo is None:
-        dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
-        db.session.add(dispo)
-        db.session.commit()
 
-def ajouter_possibilite_soutien(id_periode,id_prof,nom_mat):
-    periode=Periode.query.filter(Periode.idPeriode==id_periode).first()
-    prof=Professeur.query.filter(Professeur.idProf==id_prof).first()
-    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
-    possibilite=PossibiliteSoutien.query.filter(PossibiliteSoutien.idPeriode==periode.idPeriode).filter(PossibiliteSoutien.idProf==prof.idProf).filter(PossibiliteSoutien.idMatiere==matiere.idMatiere).first()
-    if possibilite is None:
-        possibilite=PossibiliteSoutien(idPeriode=periode.idPeriode,idProf=prof.idProf,idMatiere=matiere.idMatiere)
-        db.session.add(possibilite)
-        db.session.commit()
 
-def creer_oral(heure,date):
-    if Oral.query.filter(Oral.heureOral==heure).filter(Oral.dateOral==date).first() is None:
-        soutien=Oral(heureOral=heure,dateOral=date)
-        db.session.add(soutien)
-        db.session.commit()
-
-def creer_periode(date_debut,date_fin,id):
-    if Periode.query.filter(Periode.idPeriode==id).first() is None:
-        if id == 1 or id == 2:
-            semestre=1
-        else:
-            semestre=2
-        periode=Periode(idPeriode=id,dateDebut=date_debut,dateFin=date_fin,semestre=semestre)
-        db.session.add(periode)
-        db.session.commit()
-
-def suppr_possibilité_soutien(id_periode,id_prof,nom_mat):
-    periode=Periode.query.filter(Periode.idPeriode==id_periode).first()
-    prof=Professeur.query.filter(Professeur.idProf==id_prof).first()
-    matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()
-    possibilite=PossibiliteSoutien.query.filter(PossibiliteSoutien.idPeriode==periode.idPeriode).filter(PossibiliteSoutien.idProf==prof.idProf).filter(PossibiliteSoutien.idMatiere==matiere.idMatiere).first()
-    if possibilite is not None:
-        db.session.delete(possibilite)
-        db.session.commit()
-
+# def get_id_QCM(nom_matiere, url, id_matiere):
+#     QCM.query.filter(urlQCM)
 def suppression_oral(date,heure):
     oral=Oral.query.filter(Oral.dateOral==date).filter(Oral.heureOral==heure).first()
     if oral is not None:
         db.session.delete(oral)
         db.session.commit()
+
 
 
 @login_manager.user_loader
