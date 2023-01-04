@@ -104,6 +104,7 @@
 </section>
 {% endblock %}
 {% block right %}
+<div class="content"></div>
     <table id="suivie_etu_table">
         <tr id="colonnes">
             <th id="noms">Sem</th>
@@ -136,7 +137,14 @@
             <td>Java</td>
         </tr>
     </table>
+    
 <button type="button" id="collapsible" onclick="collapse()">
+
 <img src="{{ url_for('static', filename='img/moins.png') }}" alt="-" height="10em"></button>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='suivi_etu.js') }}"></script>
 {% endblock %}
  

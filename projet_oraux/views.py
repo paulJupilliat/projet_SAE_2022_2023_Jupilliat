@@ -93,13 +93,13 @@ def Suivie_etu():
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():
     return render_template("SuiviGenEtu.html",title="Suivie général étudiant", admin=True)
-@app.route("/search/",methods=("POST","GET"))
+@app.route("/search/",methods=("POST",))
 def search():
-    search = request.form.get("search")
+    search = request.form.get("recherche")
     search = search.lower()
     eleve = Eleve.query.filter(Eleve.nom.lower().like("%"+search+"%")).all()
     prof = Professeur.query.filter(Professeur.nom.lower().like("%"+search+"%")).all()
-    return render_template("search.html",title="Recherche", eleve=eleve, prof=prof)
+    return render_template("SuivieGenEtu.html",title="Recherche", eleve=eleve, prof=prof)
 
 # @app.route("/")
 # def home():
