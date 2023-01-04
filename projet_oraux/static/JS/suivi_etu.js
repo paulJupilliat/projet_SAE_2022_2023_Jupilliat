@@ -1,7 +1,7 @@
 function plie_deplie_matieres() {
     const img = document.getElementById("dep");
     if (document.getElementById("matieres_gauche").style.display == "none") {
-        document.getElementById("matieres_gauche").style.display = "block";
+        document.getElementById("matieres_gauche").style.display = "flex";
     } else {
         document.getElementById("matieres_gauche").style.display = "none";
     }
