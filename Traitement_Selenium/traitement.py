@@ -1,15 +1,8 @@
 import sys
-sys.path.append('./SQLAlchemy')
 sys.path.append('./projet_oraux')
-from Reponse_sondage import Reponse_sondage
-from connexion_BD import ouvrir_connexion
-import fonction_BD
 import models
-from Eleve import Eleve
-from QCM import QCM
 
 def main(fichier_ouvrir):
-    connexion = ouvrir_connexion("manach","manach","servinfo-mariadb","DBmanach")
     for (idpartie,fic,date) in fichier_ouvrir:
         fichier = open("./Traitement_Selenium/"+fic,"r")
         entete = fichier.readline()
@@ -54,7 +47,7 @@ def main(fichier_ouvrir):
                 separe = ligne.split(",")
                 if "Moyenne globale" not in separe[0]:
                     if note != 0:
-                        fonction_BD.creation_existe(connexion,Eleve(separe[idenfiant],separe[nom],separe[prenom],None,None))
+                        models.creation_existe(separe[idenfiant],separe[nom],separe[prenom],None,None)
                         note_total = float(separe[note][1:]) + float(separe[note + 1][:-1])
                         models.ajouter_resultat_eleve(idpartie,separe[idenfiant],(note_total/sur_combien)*20)
 
