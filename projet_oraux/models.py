@@ -307,10 +307,34 @@ def disponibilites_enseignant(id_enseignant, date):
     dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).filter(EstDisponible.numEnseignant == id_enseignant).all()
     return dispo
 
+def ajouter_resultat_eleve(id_QCM,num_etu,note):
+    nb_rep = ResultatQCM.quety.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    if nb_rep == 0:
+        res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
+        db.session.add(res)
+        db.session.commit()
+    else:
+        pass
 
+def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
+    nb_rep = RepSondage.quety.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    if nb_rep == 0:
+        rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
+                        matiereVoulu = matiere_voulu, commentaire = commentaire)
+        db.session.add(rep)
+        db.session.commit()
+    else:
+        pass
 
+def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
+    res = Eleve.query.filter(numEtu = num_etu).count()
+    if res == 0:
+        eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
+        db.session.add(eleve)
+        db.session.commit()
 
-
+def get_id_QCM(nom_matiere, url, id_matiere):
+    QCM.query.filter(urlQCM)
 
 # def get_book(id):
 #     return Book.query.get(id)

@@ -1,6 +1,6 @@
 import click
 
-from .app import app
+from .app import app, db
 @app.cli.command()
 @click.argument('filename')
 def loaddb(filename):
