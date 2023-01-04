@@ -1,8 +1,10 @@
 import sys
 sys.path.append('./SQLAlchemy')
+sys.path.append('./projet_oraux')
 from Reponse_sondage import Reponse_sondage
 from connexion_BD import ouvrir_connexion
 import fonction_BD
+import models
 from Eleve import Eleve
 from QCM import QCM
 
@@ -30,7 +32,7 @@ def main(fichier_ouvrir):
             for ligne in fichier:
                 separe = ligne.split(",")
                 try:
-                    fonction_BD.ajouter_reponse_sondage(connexion,Reponse_sondage(separe[consolidation],separe[matiere],separe[precision][:-1],date,separe[idenfiant],idpartie))
+                    models.ajouter_reponse_sondage(separe[consolidation],idpartie,separe[idenfiant],date,separe[matiere],separe[precision][:-1])
                 except Exception as e:
                     print(e)
                 print("l'étudiant d'identifiant " + separe[idenfiant] + " souhaite participer à la consolidation : " + separe[consolidation] )
@@ -54,6 +56,6 @@ def main(fichier_ouvrir):
                     if note != 0:
                         fonction_BD.creation_existe(connexion,Eleve(separe[idenfiant],separe[nom],separe[prenom],None,None))
                         note_total = float(separe[note][1:]) + float(separe[note + 1][:-1])
-                        fonction_BD.ajouter_resultat_eleve(connexion,separe[idenfiant],idpartie,(note_total/sur_combien)*20)
+                        models.ajouter_resultat_eleve(idpartie,separe[idenfiant],(note_total/sur_combien)*20)
 
 # main(["SAE _QCM -Test QCM (26102022)-notes.csv"])

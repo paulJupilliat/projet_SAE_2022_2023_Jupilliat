@@ -307,9 +307,16 @@ def disponibilites_enseignant(id_enseignant, date):
     dispo = EstDisponible.query.filter(EstDisponible.oral.dateOral >= sem.dateDebut).filter(EstDisponible.oral.dateOral <= sem.dateFin).filter(EstDisponible.numEnseignant == id_enseignant).all()
     return dispo
 
+def ajouter_resultat_eleve(id_QCM,num_Etu,note):
+    res = ResultatQCM(idQCM = id_QCM,numEtu = num_Etu , note = note)
+    db.session.add(res)
+    db.session.commit()
 
-
-
+def ajouter_reponse_sondage(participation : str, idSondage: int, numEtu: str, dateSondage: str, matiere_voulu: str, commentaire: str):
+    rep = RepSondage(participation = participation, idSondage = idSondage, numEtu = numEtu, dateSondage =dateSondage,
+                    matiereVoulu = matiere_voulu, commentaire = commentaire)
+    db.session.add(rep)
+    db.session.commit()
 
 
 # def get_book(id):
