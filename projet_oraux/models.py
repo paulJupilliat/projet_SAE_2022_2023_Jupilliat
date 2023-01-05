@@ -38,7 +38,7 @@ class QuestionSondage(db.Model):
     id_quest = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(500))
     #relation pour avoir le sondage d une question
-    sondage = db.relationship("Sondage", backref=db.backref("questionsondage", lazy="dynamic"))
+    sondage = db.relationship(Sondage, backref=db.backref("fk_questionsondage", lazy="dynamic"))
     def __repr__(self):
         """representation de l objet QuestionSondage"""
         return f"QuestionSondage({self.id_sond}, {self.id_quest}, {self.question})"
@@ -61,7 +61,7 @@ class QCM(db.Model):
     #relation pour avoir la matiere d un qcm
     id_matiere = db.Column(db.Integer, db.ForeignKey("matiere.id_matiere"))
     #relation inverse pour avoir les qcm d une matiere
-    matiere = db.relationship("Matiere", backref=db.backref("qcm", lazy="dynamic"))
+    matiere = db.relationship(Matiere, backref=db.backref("fk_matiere_qcm", lazy="dynamic"))
     date_debut = db.Column(db.String(500))
     date_fin = db.Column(db.String(500))
     def __repr__(self):
@@ -105,11 +105,11 @@ class Oral(db.Model):
     #relation pour avoir la matiere d un oral
     id_matiere = db.Column(db.Integer, db.ForeignKey("matiere.id_matiere"))
     #relation inverse pour avoir les oraux d une matiere
-    matiere = db.relationship("Matiere", backref=db.backref("oral", lazy="dynamic"))
+    matiere = db.relationship(Matiere, backref=db.backref("fk_matiere_oral", lazy="dynamic"))
     #relation pour avoir le professeur d un oral
     id_prof = db.Column(db.String(500), db.ForeignKey("professeur.id_prof"))
     #relation inverse pour avoir les oraux d un professeur
-    professeur = db.relationship("Professeur", backref=db.backref("oral", lazy="dynamic"))
+    professeur = db.relationship(Professeur, backref=db.backref("fk_professeur_oral", lazy="dynamic"))
     def __repr__(self):
         """representation de l objet Oral"""
         return f"Oral({self.id_oral}, {self.date_oral}, {self.heure_oral})"
@@ -122,9 +122,9 @@ class ParticipantsOral(db.Model):
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     commentaire = db.Column(db.String(800))
     #relation pour avoir l oral d un participant
-    oral= db.relationship(Oral, backref=db.backref("oral", cascade="all, delete-orphan"),overlaps="oral,eleve")
+    oral= db.relationship(Oral, backref=db.backref("fk_participantOral_oral", cascade="all, delete-orphan"),overlaps="oral,eleve")
     #relation pour avoir l eleve d un participant
-    eleve= db.relationship(Eleve, backref=db.backref("eleve", cascade="all, delete-orphan"),overlaps="oral,eleve")
+    eleve= db.relationship(Eleve, backref=db.backref("fk_participantOral_eleve", cascade="all, delete-orphan"),overlaps="oral,eleve")
     def __repr__(self):
         """representation de l objet ParticipantsOral"""
         return f"ParticipantsOral({self.id_oral}, {self.num_etu}, {self.commentaire})"
@@ -136,9 +136,9 @@ class ResultatQCM(db.Model):
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     note = db.Column(db.Integer)
     #un eleve peut avoir qu'une seule note pour un qcm
-    eleve = db.relationship(Eleve, backref=db.backref("eleve", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    eleve = db.relationship(Eleve, backref=db.backref("fk_resqcm_eleve", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     #un qcm peut avoir qu'une seule note pour un eleve
-    qcm = db.relationship(QCM, backref=db.backref("qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    qcm = db.relationship(QCM, backref=db.backref("fk_resqcm_qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     def __repr__(self):
         """representation de l objet ResultatQCM"""
         return f"ResultatQCM({self.id_qcm}, {self.num_etu}, {self.note})"
@@ -147,18 +147,18 @@ class RepSondage(db.Model):
     """classe RepSondage qui fait la
     relation entre les sondages et les eleves -> reponses"""
     __tablename__ = "repsondage"
-    id_sondage = db.Column(db.Integer, db.ForeignKey("sondage.id_sondage"), primary_key=True)
+    id_sondage = db.Column(db.Integer, db.ForeignKey("sondage.id_sond"), primary_key=True)
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     matiere_voulue = db.Column(db.String(100))
     volontaire = db.Column(db.String(50))
     commentaire = db.Column(db.String(800))
     #relation pour avoir le sondage d une reponse
-    sondage = db.relationship(Sondage, backref=db.backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    sondage = db.relationship(Sondage, backref=db.backref("fk_repsond_sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
-    eleve = db.relationship(Eleve, backref=db.backref("eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    eleve = db.relationship(Eleve, backref=db.backref("fk_repsond_eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     def __repr__(self):
         """representation de l objet RepSondage"""
-        return f"RepSondage({self.participation}, {self.id_sondage}, {self.num_etu}, {self.date_sond}, {self.matiere_voulue}, {self.commentaire})"
+        return f"RepSondage({self.volontaire}, {self.id_sondage}, {self.num_etu}, {self.matiere_voulue}, {self.commentaire})"
 class Periode(db.Model):
     """classe Periode qui contient les periodes
     assignées a leur semestres avec des dates limites"""
@@ -179,7 +179,7 @@ class Semaine(db.Model):
     date_fin = db.Column(db.String(500))
     #ajout de la periode pour faciliter la recherche
     id_periode = db.Column(db.Integer, db.ForeignKey("periode.id_periode"))
-    periode = db.relationship("Periode", backref=db.backref("semaine", lazy="dynamic"))
+    periode = db.relationship(Periode, backref=db.backref("fk_semaine_Periode", lazy="dynamic"))
     def __repr__(self):
         """representation de l objet Semaine"""
         return f"Semaine({self.id_semaine}, {self.date_debut}, {self.date_fin})"
@@ -192,11 +192,11 @@ class PossibiliteSoutien(db.Model):
     id_matiere = db.Column(db.Integer, db.ForeignKey("matiere.id_matiere"), primary_key=True)
     id_periode = db.Column(db.Integer, db.ForeignKey("periode.id_periode"), primary_key=True)
     #relation pour avoir le professeur d une possibilite de soutien
-    professeur = db.relationship(Professeur, backref=db.backref("professeur", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
+    professeur = db.relationship(Professeur, backref=db.backref("fk_idprofesseur_professeur", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
     #relation pour avoir la matiere d une possibilite de soutien
-    matiere = db.relationship(Matiere, backref=db.backref("matiere", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
+    matiere = db.relationship(Matiere, backref=db.backref("fk_idmatiere_matiere", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
     #relation pour avoir la periode d une possibilite de soutien
-    periode = db.relationship(Periode, backref=db.backref("periode", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
+    periode = db.relationship(Periode, backref=db.backref("fk_idperiode_periode", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
     def __repr__(self):
         """representation de l objet PossibiliteSoutien"""
         return f"PossibiliteSoutien({self.id_prof}, {self.id_matiere}, {self.id_periode})"
@@ -207,9 +207,9 @@ class EstDisponible(db.Model):
     id_prof = db.Column(db.String(500), db.ForeignKey("professeur.id_prof"), primary_key=True)
     id_oral = db.Column(db.Integer, db.ForeignKey("oral.id_oral"), primary_key=True)
     #relation pour avoir le professeur d une disponibilite
-    professeur = db.relationship(Professeur, backref=db.backref("professeur", cascade="all, delete-orphan"),overlaps="professeur,oral")
+    professeur = db.relationship(Professeur, backref=db.backref("fk_estdisponible_professeur", cascade="all, delete-orphan"),overlaps="professeur,oral")
     #relation pour avoir l oral d une disponibilite
-    oral = db.relationship(Oral, backref=db.backref("oral", cascade="all, delete-orphan"),overlaps="professeur,oral")
+    oral = db.relationship(Oral, backref=db.backref("fk_estdisponible_oral", cascade="all, delete-orphan"),overlaps="professeur,oral")
     def __repr__(self):
         """representation de l objet EstDisponible"""
         return f"EstDisponible({self.id_prof}, {self.id_oral})"
@@ -222,9 +222,9 @@ class ReponseQuestionSondage(db.Model):
     id_quest = db.Column(db.Integer, db.ForeignKey("questionSondage.id_quest"), primary_key=True)
     reponse = db.Column(db.String(500))
     #relation pour avoir l eleve d une reponse a une question
-    eleve = db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
+    eleve = db.relationship(Eleve, backref=db.backref("fk_ReponseQuestionSondage_eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
     #relation pour avoir la question d une reponse a une question
-    question = db.relationship(QuestionSondage, backref=db.backref("questionSondage", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
+    question = db.relationship(QuestionSondage, backref=db.backref("fk_ReponseQuestionSondage_questionSondage", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
     def __repr__(self):
         """representation de l objet ReponseQuestionSondage"""
         return f"ReponseQuestionSondage({self.num_etu}, {self.id_quest}, {self.reponse})"

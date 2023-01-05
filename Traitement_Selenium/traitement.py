@@ -5,99 +5,114 @@ Base = declarative_base()
 engine = create_engine('mysql+mysqlconnector://lidec:lidec@servinfo-mariadb/DBlidec', echo=True, future=True)
 session = Session(engine)
 
-class Sondage(Base):
-    __tablename__ = "sondage"
-    idSond = Column(Integer, primary_key=True)
-    urlSond = Column(String(500))
-    dateSondage = Column(String(500))
-    def __repr__(self):
-        return f"Sondage({self.idSond}, {self.urlSond})"
-
-class Matiere(Base):
-    __tablename__ = "matiere"
-    idMatiere = Column(Integer, primary_key=True)
-    nomMatiere = Column(String(50))
-    def __repr__(self):
-        return f"Matiere({self.idMatiere}, {self.nomMatiere})"
-
-class QCM(Base):
-    __tablename__ = "qcm"
-    idQCM = Column(Integer, primary_key=True)
-    nomQCM = Column(String(50))
-    urlQCM = Column(String(500))
-    #relation pour avoir la matiere d un qcm
-    idMatiere = Column(Integer, ForeignKey("matiere.idMatiere"))
-    #relation inverse pour avoir les qcm d une matiere
-    matiere = relationship("Matiere", backref=backref("qcm", lazy="dynamic"))
-    dateDebut = Column(String(500))
-    dateFin = Column(String(500))
-    def __repr__(self):
-        return f"QCM({self.idQCM}, {self.nomQCM}, {self.urlQCM}, {self.dateDebut}, {self.dateFin})"
-
 class Eleve(Base):
+    """classe Eleve
+    """
     __tablename__ = "eleve"
-    numEtu = Column(Integer, primary_key=True)
+    num_etu = Column(Integer, primary_key=True)
     nom = Column(String(50))
     prenom = Column(String(50))
-    groupeS1 = Column(String(50))
-    groupeS2 = Column(String(50))
+    groupe_s1 = Column(String(50))
+    groupe_s2 = Column(String(50))
     def __repr__(self):
-        return f"Eleve({self.nom}, {self.prenom}, {self.groupeS1}, {self.groupeS2})"
+        """representation de l objet Eleve"""
+        return f"Eleve({self.nom}, {self.prenom}, {self.groupe_s1}, {self.groupe_s2})"
+
+class Sondage(Base):
+    """classe Sondage qui contient les sondages
+    """
+    __tablename__ = "sondage"
+    id_sond = Column(Integer, primary_key=True)
+    url_sond = Column(String(500))
+    date_sond = Column(String(500))
+    def __repr__(self):
+        """representation de l objet Sondage"""
+        return f"Sondage({self.id_sond}, {self.url_sond})"
+class Matiere(Base):
+    """classe Matiere qui contient les matieres
+    """
+    __tablename__ = "matiere"
+    id_matiere = Column(Integer, primary_key=True)
+    nom_matiere = Column(String(50))
+    def __repr__(self):
+        """representation de l objet Matiere"""
+        return f"Matiere({self.id_matiere}, {self.nom_matiere})"
+class QCM(Base):
+    """classe QCM qui contient les qcm
+    """
+    __tablename__ = "qcm"
+    id_qcm = Column(Integer, primary_key=True)
+    nom_qcm = Column(String(50))
+    url_qcm = Column(String(500))
+    #relation pour avoir la matiere d un qcm
+    id_matiere = Column(Integer, ForeignKey("matiere.id_matiere"))
+    #relation inverse pour avoir les qcm d une matiere
+    matiere = relationship(Matiere, backref=backref("fk_matiere_qcm", lazy="dynamic"))
+    date_debut = Column(String(500))
+    date_fin = Column(String(500))
+    def __repr__(self):
+        """representation de l objet QCM"""
+        return f"QCM({self.id_qcm}, {self.nom_qcm}, {self.url_qcm}, {self.date_debut}, {self.date_fin})"
 
 class ResultatQCM(Base):
+    """classe ResultatQCM qui fait la
+    relation entre les qcm et les eleves -> note"""
     __tablename__ = "resultatqcm"
-    idQCM = Column(Integer, ForeignKey("qcm.idQCM"), primary_key=True)
-    numEtu = Column(Integer, ForeignKey("eleve.numEtu"), primary_key=True)
+    id_qcm = Column(Integer, ForeignKey("qcm.id_qcm"), primary_key=True)
+    num_etu = Column(Integer, ForeignKey("eleve.num_etu"), primary_key=True)
     note = Column(Integer)
     #un eleve peut avoir qu'une seule note pour un qcm
-    eleve = relationship(Eleve, backref=backref("eleverepqcm", lazy="dynamic"))
+    eleve = relationship(Eleve, backref=backref("fk_resqcm_eleve", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     #un qcm peut avoir qu'une seule note pour un eleve
-    qcm = relationship(QCM, backref=backref("qcm", lazy="dynamic"))
+    qcm = relationship(QCM, backref=backref("fk_resqcm_qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     def __repr__(self):
-        return f"ResultatQCM({self.idQCM}, {self.numEtu}, {self.note})"
+        """representation de l objet ResultatQCM"""
+        return f"ResultatQCM({self.id_qcm}, {self.num_etu}, {self.note})"
 
 class RepSondage(Base):
+    """classe RepSondage qui fait la
+    relation entre les sondages et les eleves -> reponses"""
     __tablename__ = "repsondage"
-    idSondage = Column(Integer, ForeignKey("sondage.idSond"), primary_key=True)
-    numEtu = Column(Integer, ForeignKey("eleve.numEtu"), primary_key=True)
-    matiereVoulu = Column(String(100))
+    id_sondage = Column(Integer, ForeignKey("sondage.id_sond"), primary_key=True)
+    num_etu = Column(Integer, ForeignKey("eleve.num_etu"), primary_key=True)
+    matiere_voulue = Column(String(100))
     volontaire = Column(String(50))
+    commentaire = Column(String(800))
     #relation pour avoir le sondage d une reponse
-    sondage = relationship(Sondage, backref=backref("sondage", lazy="dynamic"))
+    sondage = relationship(Sondage, backref=backref("fk_repsond_sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
-    eleve = relationship(Eleve, backref=backref("eleverepsondage", lazy="dynamic"))
-
+    eleve = relationship(Eleve, backref=backref("fk_repsond_eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     def __repr__(self):
-        return f"RepSondage({self.participation}, {self.idSondage}, {self.numEtu}, {self.dateSondage}, {self.matiereVoulu}, {self.commentaire})"
+        """representation de l objet RepSondage"""
+        return f"RepSondage({self.volontaire}, {self.id_sondage}, {self.num_etu}, {self.matiere_voulue}, {self.commentaire})"
 
 def ajouter_resultat_eleve(id_QCM,num_etu,note):
-    nb_rep = session.query(ResultatQCM).filter(ResultatQCM.numEtu == num_etu).count()
+    nb_rep = session.query(ResultatQCM).filter(ResultatQCM.num_etu == num_etu).count()
     if nb_rep == 0:
-        res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
+        res = ResultatQCM(id_qcm = id_QCM, num_etu = num_etu, note = note)
         session.add(res)
         session.commit()
     else:
         pass
 
 def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
-    nb_rep = session.query(RepSondage).filter(RepSondage.numEtu == num_etu).filter(RepSondage.idSondage == id_sondage).count()
+    nb_rep = session.query(RepSondage).filter(RepSondage.num_etu == num_etu).filter(RepSondage.id_sondage == id_sondage).count()
     if nb_rep == 0:
-        rep = RepSondage(volontaire = participation, idSondage = id_sondage, numEtu = num_etu,
-                        matiereVoulu = matiere_voulu, commentaire = commentaire)
+        rep = RepSondage(volontaire = participation, id_sondage = id_sondage, num_etu = num_etu,
+                        matiere_voulue = matiere_voulu, commentaire = commentaire)
         session.add(rep)
         session.commit()
     else:
         pass
 
-def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
-    res = session.query(Eleve).filter(Eleve.numEtu == num_etu).count()
+def creation_existe(num_etu, nom, prenom, groupe_S1, groupe_S2):
+    res = session.query(Eleve).filter(Eleve.num_etu == num_etu).count()
     if res == 0:
-        eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
+        eleve = Eleve(num_etu = num_etu, nom = nom, prenom = prenom, groupe_s1 = groupe_S1, groupe_s2 = groupe_S2)
         session.add(eleve)
         session.commit()
 
 def main(fichier_ouvrir):
-    connexion = ouvrir_connexion("manach","manach","servinfo-mariadb","DBmanach")
     for (idpartie,fic,date) in fichier_ouvrir:
         fichier = open("./Traitement_Selenium/"+fic,"r")
         entete = fichier.readline()
@@ -146,4 +161,4 @@ def main(fichier_ouvrir):
                         note_total = float(separe[note][1:]) + float(separe[note + 1][:-1])
                         ajouter_resultat_eleve(idpartie,separe[idenfiant],(note_total/sur_combien)*20)
 
-main([(1,"Sondage (11112022).csv","")])
+# main([(1,"Sondage (11112022).csv","")])
