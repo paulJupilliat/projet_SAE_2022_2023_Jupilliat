@@ -9,8 +9,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/suiviGen.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/soutien.css')}}">
- {% endblock %}
-{% block center %}
+{% endblock %}
+{% block aside %}
+        
             <select name="Semaine" id="sem-select" onchange="load_data()">
                 <option value="">Semaine</option>
                 <!-- remplir avec le selenium -->
@@ -21,24 +22,111 @@
                 <option value="semaine5">semaine5</option>
                 <option value="semaine6">semaine6</option>
             </select>
-        <table id="labels">
-            <thead id="titre_suivi">
-                <tr>
-                    <th id="titre_tableau_sondage" colspan="6"><H2>Soutien</H2></th>
-                </tr>
-                <tr class="colonnes">
-                    <th class="noms">Etudiant</th>
-                    <th class="noms">Matière 1</th>
-                    <th class="noms">Matière 2</th>
-                    <th class="noms">Volontaire</th>
-                    <th class="noms">Matière</th>
-                    <th class="noms">Commentaire</th>
-                </tr>    
-            </thead>
-        </table>
-        <table class="scrolable" id="tab2">
-        </table>
-        {% endblock %}
-        {% block scripts %}
-<script src="{{ url_for('static', filename='JS/soutien.js') }}"></script>
+        
 {% endblock %}
+{% block center %}
+                <section id="tableaugen">
+                    <table id="labels">
+                        <thead id="titre_suivi">
+                            <tr>
+                                <th id="titre_tableau_sondage" colspan="6"><H2>Suivi Etudiant</H2></th>
+                            </tr>
+                            <tr class="colonnes">
+                                <th class="noms">Etudiant</th>
+                                <th class="noms">Python</th>
+                                <th class="noms">Web</th>
+                                <th class="noms">Bd</th>
+                                <th class="noms">volontaire</th>
+                                <th class="noms">Souhait</th>
+                                <th class="noms">Retenue</th>
+                                <th class="noms">Enseignant</th>
+                                <th class="noms">Créneau</th>
+                            </tr>    
+                        </thead>
+                    </table>
+                    <table class="scrolable" id="tab2">
+                        <tbody>
+                            <tr>
+                                <td class="nom">Paul</td>
+                                <td class="matiere">10</td>
+                                <td class="matiere">12</td>
+                                <td class="matiere">16</td>
+                                <td class="volontaire">oui</td>
+                                <td class="souhait">Python</td>
+                                <td class="retenue">Python</td>
+                                <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                <select name="prof" id="prof">
+                                    <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
+                                    <option value="Anglade">Anglade</option>
+                                    <option value="Arzouz">Arzouz</option>
+                                </select></form>
+                                </td>
+                                <td class="creneau"> <form action="choix_crenau">
+                                    <label for="cren">
+                                        <select name="cren" id="cren" >
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </label>
+                                </form></td>
+
+                                
+                            </tr>
+                            <tr>
+                                <td class="nom">Paul</td>
+                                <td class="matiere">10</td>
+                                <td class="matiere">12</td>
+                                <td class="matiere">16</td>
+                                <td class="volontaire">oui</td>
+                                <td class="souhait">Python</td>
+                                <td class="retenue">Python</td>
+                                <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                <select name="prof" id="prof">
+                                    <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
+                                    <option value="Anglade">Anglade</option>
+                                    <option value="Arzouz">Arzouz</option>
+                                </select></form>
+                                </td>
+                                <td class="creneau"> <form action="choix_crenau">
+                                    <label for="cren">
+                                        <select name="cren" id="cren" >
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </label>
+                                </form></td>
+
+                                
+                            </tr>
+                            <tr>
+                                <td class="nom">Paul</td>
+                                <td class="matiere">10</td>
+                                <td class="matiere">12</td>
+                                <td class="matiere">16</td>
+                                <td class="volontaire">oui</td>
+                                <td class="souhait">Python</td>
+                                <td class="retenue">Python</td>
+                                <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                <select name="prof" id="prof">
+                                    <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
+                                    <option value="Anglade">Anglade</option>
+                                    <option value="Arzouz">Arzouz</option>
+                                </select></form>
+                                </td>
+                                <td class="creneau"> <form action="choix_crenau">
+                                    <label for="cren">
+                                        <select name="cren" id="cren" >
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </label>
+                                </form></td>
+
+                                
+                            </tr>
+
+                        </tbody>
+                    </table></section>
+            </div>
+   
+        {% endblock %}
