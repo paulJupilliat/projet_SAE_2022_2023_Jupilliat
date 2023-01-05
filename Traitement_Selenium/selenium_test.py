@@ -13,84 +13,90 @@ session = Session(engine)
 Base = declarative_base()
 
 class Sondage(Base):
+    """classe Sondage qui contient les sondages
+    """
     __tablename__ = "sondage"
-    idSond = Column(Integer, primary_key=True)
-    urlSond = Column(String(500))
-    dateSondage = Column(String(500))
+    id_sond = Column(Integer, primary_key=True)
+    url_sond = Column(String(500))
+    date_sond = Column(String(500))
     def __repr__(self):
-        return f"Sondage({self.idSond}, {self.urlSond})"
-
+        """representation de l objet Sondage"""
+        return f"Sondage({self.id_sond}, {self.url_sond})"
 class Matiere(Base):
+    """classe Matiere qui contient les matieres
+    """
     __tablename__ = "matiere"
-    idMatiere = Column(Integer, primary_key=True)
-    nomMatiere = Column(String(50))
+    id_matiere = Column(Integer, primary_key=True)
+    nom_matiere = Column(String(50))
     def __repr__(self):
-        return f"Matiere({self.idMatiere}, {self.nomMatiere})"
-
+        """representation de l objet Matiere"""
+        return f"Matiere({self.id_matiere}, {self.nom_matiere})"
 class QCM(Base):
+    """classe QCM qui contient les qcm
+    """
     __tablename__ = "qcm"
-    idQCM = Column(Integer, primary_key=True)
-    nomQCM = Column(String(50))
-    urlQCM = Column(String(500))
+    id_qcm = Column(Integer, primary_key=True)
+    nom_qcm = Column(String(50))
+    url_qcm = Column(String(500))
     #relation pour avoir la matiere d un qcm
-    idMatiere = Column(Integer, ForeignKey("matiere.idMatiere"))
+    id_matiere = Column(Integer, ForeignKey("matiere.id_matiere"))
     #relation inverse pour avoir les qcm d une matiere
-    matiere = relationship("Matiere", backref=backref("qcm", lazy="dynamic"))
-    dateDebut = Column(String(500))
-    dateFin = Column(String(500))
+    matiere = relationship(Matiere, backref=backref("fk_matiere_qcm", lazy="dynamic"))
+    date_debut = Column(String(500))
+    date_fin = Column(String(500))
     def __repr__(self):
-        return f"QCM({self.idQCM}, {self.nomQCM}, {self.urlQCM}, {self.dateDebut}, {self.dateFin})"
+        """representation de l objet QCM"""
+        return f"QCM({self.id_qcm}, {self.nom_qcm}, {self.url_qcm}, {self.date_debut}, {self.date_fin})"
 
 def get_id_QCM(nom_matiere, url, id_matiere):
     id_qcm = 0
-    res = session.query(QCM).filter(QCM.urlQCM == url).count()
+    res = session.query(QCM).filter(QCM.url_qcm == url).count()
     if res == 0:
-        qcm = QCM(idQCM = id_qcm, nomQCM = nom_matiere, urlQCM = url, idMatiere = id_matiere)
+        qcm = QCM(id_qcm = id_qcm, nom_qcm = nom_matiere, url_qcm = url, id_matiere = id_matiere)
         session.add(qcm)
         session.commit()
         id_qcm = get_id_QCM_max()
     else:
-        id_qcm = session.query(QCM.idQCM).filter(QCM.urlQCM == url).first()[0]
+        id_qcm = session.query(QCM.id_qcm).filter(QCM.url_qcm == url).first()[0]
     return id_qcm
 
 def get_id_sondage(url):
     id = 0
-    res = session.query(Sondage).filter(Sondage.urlSond == url).count()
+    res = session.query(Sondage).filter(Sondage.url_sond == url).count()
     if res == 0:
-        sondage = Sondage(idSond = 0, urlSond = url)
+        sondage = Sondage(id_sond = 0, url_sond = url)
         session.add(sondage)
         session.commit()
         id = get_id_sondage_max()
         return id
     else:
-        id = session.query(Sondage.idSond).filter(Sondage.urlSond == url).first()[0]
+        id = session.query(Sondage.id_sond).filter(Sondage.url_sond == url).first()[0]
     return id
 
 def get_id_matiere(nom_matiere):
     id = 0
     # select([func.count()]).select_from(select(Matiere).where(Matiere.nomMatiere.in_([nom_matiere])))
-    res = session.query(Matiere).filter(Matiere.nomMatiere == nom_matiere).count()
+    res = session.query(Matiere).filter(Matiere.nom_matiere == nom_matiere).count()
     if res == 0:
-        matiere = Matiere(idMatiere = 0, nomMatiere = nom_matiere)
+        matiere = Matiere(id_matiere = 0, nom_matiere = nom_matiere)
         session.add(matiere)
         session.commit()
         id = get_id_matiere_max()
         return id
     else:
-        id = session.query(Matiere.idMatiere).filter(Matiere.nomMatiere == nom_matiere).first()[0]
+        id = session.query(Matiere.id_matiere).filter(Matiere.nom_matiere == nom_matiere).first()[0]
         print(id)
     return id
         
 def get_id_matiere_max():
-    res = session.query(func.max(Matiere.idMatiere)).scalar()
+    res = session.query(func.max(Matiere.id_matiere)).scalar()
     return res
         
 def get_id_QCM_max():
-    return session.query(func.max(QCM.idQCM)).scalar()
+    return session.query(func.max(QCM.id_qcm)).scalar()
         
 def get_id_sondage_max():
-    return session.query(func.max(Sondage.idSond)).scalar()
-
+    return session.query(func.max(Sondage.id_sond)).scalar()
 os.environ['MOZ_HEADLESS'] = '1'
 user = input("Entrer votre nom utilisateur :")
 mdp = getpass("Entrer votre mot de passe :")

@@ -147,7 +147,7 @@ class RepSondage(db.Model):
     """classe RepSondage qui fait la
     relation entre les sondages et les eleves -> reponses"""
     __tablename__ = "repsondage"
-    id_sondage = db.Column(db.Integer, db.ForeignKey("sondage.id_sondage"), primary_key=True)
+    id_sondage = db.Column(db.Integer, db.ForeignKey("sondage.id_sond"), primary_key=True)
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     matiere_voulue = db.Column(db.String(100))
     volontaire = db.Column(db.String(50))
@@ -158,7 +158,7 @@ class RepSondage(db.Model):
     eleve = db.relationship(Eleve, backref=db.backref("fk_repsond_eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     def __repr__(self):
         """representation de l objet RepSondage"""
-        return f"RepSondage({self.participation}, {self.id_sondage}, {self.num_etu}, {self.date_sond}, {self.matiere_voulue}, {self.commentaire})"
+        return f"RepSondage({self.volontaire}, {self.id_sondage}, {self.num_etu}, {self.matiere_voulue}, {self.commentaire})"
 class Periode(db.Model):
     """classe Periode qui contient les periodes
     assignées a leur semestres avec des dates limites"""
