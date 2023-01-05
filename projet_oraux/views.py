@@ -67,7 +67,95 @@ def route():
 
 @app.route("/ResQCM")
 def ResQCM():
-    return render_template("ResQCM.html",title="Resultat QCM", admin=True)
+    semaines=[37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    groupes=["11A","11B","11C","12A","12B","12C"]
+    matieres=["Python","Java","C++"]
+    res_bandeau={"Python": 12, "Java": 15, "C++": 18}
+    # res_eleve=[el,el.groupe_s2]
+    # for qcm in qcms:
+    #     res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+    #     res_eleve.append(res_QCM)
+    # rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+    # res_eleve.append(rep_sond)
+    # resultats.append(res_eleve)
+    el=Eleve(num_etu=1, nom="Dupont", prenom="Jean", groupe_s1="11A", groupe_s2="11A")
+    s=Sondage(id_sondage=1, date_sond="2020-10-10")
+    reps=RepSondage(num_etu=1, id_sondage=1, matiere_voulue="Python", volontaire="oui")
+    resultats=[[el,el.groupe_s2,[18,17,12],reps],[el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps],[ el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps],
+    [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps], [el,el.groupe_s2,[18,17,12],reps]]
+    return render_template("ResQCM.html",title="Resultat QCM", admin=True,
+    semaines=semaines,matieres=matieres, groupes=groupes,res_bandeau=res_bandeau, resultats=resultats)
 
 @app.route("/Acceuil")
 def Acceuil():

@@ -1,7 +1,8 @@
 Jour de soutien:2
 Heure de soutien:14
 Seuil:0.7
-Date fin P1:21/10
-Date fin P2:21/01
-Date fin P3:21/04
-
+Date rentree:01/09/2022
+Date fin P1:21/10/2022
+Date fin P2:21/01/2023
+Date fin P3:21/04/2023
+Date fin annee:06/07/2023

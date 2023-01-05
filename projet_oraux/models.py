@@ -1,9 +1,11 @@
 ## Models permet de definir les données de l app
 
 
+import datetime
 from .app import db
 from flask_login import UserMixin
 from .app import login_manager
+from .commands import lecture_parametre_def
 
 class Eleve(db.Model):
     """classe Eleve
@@ -477,24 +479,104 @@ def get_res_QCMs(semaine:int,liste_groupes=[])->list:
         list: liste des resultats de QCM
     """
     sem = Semaine.query.filter(Semaine.id_semaine == semaine).first()
-    qcms=QCM.query.filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all()
+    semestre="S"+str(Periode.query.filter(Periode.id_periode == sem.id_periode).first().semestre)
+    qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all().order_by(Matiere.nom_matiere)
     resultats=[]
     if len(liste_groupes)==0:
-        for qcm in qcms:
-            res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.id_qcm==qcm.id_qcm).all()
-            resultats.append(res_QCM)
+        #recup les eleves qui ont fait le QCM
+        eleves=Eleve.query.join(ResultatQCM).join(QCM).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all()
+        for eleve in eleves:
+            el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
+            rep=[]
+            res_eleve=[el]
+            if semestre == "S1":
+                res_eleve.append(el.groupe_s1)
+            else:
+                res_eleve.append(el.groupe_s2)
+            res_eleve.append(rep)
+            for qcm in qcms:
+                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+                res_eleve[2].append(res_QCM.note)
+            rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+            res_eleve.append(rep_sond)
+            resultats.append(res_eleve)
     else:
-        semestre="S"+str(Periode.query.filter(Periode.id_periode == sem.id_periode).first().semestre)
         if semestre == "S1":
-            for qcm in qcms:
-                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.groupe_s1.in_(liste_groupes)).all()
-                resultats.append(res_QCM)
+            eleves=Eleve.query.join(ResultatQCM).join(QCM).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).filter(Eleve.groupe_s1.in_(liste_groupes)).all()
+            for eleve in eleves:
+                el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
+                rep=[]
+                res_eleve=[el,el.groupe_s1,rep]
+                for qcm in qcms:
+                    res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+                    res_eleve[2].append(res_QCM.note)
+                rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+                res_eleve.append(rep_sond)
+                resultats.append(res_eleve)
         else:
-            for qcm in qcms:
-                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.groupe_s2.in_(liste_groupes)).all()
-                resultats.append(res_QCM)
+            eleves=Eleve.query.join(ResultatQCM).join(QCM).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).filter(Eleve.groupe_s2.in_(liste_groupes)).all()
+            for eleve in eleves:
+                rep=[]
+                el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
+                res_eleve=[el,el.groupe_s2,rep]
+                for qcm in qcms:
+                    res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+                    res_eleve[2].append(res_QCM)
+                rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+                res_eleve.append(rep_sond)
+                resultats.append(res_eleve)
     return resultats
 
+def get_moyennes_res_QCMs(semaine:int,id:str)->dict:
+    """fonction recuperant les resultats de QCM pour une date
+    en fonction de l id de groupe
+    Args:
+        date (String): date du QCM
+    Returns:
+        dict: dico des resultats de QCM
+    """
+    sem = Semaine.query.filter(Semaine.id_semaine == semaine).first()
+    qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all().order_by(Matiere.nom_matiere)
+    resultats={}
+    if id=="generale":
+        for qcm in qcms:
+            res_QCM=get_moyenne_generale(qcm.id_qcm)
+            resultats[qcm.nom_matiere]=res_QCM
+    else:
+        for qcm in qcms:
+            res_QCM=get_moyenne_groupe(id,qcm.id_qcm)
+            mat=Matiere.query.filter(Matiere.id_matiere==qcm.id_matiere).first()
+            resultats[qcm.nom_matiere]=res_QCM
+    return resultats
+        
+def get_semaines()->list:
+    """fonction recuperant les semaines
+
+    Returns:
+        list: liste des semaines
+    """
+    semaines=Semaine.query.all()
+    return semaines
+
+def get_groupes(semestre:int)->list:
+    """fonction recuperant les groupes
+
+    Returns:
+        list: liste des groupes
+    """
+    if semestre == 1:
+        eleves=Eleve.query.filter(Eleve.groupe_s1 != None).all()
+        groupes=[]
+        for e in eleves:
+            if e.groupe_s1 not in groupes:
+                groupes.append(e.groupe_s1)
+    else:
+        eleves=Eleve.query.filter(Eleve.groupe_s2 != None).all()
+        groupes=[]
+        for e in eleves:
+            if e.groupe_s2 not in groupes:
+                groupes.append(e.groupe_s2)
+    return groupes
 def get_res_sondages(semaine:int,liste_groupes=[])->list:
     """fonction recuperant les resultats de sondage pour une date
 
@@ -573,7 +655,7 @@ def get_eleves_groupe(groupe:int, date:str):
         eleves = Eleve.query.filter(Eleve.groupe_s1 == groupe).filter(Eleve.date_debut >= sem.date_debut).filter(Eleve.date_debut <= sem.date_fin).all()
     eleves = Eleve.query.filter(Eleve.groupe_s2 == groupe).filter(Eleve.date_fin >= sem.date_debut).filter(Eleve.date_fin <= sem.date_fin).all()
     return eleves
-    
+
 def disponibilites_enseignant(id_enseignant:int, date:str)->list:
     """fonction recuperant les disponibilites d un enseignant pour une date
 
@@ -685,6 +767,38 @@ def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, 
                         matiere_voulue = matiere_voulu, commentaire = commentaire)
         db.session.add(rep)
         db.session.commit()
+
+def init_periode_semaines():
+    #crea des periodes
+    rentree=lecture_parametre_def("Date rentree")
+    fin_p1=lecture_parametre_def("Date fin P1")
+    fin_p2=lecture_parametre_def("Date fin P2")
+    fin_p3=lecture_parametre_def("Date fin P3")
+    fin_annee=lecture_parametre_def("Date fin annee")
+    date_rentree=datetime.strptime(rentree,"%d/%m/%Y")
+    date_fin_p1=datetime.strptime(fin_p1,"%d/%m/%Y")
+    date_fin_p2=datetime.strptime(fin_p2,"%d/%m/%Y")
+    date_fin_p3=datetime.strptime(fin_p3,"%d/%m/%Y")
+    date_fin_annee=datetime.strptime(fin_annee,"%d/%m/%Y")
+    p1=Periode(id_periode=1,date_debut=date_rentree,date_fin=date_fin_p1,semestre=1)
+    p2=Periode(id_periode=2,date_debut=date_fin_p1+datetime.timedelta(days=1),date_fin=date_fin_p2,semestre=1)
+    p3=Periode(id_periode=3,date_debut=date_fin_p2+datetime.timedelta(days=1),date_fin=date_fin_p3,semestre=2)
+    p4=Periode(id_periode=4,date_debut=date_fin_p3+datetime.timedelta(days=1),date_fin=date_fin_annee,semestre=2)
+    db.session.add(p1)
+    db.session.add(p2)
+    db.session.add(p3)
+    db.session.add(p4)
+
+    #crea des semaines
+    date=date_rentree
+    id_semaine=1
+    while date<date_fin_annee:
+        semaine=Semaine(id_semaine=id_semaine,date_debut=date,date_fin=date+datetime.timedelta(days=6))
+        date=date+datetime.timedelta(days=7)
+        id_semaine=id_semaine+1
+        db.session.add(semaine)
+    db.session.commit()
+
 
 def ajouter_commentaire(idOral,numEtu,commentaire):
     oral=Oral.query.filter(Oral.idOral==idOral).first()

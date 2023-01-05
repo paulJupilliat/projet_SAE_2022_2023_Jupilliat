@@ -17,11 +17,9 @@
     </div>
     <section id="groupe_filtre">
     <select name="semaines" id="selec-sem">
-        <option value="">Semaine 43</option>
-        <option value="">Semaine 44</option>
-        <option value="">Semaine 45</option>
-        <option value="">Semaine 46</option>
-        <option value="">Semaine 47</option>
+        {% for semaine in semaines %}
+            <option value="{{ semaine }}">{{ semaine }}</option>
+        {% endfor %}
     </select>
     
     <div id="aside_grp">
@@ -30,38 +28,13 @@
             <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
     </div>
     <ul id="grps_filtres">
-        <li>
-            <input type="checkbox" name="11A" id="11A">
-            <label for="11A">11A</label>
-        </li>
-        <li>
-            <input type="checkbox" name="11B" id="11B">
-            <label for="11B">11B</label>
-        </li>
-        <li>
-            <input type="checkbox" name="12A" id="12A">
-            <label for="12A">12A</label>
-        </li>
-        <li>
-            <input type="checkbox" name="12B" id="12B">
-            <label for="12B">12B</label>
-        </li>
-        <li>
-            <input type="checkbox" name="13A" id="13A">
-            <label for="13A">13A</label>
-        </li>
-        <li>
-            <input type="checkbox" name="13B" id="13B">
-            <label for="13B">13B</label>
-        </li>
-        <li>
-            <input type="checkbox" name="14A" id="14A">
-            <label for="14A">14A</label>
-        </li>
-        <li>
-            <input type="checkbox" name="14B" id="14B">
-            <label for="14B">14B</label>
-        </li>
+        {% for groupe in groupes %}
+            <li>
+                <input type="checkbox" name="{{ groupe }}" id="{{ groupe }}">
+                <label for="{{ groupe }}">{{ groupe }}</label>
+            </li>
+        {% endfor %}
+        
     </ul>
     <input id="liaison_bd" class="btn_valide" value="Valider" type="button"></input>
 </section>
@@ -78,8 +51,9 @@
         <tr class="colonnes">
             <th class="noms">Etudiant</th>
             <th class="noms">Groupe</th>
-            <th class="noms">matiere1</th>
-            <th class="noms">matiere2</th>
+            {% for matiere in matieres %}
+                <th class="noms">{{ matiere }}</th>
+            {% endfor %}
             <th class="noms">Soutien</th>
             <th class="noms">Voeu matiere</th>
         </tr>
@@ -87,167 +61,31 @@
             <th class="moy">Moyenne</th>
             <th class="moy">
                 <select>
-                    <option value="gen">Generale</option>
-                    <option value="11A">11A</option>
-                    <option value="11B">11B</option>
-                    <option value="12A">12A</option>
-                    <option value="12B">12B</option>
-                    <option value="13A">13A</option>
-                    <option value="13B">13B</option>
-                    <option value="14A">14A</option>
-                    <option value="14B">14B</option>
+                    <option value="generale">Generale</option>
+                    {% for groupe in groupes %}
+                        <option value="{{ groupe }}">{{ groupe }}</option>
+                    {% endfor %}
                 </select>
             </th>
-            <th class="moy">12.5</th>
-            <th class="moy">12.5</th>
+            {% for matiere,moyenne in res_bandeau %}
+                <th class="moy">{{ moyenne }}</th>
+            {% endfor %}
         </tr>
         </table>
         <table class="scrolable">
             <tbody>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>11A</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-                <td>12.5</td>
-            </tr></tbody>
+            {% for eleve,groupe,qcms,rep_sond in resultats %}
+                <tr>
+                    <td>{{ eleve.nom }}{{ eleve.prenom }}</td>
+                    <td>{{ groupe }}</td>
+                    {% for qcm in qcms %}
+                        <td>{{ qcm }}</td>
+                    {% endfor %}
+                    <td>{{ rep_sond.volontaire }}</td>
+                    <td>{{ rep_sond.matiere_voulue }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
     </table></div></section>
 {% endblock %}
 {% block scripts %}
