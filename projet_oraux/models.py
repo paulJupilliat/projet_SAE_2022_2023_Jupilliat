@@ -97,7 +97,7 @@ class User(db.Model, UserMixin):
 class Oral(db.Model):
     """classe Oral qui contient les oraux(soutien)
     """
-    __tablename__ = "oraux"
+    __tablename__ = "oral"
     id_oral = db.Column(db.Integer, primary_key=True)
     date_oral = db.Column(db.String(500))
     heure_oral = db.Column(db.String(500))
@@ -117,13 +117,13 @@ class ParticipantsOral(db.Model):
     """classe ParticipantsOral qui fait la 
     relation entre les oraux et les eleves"""
     __tablename__ = "participantsoral"
-    id_oral = db.Column(db.Integer, db.ForeignKey("oral.idOralz"), primary_key=True)
+    id_oral = db.Column(db.Integer, db.ForeignKey("oral.id_oral"), primary_key=True)
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     commentaire = db.Column(db.String(800))
     #relation pour avoir l oral d un participant
-    oral= db.relationship(Oral, backref=db.backref("oraux", cascade="all, delete-orphan"),overlaps="oral,eleve")
+    oral= db.relationship(Oral, backref=db.backref("oral", cascade="all, delete-orphan"),overlaps="oral,eleve")
     #relation pour avoir l eleve d un participant
-    eleve= db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="oral,eleve")
+    eleve= db.relationship(Eleve, backref=db.backref("eleve", cascade="all, delete-orphan"),overlaps="oral,eleve")
     def __repr__(self):
         """representation de l objet ParticipantsOral"""
         return f"ParticipantsOral({self.id_oral}, {self.num_etu}, {self.commentaire})"
@@ -135,7 +135,7 @@ class ResultatQCM(db.Model):
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     note = db.Column(db.Integer)
     #un eleve peut avoir qu'une seule note pour un qcm
-    eleve = db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    eleve = db.relationship(Eleve, backref=db.backref("eleve", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     #un qcm peut avoir qu'une seule note pour un eleve
     qcm = db.relationship(QCM, backref=db.backref("qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     def __repr__(self):
@@ -154,7 +154,7 @@ class RepSondage(db.Model):
     #relation pour avoir le sondage d une reponse
     sondage = db.relationship(Sondage, backref=db.backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
-    eleve = db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    eleve = db.relationship(Eleve, backref=db.backref("eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     def __repr__(self):
         """representation de l objet RepSondage"""
         return f"RepSondage({self.participation}, {self.id_sondage}, {self.num_etu}, {self.date_sond}, {self.matiere_voulue}, {self.commentaire})"
@@ -800,19 +800,19 @@ def init_periode_semaines():
     db.session.commit()
 
 
-def ajouter_commentaire(idOral,numEtu,commentaire):
-    oral=Oral.query.filter(Oral.idOral==idOral).first()
-    etu=Eleve.query.filter(Eleve.numEtu==numEtu).first()
-    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
+def ajouter_commentaire(id_oral,num_etu,commentaire):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
+    etu=Eleve.query.filter(Eleve.num_etu==num_etu).first()
+    part=ParticipantsOral.query.filter(ParticipantsOral.id_oral==oral.id_oral).filter(ParticipantsOral.num_etu==etu.num_etu).first()
     part.commentaire=commentaire
     db.session.commit()
 
-def ajouter_dispo(idOral,idProf):
-    oral=Oral.query.filter(Oral.idOral==idOral).first()
+def ajouter_dispo(id_oral,idProf):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
     prof=Professeur.query.filter(Professeur.idProf==idProf).first()
-    dispo=EstDisponible.query.filter(EstDisponible.idOral==oral.idOral).filter(EstDisponible.idProf==prof.idProf).first()
+    dispo=EstDisponible.query.filter(EstDisponible.id_oral==oral.id_oral).filter(EstDisponible.idProf==prof.idProf).first()
     if dispo is None:
-        dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
+        dispo=EstDisponible(id_oral=oral.id_oral,idProf=prof.idProf)
         db.session.add(dispo)
     else:
         pass
