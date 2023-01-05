@@ -62,6 +62,13 @@ table {
   text-align: center; 
   border: 1px solid #333;   
 }
+
+#section_tableau th , #section_tableau td{
+  padding: 0.5em;
+  width: 10em;
+  text-align: center; 
+  border: 1px solid #333;   
+}
 thead,
 tfoot{
     background-color: #333;
@@ -128,9 +135,15 @@ aside{
 
 
 
-#tableauqcm , #tableaudispo, #tableaugen{
+#tableauqcm , #tableaudispo, #tableaugen, #section_tableau {
   display:flex;
   flex-direction: column;
+}
+#section_tableau{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
 }
 
 #tableauqcm table{
@@ -152,3 +165,11 @@ aside{
   align-self: center;
 }
 
+.p4{
+  align-self: end;
+}
+
+#labels{
+  width: auto;
+  flex-grow: 1;
+}
