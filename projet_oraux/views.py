@@ -67,9 +67,6 @@ def ResQCM():
     groupes=["11A","11B","11C","12A","12B","12C"]
     matieres=["Python","Java","C++"]
     res_bandeau=[("Python", 12), ("Java", 15), ("C++", 18)]
-    # el=Eleve(num_etu=1, nom="Dupont", prenom="Jean", groupe_s1="11A", groupe_s2="11A")
-    # s=Sondage(id_sondage=1, date_sond="2020-10-10")
-    # reps=RepSondage(num_etu=1, id_sondage=1, matiere_voulue="Python", volontaire="oui")
     reps={"matiere_voulue":"Python", "volontaire":"oui"}
     el={"num_etu":1, "nom":"Dupont", "prenom":"Jean", "groupe_s1":"11A", "groupe_s2":"11A"}
     resultats=[[el,el["groupe_s2"],[18,17,12],reps],[el,el["groupe_s2"],[18,17,12],reps],
@@ -198,7 +195,14 @@ def save_paramEns():
     return render_template("paramEns.html",title="Paramètres Enseignant")
 @app.route("/res_sond")
 def res_sond():
-    return render_template("res_sond.html",title="Resultat sondage", admin=True)
+    groupes=["11A","11B","11C","12A","12B","12C"]
+    # res_eleve,groupe,res_qs in sondages
+    res_eleve={"nom":"Chabin","prenom":"Alexandre","matiere_voulue":"Java","volontaire":"oui","commentaire":"Je suis motivé"}
+    groupe="11A"
+    res_qs=[{"question":"Quelle matière voulez vous voir en priorité ?","reponse":"Java","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","reponse":"oui","id_quest":2}, {"question":"Avez vous des remarques ?","reponse":"Je suis motivé","id_quest":3}]
+    sondages=[[res_eleve,groupe,res_qs],[ res_eleve,groupe,res_qs], [res_eleve,groupe,res_qs]]
+    questions=[{"question":"Quelle matière voulez vous voir en priorité ?","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","id_quest":2}, {"question":"Avez vous des remarques ?","id_quest":3}]
+    return render_template("res_sond.html",title="Resultat sondage", admin=True,groupes=groupes,sondages=sondages,questions=questions)
 @app.route("/Soutien")
 def Soutien():
     return render_template("Soutien.html",title="Soutien", admin=True)

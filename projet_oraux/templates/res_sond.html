@@ -30,38 +30,12 @@
                     <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
             </div>
             <ul id="grps_filtres">
-                <li>
-                    <input type="checkbox" name="11A" id="11A">
-                    <label for="11A" style="display: inline;" >11A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="11B" id="11B">
-                    <label for="11B" style="display: inline;">11B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="12A" id="12A">
-                    <label for="12A" style="display: inline;">12A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="12B" id="12B">
-                    <label for="12B" style="display: inline;">12B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="13A" id="13A">
-                    <label for="13A" style="display: inline;">13A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="13B" id="13B">
-                    <label for="13B" style="display: inline;">13B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="14A" id="14A">
-                    <label for="14A" style="display: inline;">14A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="14B" id="14B">
-                    <label for="14B" style="display: inline;">14B</label>
-                </li>
+                {% for groupe in groupes %}
+                    <li>
+                        <input type="checkbox" name="{{ groupe }}" id="{{ groupe }}">
+                        <label for="{{ groupe }}">{{ groupe }}</label>
+                    </li>
+                {% endfor %}
             </ul>
             <input id="liaison_bd" class="btn_valide" value="Valider" type="button"></input>
         </section>
@@ -81,62 +55,24 @@
                         <th id="grp2"><input type="checkbox" name="soutien" id="soutien" class="soutien in_filtres" onclick="cache_soutien()"> <label for="soutien"> Soutien?</label></th>
                         <th id="grp3"><input type="checkbox" name="mat" id="mat" class="mat in_filtres"  onclick="cache_matiere()"> <label for="mat"> Matiere</label></th>
                         <th id="grp4"><input type="checkbox" name="com" id="comm" class="comm in_filtres" onclick="cache_commentaire()"><label for="comm"> Commentaire</label></th>
+                        {% for question in questions %}
+                            <th id="grpq{{question.id_quest}}"><input type="checkbox" name="{{question.id_quest}}" id="{{question.id_quest}}" class="question{{question.id_quest}} in_filtres" onclick='cache_colonne()'><label for="{{question.id_quest}}">{{question.question}}</label></th>
+                        {% endfor %}
                     </tr>
-
+                    
+                    {% for res_eleve,groupe,res_qs in sondages %}
                     <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">NULL</td>
-                        
+                        <td class="etu">{{ res_eleve.nom }} {{ res_eleve.prenom }}</td>
+                        <td class="grp">{{ groupe }}</td>
+                        <td class="soutien">{{ res_eleve.volontaire }}</td>
+                        <td class="mat">{{ res_eleve.matiere_voulue }}</td>
+                        <td class="comm">{{ res_eleve.commentaire }}</td>
+                        {% for question in res_qs %}
+                            <td class="question{{question.id_quest}}">{{ question.reponse }}</td>
+                        {% endfor %}
                     </tr>
-
-
-                    <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
-                    </tr>
-
-                    <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">NULL</td>
-                        
-                    </tr>
-                    <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
-                    </tr>
-                    <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
-                    </tr>
-                    <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
-                    </tr>
-                    <tr>
-                        <td class="etu">Paul</td>
-                        <td class="grp">11A</td>
-                        <td class="soutien">OUI</td>
-                        <td class="mat">Web</td>
-                        <td class="comm">paul participe super bien en cours et deviens de plus en plus regulier a l'idee de faire n'importe quoi juste pouyr trouver quelque chose a dire il recherche si c'est possible de suate une ligen en dazônd,z</td>
-                    </tr>
+                    {% endfor %}
+                    
                 </tbody>
             </table>
         </div>

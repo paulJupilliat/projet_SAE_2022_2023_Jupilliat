@@ -195,6 +195,7 @@ function remettre_matiere(){
 
 function cache_commentaire() {
     var comm = document.getElementsByClassName('comm');
+    console.log(comm)
     for (var i = 0; i < comm.length; i++) {
         // si le checkbox est coché alors on cache la colonne
         if (document.getElementById('comm').checked) {
@@ -235,6 +236,63 @@ function cache_commentaire() {
 function remettre_commentaire(){
     document.getElementById('comm').checked = false;
     cache_commentaire();
+}
+
+function cache_colonne(){  
+
+    var id =event.srcElement.id;
+    //si le premier caractère est un q on l'enlève
+    if(id.charAt(0) == 'q'){
+        id_cb=id
+        id = id.substring(1);
+    }
+    var classn = "question" + id;
+    var grp = "grpq" + id;
+    var col = document.getElementsByClassName(classn);
+    for (var i = 0; i < col.length; i++) {
+        // si le checkbox est coché alors on cache la colonne
+        if (document.getElementById(id).checked) {
+            col[i].style.display = 'none';
+            document.getElementById(grp).style.display = 'none';
+            // ajout de la checkbox ailleurs
+            
+        }
+        else{
+            col[i].style.display = 'table-cell';
+        }
+
+    }
+    if(document.getElementById(id).checked){
+        
+        const btn_rea = document.getElementById('q'+id);
+        if (btn_rea == null) {
+            var htmlbt= '<input type="checkbox" id="q'+id+'" name="q'+id+'" value="'+id+'" onclick="remettre_colonne()" class="in_filtres"> <label id ="label_q'+id+'" for="q'+id+'">Question'+id+' </label>' + document.getElementById("tableau").innerHTML ;
+            document.getElementById("tableau").innerHTML = htmlbt;
+        }
+        else{
+            btn_rea.style.display = 'inline';
+            document.getElementById('label_q'+id).style.display = 'inline';
+        }
+    }
+    else{
+        const btn_rea = document.getElementById('q'+id);
+        if (btn_rea != null) {
+            document.getElementById(grp).style.display = 'table-cell';
+            document.getElementById('q'+id).style.display = 'none';
+            document.getElementById('label_q'+id).style.display = 'none';
+            document.getElementById('q'+id).checked = false;
+        }
+        
+
+    }
+
+}
+
+function remettre_colonne(){
+    var id =event.srcElement.id;
+    document.getElementById(id).checked = false;
+    cache_colonne();
+
 }
 function plie_deplie_filtres() {
     const img = document.getElementById("dep");
