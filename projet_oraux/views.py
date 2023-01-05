@@ -2,59 +2,6 @@
 
 from .app import app
 from flask import render_template, request,url_for , redirect
-# from .models import *
-# from flask_wtf import FlaskForm
-# from wtforms import StringField , HiddenField,PasswordField
-# from wtforms.validators import DataRequired
-# from hashlib import sha256
-# from flask_login import login_user , current_user,logout_user
-
-# class AuthorForm(FlaskForm):
-#     id = HiddenField("id")
-#     name = StringField("Name",validators=[DataRequired()])
-# class BookForm(FlaskForm):
-#     id = HiddenField("id")
-#     title = StringField("Title",validators=[DataRequired()])
-#     price = StringField("Price",validators=[DataRequired()])
-#     url = StringField("Url",validators=[DataRequired()])
-#     img = StringField("Picture(link)",validators=[DataRequired()])
-#     #champ pour le choix de l auteur liste déroulante
-#     author = StringField("Author",validators=[DataRequired()])
-#     genres = StringField("Genres(separated by comma)",validators=[DataRequired()])
-# class GenreForm(FlaskForm):
-#     id = HiddenField("id")
-#     name = StringField("Name",validators=[DataRequired()])
-# class FiltersForm(FlaskForm):
-#     author = StringField("Author")
-#     genre = StringField("Genre")
-#     price_min = StringField("Price min")
-#     price_max = StringField("Price max")
-#     order = StringField("Order(by title, author, genre, price)")
-
-# class LoginForm ( FlaskForm ):
-#     username = StringField("Username")
-#     password = PasswordField("Password")
-#     next = HiddenField()
-#     id = HiddenField()
-#     def get_authenticated_user(self):
-#         user = User.query.get(self.username.data)
-#         if user is None:
-#             return None
-#         m = sha256()
-#         m.update(self.password.data.encode())
-#         passwd = m.hexdigest()
-#         return user if passwd == user.password else None
-
-# class RegisterForm ( FlaskForm ):
-#     username = StringField("Username")
-#     password = PasswordField("Password")
-#     confirm = PasswordField("Confirm password")
-
-# class EditUserForm ( FlaskForm ):
-#     username = StringField("Actual username")
-#     password = PasswordField("Actual password")
-#     newpsswd = PasswordField("New password")
-#     confirm = PasswordField("Confirm new password")
 
 
 @app.route("/")
