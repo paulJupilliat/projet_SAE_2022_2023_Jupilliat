@@ -1,4 +1,3 @@
-
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
@@ -98,6 +97,7 @@ def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
         session.commit()
 
 def main(fichier_ouvrir):
+    connexion = ouvrir_connexion("manach","manach","servinfo-mariadb","DBmanach")
     for (idpartie,fic,date) in fichier_ouvrir:
         fichier = open("./Traitement_Selenium/"+fic,"r")
         entete = fichier.readline()

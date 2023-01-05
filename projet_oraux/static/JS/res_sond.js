@@ -17,7 +17,7 @@ function cache_grp() {
     if(document.getElementById('grp').checked){
         const btn_rea = document.getElementById('groupe');
         if (btn_rea == null) {
-            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="groupe" name="grp" value="grp" onclick="remettre_grp()"> <label id = "label_groupe" for="groupe">Groupe </label>' + document.getElementById("tableau").innerHTML;
+            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="groupe" name="grp" value="grp" onclick="remettre_grp()" class="in_filtres"> <label id = "label_groupe" for="groupe">Groupe </label>' + document.getElementById("tableau").innerHTML;
         }
         else{
             btn_rea.style.display = 'inline';
@@ -66,7 +66,7 @@ function cache_etu(){
     if(document.getElementById('etu').checked){
         const btn_rea = document.getElementById('etud');
         if (btn_rea == null) {
-            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="etud" name="etu" value="etu" onclick="remettre_etu()"> <label id = "label_etud" for="etud">Etudiant </label>' +document.getElementById("tableau").innerHTML;
+            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="etud" name="etu" value="etu" onclick="remettre_etu()" class="in_filtres"> <label id = "label_etud" for="etud">Etudiant </label>' +document.getElementById("tableau").innerHTML;
         }
         else{
             btn_rea.style.display = 'inline';
@@ -113,7 +113,7 @@ function cache_soutien() {
     if(document.getElementById('soutien').checked){
         const btn_rea = document.getElementById('sout');
         if (btn_rea == null) {
-            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="sout" name="sout" value="soutien" onclick="remettre_soutien()"> <label id = "label_sout" for="sout">Soutien </label>' + document.getElementById("tableau").innerHTML;
+            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="sout" name="sout" value="soutien" onclick="remettre_soutien()" class="in_filtres"> <label id = "label_sout" for="sout">Soutien </label>' + document.getElementById("tableau").innerHTML;
         }
         else{
             btn_rea.style.display = 'inline';
@@ -163,7 +163,7 @@ function cache_matiere() {
     if(document.getElementById('mat').checked){
         const btn_rea = document.getElementById('matiere');
         if (btn_rea == null) {
-            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="matiere" name="matiere" value="mat" onclick="remettre_matiere()"> <label id = "label_matiere" for="matiere">Matiere </label>' + document.getElementById("tableau").innerHTML;
+            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="matiere" name="matiere" value="mat" onclick="remettre_matiere()" class="in_filtres"> <label id = "label_matiere" for="matiere">Matiere </label>' + document.getElementById("tableau").innerHTML;
         }
         else{
             btn_rea.style.display = 'inline';
@@ -211,7 +211,7 @@ function cache_commentaire() {
     if(document.getElementById('comm').checked){
         const btn_rea = document.getElementById('commentaire');
         if (btn_rea == null) {
-            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="commentaire" name="commentaire" value="comm" onclick="remettre_commentaire()"> <label id = "label_commentaire" for="commentaire">Commentaire </label>' + document.getElementById("tableau").innerHTML ;
+            document.getElementById("tableau").innerHTML = '<input type="checkbox" id="commentaire" name="commentaire" value="comm" onclick="remettre_commentaire()" class="in_filtres"> <label id = "label_commentaire" for="commentaire">Commentaire </label>' + document.getElementById("tableau").innerHTML ;
         }
         else{
             btn_rea.style.display = 'inline';
@@ -243,10 +243,10 @@ function plie_deplie_filtres() {
     } else {
         document.getElementById("grps_filtres").style.display = "none";
     }
-    if (img.src.match("../img/plie.png")) {
-        img.src = "../img/deplie.png";
+    if (img.src.match("./static/img/plie.png")) {
+        img.src = "./static/img/deplie.png";
     } else {
-        img.src = "../img/plie.png";
+        img.src = "./static/img/plie.png";
     }
 };
 
@@ -257,9 +257,9 @@ function plie_deplie_semaines() {
     } else {
         document.getElementById("groupe_filtre").style.display = "none";
     }
-    if (img.src.match("../img/plie.png")) {
-        img.src = "../img/deplie.png";
+    if (img.src.match("./static/img/plie.png")) {
+        img.src = "./static/img/deplie.png";
     } else {
-        img.src = "../img/plie.png";
+        img.src = "./static/img/plie.png";
     }
 };

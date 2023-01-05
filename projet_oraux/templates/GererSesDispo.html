@@ -1,22 +1,13 @@
-{% if admin %}
-    {% extends 'BaseAdmin.html' %}
-{% else %}
-    {% extends 'BaseEnsiegnant.html' %}
-{% endif %}
+{% extends 'BaseEnsiegnant.html' %}
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dispo.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gerer_dispo.css')}}">
 
 {% endblock %}
-{% block aside %}
-            <div id="aside_filtres">
-                <h2>Filtres</h2>
-                <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep2"/></button>
-            </div>
-            <section id="groupe_filtre">
+{% block top %}
+            <div id="selection_semaine">
             <select name="semaines" id="selec-sem">
                 <option value="">Semaine 43</option>
                 <option value="">Semaine 44</option>
@@ -24,35 +15,8 @@
                 <option value="">Semaine 46</option>
                 <option value="">Semaine 47</option>
             </select>
-            <div id="aside_grp">
-                <h3>Matières</h3>
-                <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
-            </div>
-            <ul id="grps_filtres">
-                <li>
-                    <input type="checkbox" name="Python" id="Python">
-                    <label for="Python">Python</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="BDD" id="BDD">
-                    <label for="BDD">BDD</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="Java" id="Java">
-                    <label for="Java">Java</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="Bash" id="Bash">
-                    <label for="Bash">Bash</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="Maths" id="Maths">
-                    <label for="Maths">Maths</label>
-                </li>
-            </ul>
-            <input id="liaison_bd" class="btn_valide" value="Valider" type="button"></input>
-            </section>
+        </div>
+        
 {% endblock %}
 {% block center%}
         <section id="tableaudispo">
@@ -63,140 +27,121 @@
                     </tr>
                 </thead>
                 <tr class="colonnes">
-                    <th class="noms">Enseignant</th>
-                    <th class="noms">matiere1</th>
-                    <th class="noms">matiere2</th>
-                    <th class="noms">matiere3</th>
                     <th class="noms">date</th>
+                    <th class="noms">heure</th>
+                    <th class="noms">salle</th>
+                    <th class="noms"></th>
                 </tr>
                 </table>
                 <table class="scrolable">
                     <tbody>
                     <tr>
-                        <td>Paul</td>
+                        <td>22/03/2023</td>
                         <td>11A</td>
                         <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
+                        <td>22/03/2023</td>
                         <td>11A</td>
                         <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
+                        <td>22/03/2023</td>
                         <td>11A</td>
                         <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
                     <tr>
-                        <td>Paul</td>
                         <td>11A</td>
                         <td>12.5</td>
                         <td>12.5</td>
-                        <td>12.5</td>
+                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
                     </tr></tbody>
             </table>
 

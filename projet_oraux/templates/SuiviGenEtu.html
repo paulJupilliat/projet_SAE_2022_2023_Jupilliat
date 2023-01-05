@@ -5,9 +5,9 @@
 {% endif %}
 {% block styles %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='filtres.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='suiviGen.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/suiviGen.css')}}">
 
 {% endblock %}
 {% block aside %}
@@ -17,13 +17,6 @@
                     <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep2"/></button>
             </div>
             <section id="groupe_filtre"> 
-            <select name="semaines" id="selec-sem">
-                <option value="">Semaine 43</option>
-                <option value="">Semaine 44</option>
-                <option value="">Semaine 45</option>
-                <option value="">Semaine 46</option>
-                <option value="">Semaine 47</option>
-            </select>
             <div id="aside_grp">
                 <h3>Groupes</h3>
                 <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
@@ -64,9 +57,14 @@
                 </li>
             </ul>
             <div id="aside_rec">
-                <h3>Recherche</h3>
-                <input type="text" name="recherche" id="recherche">
+                <form action="{{ url_for('search') }}" method="post" class="recherche_eleve" role="search" >
+                    <h3>Recherche</h3>
+                    <input type="search" name="recherche" id="recherche" placeholder="Search" aria-label="Search">
+                    <button type="submit" id="submit_recherche"></button>
+                </form>
+                
             </div>
+            <input id="liaison_bd" class="btn_valide" value="Valider" type="button"></input>
             </section>
 {% endblock %}
 {% block center %}
@@ -291,4 +289,7 @@
                 </tr>
                 </tbody>
         </table></section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='JS/suivie_etu_gen.js') }}"></script>
 {% endblock %}
