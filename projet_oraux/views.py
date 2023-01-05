@@ -467,9 +467,6 @@ def search():
 # @app.route("/logout/")
 # def logout():
 #     logout_user()
-<<<<<<< HEAD
-#     return redirect(url_for('home'))
-=======
 #     return redirect(url_for('home'))
 
 
@@ -486,4 +483,3 @@ def Connexion(origin):
     else:
         return redirect(url_for("connexionProf"))
 
->>>>>>> d3746fee27027f594a96bd2dae6896b8dd16a7a2
