@@ -60,7 +60,8 @@
         <div id="soutien">
             <p>Volontaire: {soutien.volontaire} </p>
             <p>Matiere souhaitée: {soutien.matiere_voulue} </p>
-        {% if questions is not None %}
+        <!-- si questions n'est pas None -->
+        {% if questions %}
         {% for question in questions %}
             <p>Question: {question.question} </p>
             <p>Réponse: {question.reponse} </p>
@@ -87,14 +88,14 @@
         </tr>
         {% for oral,semaine in oraux %}
         <tr>
-            {% if oral is None %}
-            <td>{{ semaine.id_semaine }}</td>
-            <td>-</td>
-            <td>-</td>
-            {% else %}
+            {% if oral %}
             <td>{{ semaine.id_semaine }}</td>
             <td>{{ oral.nom_matiere }}</td>
             <td>{{ oral.commentaire }}</td>
+            {% else %}
+            <td>{{ semaine.id_semaine }}</td>
+            <td>-</td>
+            <td>-</td>
             {% endif %}
         </tr>
         {% endfor %}
@@ -107,8 +108,9 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-{script_js}
 <script src="{{ url_for('static', filename='JS/suivi_etu.js') }}">
 </script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="{{ url_for('static', filename='JS/suivi_graphe.js') }}"></script>
 {% endblock %}
  

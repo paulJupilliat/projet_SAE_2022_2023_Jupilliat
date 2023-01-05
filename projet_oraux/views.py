@@ -3,6 +3,7 @@
 from .app import app
 from flask import render_template, request,url_for , redirect
 from .models import *
+from .commands import ecriture_js_suivi
 from flask_wtf import FlaskForm
 from wtforms import StringField , HiddenField,PasswordField
 # from wtforms.validators import DataRequired
@@ -129,31 +130,31 @@ def Suivie_etu():
     cpt=0
     while len(liste_matieres)<0:
         if cpt %2 ==0:
-            liste_modif.append([liste_matieres[cpt]])
+            mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
+            liste_modif.append(mat)
         else:
-            liste_modif[-1].append(liste_matieres[cpt])
+            mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
+            liste_modif[-1].append(mat)
         cpt+=1
     semaines=[37,38,39,40,41,42,43,44,45,46,47,48]
     #cree une liste de 3 qcms avec les resultats
     qcms=[]
     for i in range(len(liste_matieres)):
-        mat=Matiere(id_matiere=i,nom_matiere=liste_matieres[i])
-        qcm=QCM(id_qcm=i, id_mat=mat.id_matiere)
-        res = ResultatQCM(id_qcm = i, num_etu = 22107932, note = 10+i)
-        qcm.jointure.append(res)
+        mat={"id_matiere":i,"nom_matiere":liste_matieres[i]}
+        res ={ "num_etu": 22107932, "note": 15}
+        qcm={"id_qcm":i,"id_mat":mat["id_matiere"],"nom_matiere":mat["nom_matiere"],"note_qcm":res["note"]}
         qcms.append(qcm)
-    soutien=RepSondage(id_sondage=1,num_etu=22107932,matiere_voulue="Python",volontaire="oui",commentaire="Je veux du soutien")
+    soutien={"id_sondage":1,"num_etu":22107932,"matiere_voulue":"Python","volontaire":"oui","commentaire":"Je veux du soutien"}
     questions=None
     oraux =[]
     for i in range(len(semaines)):
         if i%3!=0:
-            oral = Oral(id_oral=i,id_matiere=i%len(liste_matieres),date_oral="2020-10-10",heure_oral="10:00")
-            part=ParticipantsOral(id_oral=i,id_matiere=i%len(liste_matieres),num_etu=22107932,commentaire=liste_matieres[i%len(liste_matieres)]+" oral")
-            oral.jointure.append(part)
-            oraux.append(oral,i)
+            oral={"id_oral":i,"id_matiere":i%len(liste_matieres),"date_oral":"2020-10-10",
+            "heure_oral":"10:00","num_etu":22107932,"commentaire":liste_matieres[i%len(liste_matieres)]+" oral "}
+            oraux.append((oral,i))
         else:
-            oraux.append(None,i)
-    str_js="<script>google.charts.load('current', {'packages':['line']});\n"
+            oraux.append((None,i))
+    str_js="google.charts.load('current', {'packages':['line']});\n"
     str_js+="google.charts.setOnLoadCallback(drawChart);\n"
     str_js+="function drawChart() {\n"
     str_js+="\tvar data = new google.visualization.DataTable();\n"
@@ -185,11 +186,12 @@ def Suivie_etu():
     str_js+=" };\n"
     str_js+=" var chart = new google.charts.Line(document.getElementById('linechart_material'));\n"
     str_js+=" chart.draw(data, google.charts.Line.convertOptions(options));\n"
-    str_js+=" }</script>"
+    str_js+=" }"
+    ecriture_js_suivi(str_js)
     return render_template("Suivie_etu.html",title="Suivie étudiant",
         admin=True,matieres=liste_modif,qcms=qcms,
         soutien=soutien,questions=questions,oraux=oraux,
-        semaines=semaines,script_js=str_js)
+        semaines=semaines)
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():

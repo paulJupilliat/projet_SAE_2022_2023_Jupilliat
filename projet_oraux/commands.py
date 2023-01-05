@@ -72,3 +72,11 @@ def ecriture_parametre_def(id, valeur):
         else:
             fichier.write(ligne)
     fichier.close()
+
+def ecriture_js_suivi(script_js:str):
+    """Ecrit dans le fichier suivi.js le script
+    Args:
+        script_js : script à écrire"""
+    fichier = open("projet_oraux/static/JS/suivi_graphe.js", "w")
+    fichier.write(script_js)
+    fichier.close()

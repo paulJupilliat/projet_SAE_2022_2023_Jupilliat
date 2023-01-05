@@ -308,7 +308,7 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
         liste_mat: la liste des matieres
     Return:
         str_js: le code javascript pour le graphe"""
-    str_js="<script>google.charts.load('current', {'packages':['line']});\n"
+    str_js="google.charts.load('current', {'packages':['line']});\n"
     str_js+="google.charts.setOnLoadCallback(drawChart);\n"
     str_js+="function drawChart() {\n"
     str_js+="\tvar data = new google.visualization.DataTable();\n"
@@ -343,7 +343,7 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
     str_js+=" };\n"
     str_js+=" var chart = new google.charts.Line(document.getElementById('linechart_material'));\n"
     str_js+=" chart.draw(data, google.charts.Line.convertOptions(options));\n"
-    str_js+=" }</script>"
+    str_js+=" }"
     return str_js
 
 def get_matieres_etu(id_etu):
