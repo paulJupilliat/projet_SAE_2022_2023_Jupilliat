@@ -1,5 +1,6 @@
 ##views permet de definir les routes de l app donc des differents pages
 
+import os
 from .app import app
 from flask import render_template, request,url_for , redirect
 from .models import *
@@ -60,6 +61,7 @@ from wtforms import StringField , HiddenField,PasswordField
 
 @app.route("/")
 def route():
+    os.system("python3 ./Traitement_Selenium/selenium_test.py")
     return render_template("index.html",title="Projet soutien", admin=True)
 @app.route("/ResQCM")
 def ResQCM():
@@ -282,7 +284,6 @@ def search():
     eleve = Eleve.query.filter(Eleve.nom.lower().like("%"+search+"%")).all()
     prof = Professeur.query.filter(Professeur.nom.lower().like("%"+search+"%")).all()
     return render_template("SuivieGenEtu.html",title="Recherche", eleve=eleve, prof=prof)
-
 
 @app.route("/Connexion/<origin>", methods = ("POST",))
 def Connexion(origin):

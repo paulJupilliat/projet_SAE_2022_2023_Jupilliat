@@ -6,6 +6,7 @@ from .app import db
 from flask_login import UserMixin
 from .app import login_manager
 from .commands import lecture_parametre_def
+from sqlalchemy import func
 
 class Eleve(db.Model):
     """classe Eleve
@@ -829,6 +830,79 @@ def suppression_oral(date:str,heure:str)->None:
         db.session.delete(oral)
         db.session.commit()
 
+def ajouter_resultat_eleve(id_QCM,num_etu,note):
+    nb_rep = ResultatQCM.query.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    if nb_rep == 0:
+        res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
+        db.session.add(res)
+        db.session.commit()
+    else:
+        pass
+
+def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
+    nb_rep = RepSondage.query.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    if nb_rep == 0:
+        rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
+                        matiereVoulu = matiere_voulu, commentaire = commentaire)
+        db.session.add(rep)
+        db.session.commit()
+    else:
+        pass
+
+def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
+    res = Eleve.query.filter(numEtu = num_etu).count()
+    if res == 0:
+        eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
+        db.session.add(eleve)
+        db.session.commit()
+
+def get_id_QCM(nom_matiere, url, id_matiere):
+    id_qcm = 0
+    res = QCM.query.filter(urlQCM = url).count()
+    if res == 0:
+        id_qcm = get_id_QCM_max() + 1
+        qcm = QCM(idQCM = id_qcm, nomQCM = nom_matiere, urlQCM = url, idMatiere = id_matiere)
+        db.session.add(qcm)
+        db.session.commit()
+    else:
+        id_qcm = QCM.query.filter(urlQCM = url).first().idQCM
+    return id_qcm
+
+def get_id_sondage(url):
+    id = 0
+    res = Sondage.query.filter(urlQCM = url).count()
+    if res == 0:
+        id = get_id_sondage_max() + 1
+        sondage = Sondage(idSond = id, urlQCM = url)
+        db.session.add(sondage)
+        db.session.commit()
+        return id
+    else:
+        id = Sondage.query.filter(urlQCM = url).first().idSond
+    return id
+
+def get_id_matiere(nom_matiere):
+    id = 0
+    res = Matiere.query.filter(Matiere = nom_matiere).count()
+    if res == 0:
+        id = get_id_matiere_max() + 1
+        matiere = Matiere(idMatiere = id, Matiere = nom_matiere)
+        db.session.add(matiere)
+        db.session.commit()
+        return id
+    else:
+        id = Matiere.query.filter(Matiere = nom_matiere).first().idMatiere
+    return id
+        
+def get_id_matiere_max():
+    return db.session.query(func.max(Matiere.idMatiere)).scalar()
+        
+def get_id_QCM_max():
+    return db.session.query(func.max(QCM.idQCM)).scalar()
+        
+def get_id_sondage_max():
+    return db.session.query(func.max(Sondage.idSond)).scalar()
+
 @login_manager.user_loader
 def load_user(username):
-    return User.query.get(username)
+    return User.get(username).first()
