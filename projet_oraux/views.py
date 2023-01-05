@@ -76,6 +76,10 @@ def connexionProf():
 def Dispo():
     return render_template("Dispo.html",title="Disponibilité", admin=False)
 
+@app.route("/GererSesDispo")
+def GererSesDispo():
+    return render_template("GererSesDispo.html", title="Gerer ses disponibilitées", admin = True)
+
 @app.route("/paramAdm")
 def paramAdm():
     return render_template("paramAdm.html",title="Paramètres Administrateur",admin = False)

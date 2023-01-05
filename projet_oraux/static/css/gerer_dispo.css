@@ -1,0 +1,39 @@
+#Dispo_nom{
+    background-color: #860061;
+    flex-wrap: nowrap;
+  }
+  
+  #titre_tableau_dispo{
+    flex-grow: 1;
+  }
+  
+  tr{
+    display: flex;
+  }
+
+/* met les éléments dans le top cote a cote */
+#top{
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+  padding-bottom: 0%;
+  margin-bottom: 0%;
+}
+
+h1{
+  font-size: larger;
+}
+
+#selection_semaine{
+  text-align: left;
+}
+
+#titre{
+  margin-left: 18%;
+  margin-right: 32%;
+}
+
+#div_main{
+  margin-top: -2%;
+  padding-top: 0%;
+}
