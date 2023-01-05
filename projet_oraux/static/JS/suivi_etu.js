@@ -1,7 +1,7 @@
 function plie_deplie_matieres() {
     const img = document.getElementById("dep");
     if (document.getElementById("matieres_gauche").style.display == "none") {
-        document.getElementById("matieres_gauche").style.display = "block";
+        document.getElementById("matieres_gauche").style.display = "flex";
     } else {
         document.getElementById("matieres_gauche").style.display = "none";
     }
@@ -17,9 +17,9 @@ function collapse(){
     var bt=document.getElementById("collapsible");
     if (content.style.display === "block") {
         content.style.display = "none";
-        bt.innerHTML='<img src="../img/plus.png" alt="+" height="10em">Tableau général';
+        bt.innerHTML='<img src="static/img/plus.png" alt="+" height="10em">'
     } else {
         content.style.display = "block";
-        bt.innerHTML='<img src="../img/moins.png" alt="-" height="10em">'
+        bt.innerHTML='<img src="static/img/moins.png" alt="-" height="10em">'
     }
   };

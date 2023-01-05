@@ -4,30 +4,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/parametres.css') }}">
 {% endblock %}
-{% block top %}
-        <section class="bouts_gen">
-        <select name="Semaine" id="sem-select">
-            <option value="">Semaine</option>
-            <!-- remplir avec le selenium -->
-            <option value="semaine1">semaine1</option>
-            <option value="semaine2">semaine2</option>
-            <option value="semaine3">semaine3</option>
-            <option value="semaine4">semaine4</option>
-            <option value="semaine5">semaine5</option>
-            <option value="semaine6">semaine6</option>
-        </select>
-            <input id="save_sett" type="button" value="Sauvegarder les modifications">
-        </section>
-
-    
-{% endblock %}
 {% block center %}
     <section class="infos_par" style="width:45%">
         <div class="gest_mat">
             <h3 class="titre_div">Gestion des matières</h3>
             <div class="matiere">
                 <fieldset>
-                    <legend>WEB</legend>
+                <legend>WEB</legend>
                 <input type="checkbox" id="mat1" name="p1" value="P1">
                 <label for="p1">P1</label>
                 <input type="checkbox" id="mat2" name="p2" value="p2">
@@ -47,4 +30,10 @@
             </button>
         </div>        
     </section>
+    <footer>
+    <form class="d-flex" method ="POST" role="save" action ="{{ url_for('save_paramEns',) }}">
+        <section class="bouts_gen">
+            <input id="save_sett" type="submit" value="Sauvegarder les modifications">
+        </section>
+    </form></footer>
 {% endblock %}
