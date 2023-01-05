@@ -9,7 +9,7 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
-engine = create_engine('mysql+mysqlconnector://lidec:lidec@localhost/enginelidec', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://lidec:lidec@servinfo-mariadb/DBlidec', echo=True, future=True)
 session = Session(engine)
 Base = declarative_base()
 
@@ -44,52 +44,55 @@ class QCM(Base):
 
 def get_id_QCM(nom_matiere, url, id_matiere):
     id_qcm = 0
-    res = QCM.query.filter(urlQCM = url).count()
+    res = session.query(QCM).filter(QCM.urlQCM == url).count()
     if res == 0:
-        id_qcm = get_id_QCM_max() + 1
         qcm = QCM(idQCM = id_qcm, nomQCM = nom_matiere, urlQCM = url, idMatiere = id_matiere)
         session.add(qcm)
         session.commit()
+        id_qcm = get_id_QCM_max()
     else:
-        id_qcm = QCM.query.filter(urlQCM = url).first().idQCM
+        id_qcm = session.query(QCM.idQCM).filter(QCM.urlQCM == url).first()[0]
     return id_qcm
 
 def get_id_sondage(url):
     id = 0
-    res = Sondage.query.filter(urlQCM = url).count()
+    res = session.query(Sondage).filter(Sondage.urlSond == url).count()
     if res == 0:
-        id = get_id_sondage_max() + 1
-        sondage = Sondage(idSond = id, urlQCM = url)
+        sondage = Sondage(idSond = 0, urlSond = url)
         session.add(sondage)
         session.commit()
+        id = get_id_sondage_max()
         return id
     else:
-        id = Sondage.query.filter(urlQCM = url).first().idSond
+        id = session.query(Sondage.idSond).filter(Sondage.urlSond == url).first()[0]
     return id
 
 def get_id_matiere(nom_matiere):
     id = 0
-    res = Matiere.query.filter(Matiere = nom_matiere).count()
+    # select([func.count()]).select_from(select(Matiere).where(Matiere.nomMatiere.in_([nom_matiere])))
+    res = session.query(Matiere).filter(Matiere.nomMatiere == nom_matiere).count()
     if res == 0:
-        id = get_id_matiere_max() + 1
-        matiere = Matiere(idMatiere = id, Matiere = nom_matiere)
+        matiere = Matiere(idMatiere = 0, nomMatiere = nom_matiere)
         session.add(matiere)
         session.commit()
+        id = get_id_matiere_max()
         return id
     else:
-        id = Matiere.query.filter(Matiere = nom_matiere).first().idMatiere
+        id = session.query(Matiere.idMatiere).filter(Matiere.nomMatiere == nom_matiere).first()[0]
+        print(id)
     return id
         
 def get_id_matiere_max():
-    return session.query(func.max(Matiere.idMatiere)).scalar()
+    res = session.query(func.max(Matiere.idMatiere)).scalar()
+    return res
         
 def get_id_QCM_max():
     return session.query(func.max(QCM.idQCM)).scalar()
         
 def get_id_sondage_max():
     return session.query(func.max(Sondage.idSond)).scalar()
-# os.environ['MOZ_HEADLESS'] = '1'
 
+os.environ['MOZ_HEADLESS'] = '1'
 user = input("Entrer votre nom utilisateur :")
 mdp = getpass("Entrer votre mot de passe :")
 

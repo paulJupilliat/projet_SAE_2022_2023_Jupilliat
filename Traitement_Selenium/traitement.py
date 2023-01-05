@@ -2,9 +2,9 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
-engine = create_engine('mysql+mysqlconnector://lidec:lidec@localhost/enginelidec')
-session = Session(engine)
 Base = declarative_base()
+engine = create_engine('mysql+mysqlconnector://lidec:lidec@servinfo-mariadb/DBlidec', echo=True, future=True)
+session = Session(engine)
 
 class Sondage(Base):
     __tablename__ = "sondage"
@@ -51,29 +51,28 @@ class ResultatQCM(Base):
     numEtu = Column(Integer, ForeignKey("eleve.numEtu"), primary_key=True)
     note = Column(Integer)
     #un eleve peut avoir qu'une seule note pour un qcm
-    eleve = relationship(Eleve, backref=backref("eleves", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    eleve = relationship(Eleve, backref=backref("eleverepqcm", lazy="dynamic"))
     #un qcm peut avoir qu'une seule note pour un eleve
-    qcm = relationship(QCM, backref=backref("qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    qcm = relationship(QCM, backref=backref("qcm", lazy="dynamic"))
     def __repr__(self):
         return f"ResultatQCM({self.idQCM}, {self.numEtu}, {self.note})"
 
 class RepSondage(Base):
     __tablename__ = "repsondage"
-    idSondage = Column(Integer, ForeignKey("sondage.idSondage"), primary_key=True)
+    idSondage = Column(Integer, ForeignKey("sondage.idSond"), primary_key=True)
     numEtu = Column(Integer, ForeignKey("eleve.numEtu"), primary_key=True)
-    
     matiereVoulu = Column(String(100))
     volontaire = Column(String(50))
     #relation pour avoir le sondage d une reponse
-    sondage = relationship(Sondage, backref=backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    sondage = relationship(Sondage, backref=backref("sondage", lazy="dynamic"))
     #relation pour avoir l eleve d une reponse
-    eleve = relationship(Eleve, backref=backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    eleve = relationship(Eleve, backref=backref("eleverepsondage", lazy="dynamic"))
 
     def __repr__(self):
         return f"RepSondage({self.participation}, {self.idSondage}, {self.numEtu}, {self.dateSondage}, {self.matiereVoulu}, {self.commentaire})"
 
 def ajouter_resultat_eleve(id_QCM,num_etu,note):
-    nb_rep = ResultatQCM.query.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    nb_rep = session.query(ResultatQCM).filter(ResultatQCM.numEtu == num_etu).count()
     if nb_rep == 0:
         res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
         session.add(res)
@@ -82,9 +81,9 @@ def ajouter_resultat_eleve(id_QCM,num_etu,note):
         pass
 
 def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
-    nb_rep = RepSondage.query.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    nb_rep = session.query(RepSondage).filter(RepSondage.numEtu == num_etu).filter(RepSondage.idSondage == id_sondage).count()
     if nb_rep == 0:
-        rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
+        rep = RepSondage(volontaire = participation, idSondage = id_sondage, numEtu = num_etu,
                         matiereVoulu = matiere_voulu, commentaire = commentaire)
         session.add(rep)
         session.commit()
@@ -92,12 +91,11 @@ def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, 
         pass
 
 def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
-    res = Eleve.query.filter(numEtu = num_etu).count()
+    res = session.query(Eleve).filter(Eleve.numEtu == num_etu).count()
     if res == 0:
         eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
         session.add(eleve)
         session.commit()
-
 
 def main(fichier_ouvrir):
     for (idpartie,fic,date) in fichier_ouvrir:
@@ -122,7 +120,7 @@ def main(fichier_ouvrir):
             for ligne in fichier:
                 separe = ligne.split(",")
                 try:
-                    models.ajouter_reponse_sondage(separe[consolidation],idpartie,separe[idenfiant],date,separe[matiere],separe[precision][:-1])
+                    ajouter_reponse_sondage(separe[consolidation],idpartie,separe[idenfiant],date,separe[matiere],separe[precision][:-1])
                 except Exception as e:
                     print(e)
                 print("l'étudiant d'identifiant " + separe[idenfiant] + " souhaite participer à la consolidation : " + separe[consolidation] )
@@ -144,8 +142,8 @@ def main(fichier_ouvrir):
                 separe = ligne.split(",")
                 if "Moyenne globale" not in separe[0]:
                     if note != 0:
-                        models.creation_existe(separe[idenfiant],separe[nom],separe[prenom],None,None)
+                        creation_existe(separe[idenfiant],separe[nom],separe[prenom],None,None)
                         note_total = float(separe[note][1:]) + float(separe[note + 1][:-1])
-                        models.ajouter_resultat_eleve(idpartie,separe[idenfiant],(note_total/sur_combien)*20)
+                        ajouter_resultat_eleve(idpartie,separe[idenfiant],(note_total/sur_combien)*20)
 
-# main(["SAE _QCM -Test QCM (26102022)-notes.csv"])
+main([(1,"Sondage (11112022).csv","")])
