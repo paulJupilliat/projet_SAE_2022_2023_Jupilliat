@@ -3,10 +3,11 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dispo.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gerer_dispo.css')}}">
 
 {% endblock %}
 {% block top %}
+            <div id="selection_semaine">
             <select name="semaines" id="selec-sem">
                 <option value="">Semaine 43</option>
                 <option value="">Semaine 44</option>
@@ -14,6 +15,10 @@
                 <option value="">Semaine 46</option>
                 <option value="">Semaine 47</option>
             </select>
+        </div>
+        <div id="titre">
+            <h1>Gerer Ses Dispo</h1>
+        </div>
 {% endblock %}
 {% block center%}
         <section id="tableaudispo">

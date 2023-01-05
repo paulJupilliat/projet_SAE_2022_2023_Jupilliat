@@ -32,6 +32,10 @@
             <a href="{{url_for ('paramEns')}}" class="navbar__links"><img src="{{ url_for('static', filename='img/reglages.png') }}" height="50em" alt=""></a>
             <a href="{{url_for ('route')}}" class="navbar__links"><img src="{{ url_for('static', filename='img/deconnexion.png') }}" height="40em" alt=""></a></div>
         </nav>
+        <div id="top">
+            {% block top %}
+            {% endblock %}
+        </div>
             </header>
         <!-- Your page content -->
         

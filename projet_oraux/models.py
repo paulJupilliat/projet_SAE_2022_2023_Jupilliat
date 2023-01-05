@@ -629,7 +629,7 @@ def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, 
                         matiere_voulue = matiere_voulu, commentaire = commentaire)
         db.session.add(rep)
         db.session.commit()
- def ajouter_commentaire(idOral,numEtu,commentaire):
+def ajouter_commentaire(idOral,numEtu,commentaire):
     oral=Oral.query.filter(Oral.idOral==idOral).first()
     etu=Eleve.query.filter(Eleve.numEtu==numEtu).first()
     part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
