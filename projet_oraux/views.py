@@ -84,6 +84,10 @@ def connexionProf():
 def Dispo():
     return render_template("Dispo.html",title="Disponibilité", admin=True)
 
+@app.route("/GererSesDispo")
+def GererSesDispo():
+    return render_template("GererSesDispo.html", title="Gerer ses disponibilitées", admin = True)
+
 @app.route("/paramAdm")
 def paramAdm():
     return render_template("paramAdm.html",title="Paramètres Administrateur")
@@ -484,7 +488,7 @@ def search():
 #     return redirect(url_for('home'))
 
 
-@app.route("/Connexion/<origin>", method = ("POST",))
+@app.route("/Connexion/<origin>", methods = ("POST",))
 def Connexion(origin):
     f = LoginForm()
     if f.validate_on_submit():

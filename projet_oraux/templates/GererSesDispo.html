@@ -1,0 +1,149 @@
+{% extends 'BaseEnsiegnant.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dispo.css')}}">
+
+{% endblock %}
+{% block top %}
+            <select name="semaines" id="selec-sem">
+                <option value="">Semaine 43</option>
+                <option value="">Semaine 44</option>
+                <option value="">Semaine 45</option>
+                <option value="">Semaine 46</option>
+                <option value="">Semaine 47</option>
+            </select>
+{% endblock %}
+{% block center%}
+        <section id="tableaudispo">
+            <table id="labels">
+                <thead id="Dispo_nom">
+                    <tr>
+                        <th id="titre_tableau_dispo" colspan="5"><H2>Disponibilités</H2></th>
+                    </tr>
+                </thead>
+                <tr class="colonnes">
+                    <th class="noms">date</th>
+                    <th class="noms">heure</th>
+                    <th class="noms">salle</th>
+                    <th class="noms"></th>
+                </tr>
+                </table>
+                <table class="scrolable">
+                    <tbody>
+                    <tr>
+                        <td>22/03/2023</td>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>22/03/2023</td>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>22/03/2023</td>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr>
+                    <tr>
+                        <td>11A</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                        <td>12.5</td>
+                    </tr></tbody>
+            </table>
+
+        </section>  
+{% endblock %}
+{% block scripts %}
+<script src="{{url_for('static', filename='JS/dispo.js')}}"></script>
+{% endblock %}

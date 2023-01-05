@@ -26,7 +26,7 @@
             <a href="{{url_for ('ResQCM')}}" class="navbar__links">Résultats QCM</a>
             <a href="{{url_for ('res_sond')}}" class="navbar__links">Sondages</a>
             <a href="{{url_for ('Dispo')}}" class="navbar__links">Disponibilités enseignants</a>
-            <a href="/" class="navbar__links">Gérer ses disponibilités</a>
+            <a href="{{url_for ('GererSesDispo')}}"class="navbar__links">Gérer ses disponibilités</a>
             <a href="{{url_for ('Soutien')}}" class="navbar__links">Voir le soutien</a>
             <a href="{{url_for ('SuivieGenEtu')}}" class="navbar__links">Suivi Etudiant</a>
             <a href="{{url_for ('paramEns')}}" class="navbar__links"><img src="{{ url_for('static', filename='img/reglages.png') }}" height="50em" alt=""></a>
