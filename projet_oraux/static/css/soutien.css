@@ -1,20 +1,41 @@
-main{justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
-    }
-section{
-    margin: 1em;
-}
-/* alignement du tableau et de son entete */
-table,
-td {
-    border: 1px solid #333;
-    text-align: center;
-}
 
-thead,
-tfoot {
-    background-color: #333;
-    color: #fff;
-    align-self: fit-content;
-}
+  #tableaugen table{
+    margin: 0;
+    border-spacing: 0;
+    width: fit-content;
+    align-self: center;
+  }
+#tableaugen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    width: auto;
+  }
+  #tableaugen td, #tableaugen th{
+    padding: 0.5em;
+    width: 10em;
+    text-align: center; 
+    border: 1px solid #333;   
+  }
+  #tableaugen table{
+    margin: 0;
+    border-spacing: 0;
+    width: fit-content;
+    align-self: center;
+  }
+
+  /* met le div_main au centre */
+    #div_main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #top{
+        display: flex;
+        justify-content: left;
+        margin-top: 5%;
+        padding-bottom: 0%;
+        margin-bottom: 0%;
+        padding-left: 10%;
+      }
