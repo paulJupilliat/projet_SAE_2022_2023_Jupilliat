@@ -2,10 +2,14 @@
 #top{
   display: flex;
   justify-content: center;
-  margin-top: 3%;
-  padding-bottom: 0%;
-  margin-bottom: -3%;
-  margin-left: 15%;
+  margin-top: 2%;
+  padding-bottom: 1%;
+}
+#top > *{
+  margin-left: 1%;
+  padding-left: 1%;
+  margin-right: 1%;
+  padding-right: 1%;
 }
 
 h1{
@@ -13,10 +17,6 @@ h1{
 }
 
 
-
-#top{
-  padding-right: 850px;
-}
 #titre_tableau_dispo{
   background-color: #860061;
   flex-grow: 1;

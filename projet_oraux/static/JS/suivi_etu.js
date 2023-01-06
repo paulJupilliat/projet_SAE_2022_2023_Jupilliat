@@ -15,11 +15,11 @@ function collapse(){
     // this.classList.toggle("active");
     var content = document.getElementById("content");
     var bt=document.getElementById("collapsible");
-    if (content.style.display === "block") {
+    if (content.style.display === "flex") {
         content.style.display = "none";
-        bt.innerHTML='<img src="static/img/plus.png" alt="+" height="10em">'
+        bt.innerHTML='+'
     } else {
-        content.style.display = "block";
-        bt.innerHTML='<img src="static/img/moins.png" alt="-" height="10em">'
+        content.style.display = "flex";
+        bt.innerHTML='-'
     }
   };

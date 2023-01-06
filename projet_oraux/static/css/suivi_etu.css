@@ -137,3 +137,12 @@
     color: orange;
     font-weight: bold;
   }
+
+  #droite_se{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top:0;
+    margin-bottom: 5%;
+    background-color: #d6d6d6;
+  }

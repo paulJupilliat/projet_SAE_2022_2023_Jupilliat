@@ -244,14 +244,31 @@ def Soutien():
               2:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 3:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 4:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
-                5:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
+                5:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                6:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                7:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                8:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                9:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                10:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                11:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                12:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                13:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                14:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                15:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
     eleve_non_ret={"nom_eleve":"Paul","volontaire":"~","matiere_voulue":"Python"}
     non_retenus = {1:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 2:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
-                3:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
+                3:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                4:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                5:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                6:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                7:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
     eleve_bes={"nom_eleve":"Paul","volontaire":"non"}
     eleves_besoin = {1:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 2:{"eleve":eleve_bes,"notes_qcm":[17,12]},
-                    3:{"eleve":eleve_bes,"notes_qcm":[17,12]}}
+                    3:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 4:{"eleve":eleve_bes,"notes_qcm":[17,12]},
+                    5:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 6:{"eleve":eleve_bes,"notes_qcm":[17,12]},
+                    7:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 8:{"eleve":eleve_bes,"notes_qcm":[17,12]},
+                    9:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 10:{"eleve":eleve_bes,"notes_qcm":[17,12]}}
     oraux =[{"id_oral":1,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
     {"id_oral":2,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}]
     return render_template("Soutien.html",title="Soutien", admin=True, 
@@ -344,6 +361,26 @@ def SuivieGenEtu():
     {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
     {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
     {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
     {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"}]
     semaine_act={"id_sem":1,"semestre":1,"annee":2018}
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
@@ -353,13 +390,52 @@ def SuivieGenEtu():
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
     return render_template("SuiviGenEtu.html",title="Suivi général étudiant", admin=True,suivi_gen=eleves,semaine_act=semaine_act,semaines=semaines,groupes=groupes)
-@app.route("/search/",methods=("POST",))
-def search():
+@app.route("/SuiviGenEtu/",methods=("POST",))
+def suivi_gen_recherche():
     search = request.form.get("recherche")
-    search = search.lower()
-    eleve = Eleve.query.filter(Eleve.nom.lower().like("%"+search+"%")).all()
-    prof = Professeur.query.filter(Professeur.nom.lower().like("%"+search+"%")).all()
-    return render_template("SuivieGenEtu.html",title="Recherche", eleve=eleve, prof=prof)
+    eleves=[{"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
+    {"eleve":{"nom":"def","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"def","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
+    {"eleve":{"nom":"def","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"def","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"def","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"def","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"}]
+    semaine_act={"id_sem":1,"semestre":1,"annee":2018}
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    groupes=["11A","11B","11C","12A","12B","12C"]
+    eleves_trouv=[]
+    for eleve in eleves:
+        #si le nom de leleve est une sous chaine du nom recherché
+        if search.upper() in eleve["eleve"]["nom"].upper() or search.upper() in eleve["eleve"]["prenom"].upper():
+            eleves_trouv.append(eleve)
+    return render_template("SuiviGenEtu.html",title="Recherche", suivi_gen=eleves_trouv, semaines=semaines, semaine_act=semaine_act, groupes=groupes)
 
 @app.route("/Connexion/<origin>", methods = ("POST","GET"))
 def Connexion(origin):

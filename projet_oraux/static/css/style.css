@@ -51,7 +51,7 @@ tfoot {
 main {
     display: flex;
     justify-content: space-between;
-    margin-top: 3% ;}
+}
 
 .donnees_btn{
     border-radius: 1em;
@@ -63,3 +63,4 @@ main {
 .p-4{
     margin-left: 3%;
   }
+
