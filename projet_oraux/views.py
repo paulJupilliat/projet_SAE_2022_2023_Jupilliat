@@ -254,8 +254,10 @@ def Soutien():
     {"id_oral":2,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}]
     return render_template("Soutien.html",title="Soutien", admin=True, 
     matieres=matieres,semaines=semaines,retenus=retenus,non_retenus=non_retenus,eleves_besoin=eleves_besoin,oraux=oraux,num_qcm=len(matieres))
-@app.route("/Suivie_etu")
-def Suivie_etu():
+@app.route("/Suivie_etu/") #<num_etu>
+def Suivie_etu():#num_etudiant
+    eleve = {"prenom" : "paul", "nom":"jupilliat", "groupe_s1" : "1a5" ,"groupe_s2": "1a3"}
+    # eleve = get_eleve(num_etudiant)
     liste_matieres=["Python","Java","C++","BDD","Reseau","IHM","Web"]
     liste_modif=[]
     cpt=0
@@ -267,18 +269,18 @@ def Suivie_etu():
             mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
             liste_modif[-1].append(mat)
         cpt+=1
-    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023", "semestre" : "1"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
-
+    semaine_actu = semaines[0]
     #cree une liste de 3 qcms avec les resultats
     qcms=[]
     for i in range(len(liste_matieres)):
         mat={"id_matiere":i,"nom_matiere":liste_matieres[i]}
-        res ={ "num_etu": 22107932, "note": 15}
-        qcm={"id_qcm":i,"id_mat":mat["id_matiere"],"nom_matiere":mat["nom_matiere"],"note_qcm":res["note"]}
+        res ={ "num_etu": 22107932, "note": 9}
+        qcm={"id_qcm":i,"id_mat": mat["id_matiere"],"nom_matiere":mat["nom_matiere"],"note_qcm":res["note"]}
         qcms.append(qcm)
     soutien={"id_sondage":1,"num_etu":22107932,"matiere_voulue":"Python","volontaire":"oui","commentaire":"Je veux du soutien"}
     questions=None
@@ -327,7 +329,7 @@ def Suivie_etu():
     return render_template("Suivie_etu.html",title="Suivie étudiant",
         admin=True,matieres=liste_modif,qcms=qcms,
         soutien=soutien,questions=questions,oraux=oraux,
-        semaines=semaines)
+        semaines=semaines, eleve=eleve, semaine_actu = semaine_actu)
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():

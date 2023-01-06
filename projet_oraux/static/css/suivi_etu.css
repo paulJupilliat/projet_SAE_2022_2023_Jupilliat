@@ -106,3 +106,34 @@
     width: 80%;
 
   }
+  #btn_valide_creneau{
+    margin-left:1em;
+    margin-top: 1em;
+  }
+
+  #btn_valide_semaine{
+    margin-left:1em;
+    margin-top: 1em;
+    flex-basis: 50%;  }
+
+  #selec-sem{
+    display: flex;
+  }
+
+  .nom_prenom_suivie{
+    color: #860061;
+    font-weight: bold;
+  }
+  .couleur_bonne{
+    color: #008612;
+    font-weight: bold;
+  }
+  .couleur_mauvaise{
+    color: red;
+    font-weight: bold;
+  }
+
+  #couleur_moyenne{
+    color: orange;
+    font-weight: bold;
+  }
