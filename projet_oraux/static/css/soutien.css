@@ -21,7 +21,7 @@
   #tableaugen table{
     margin: 0;
     border-spacing: 0;
-    width: fit-content;
+    width: 100%;
     align-self: center;
   }
 
@@ -39,3 +39,10 @@
         margin-bottom: 0%;
         padding-left: 10%;
       }
+  .scrolable {
+  margin-right: 0%;
+  padding-right: 0%;
+  overflow-y: scroll;
+  display: block;
+  border-spacing: 0;
+  max-height: 30em;}

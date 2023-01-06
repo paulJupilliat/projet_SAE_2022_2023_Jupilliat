@@ -1,12 +1,52 @@
-#Dispo_nom{
+#titre_tableau_dispo{
     background-color: #860061;
-    flex-wrap: nowrap;
-  }
-  
-  #titre_tableau_dispo{
     flex-grow: 1;
   }
-  
-  tr{
-    display: flex;
+  #tableaudispo table{
+    margin: 0;
+    border-spacing: 0;
+    width: fit-content;
+    align-self: center;
   }
+  #tableaudispo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    width: auto;
+  }
+  #tableaudispo td, #tableaudispo th{
+    padding: 0.5em;
+    width: 10em;
+    text-align: center; 
+    border: 1px solid #333;   
+  }
+  #tableaudispo table{
+    margin: 0;
+    border-spacing: 0;
+    width: 100%;
+    align-self: center;
+  }
+  
+  /* met le div_main au centre */
+    #div_main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .scrolable {
+      margin: 0%;
+      padding: 0%;
+      overflow-y: scroll;
+      display: block;
+      max-width: 100%;
+      max-height: 30em;}
+      tr{
+        display: flex;
+      }
+      tr a{
+        text-decoration: none;
+        color: #000;
+      }
+
+/* met la barre pour scroller a droite du tableau */
