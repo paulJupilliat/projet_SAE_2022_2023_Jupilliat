@@ -20,8 +20,10 @@ def newuser(username , password ):
     from .models import User
     from hashlib import sha256
     m =sha256()
-    m.update(password.encode())
-    u = User(username =username , password=m.hexdigest ())
+    avec_sel = password+"21rt"
+    m.update(avec_sel.encode())
+    passw = m.hexdigest()
+    u = User(username =username , password=passw, est_admin = "F")
     db.session.add(u)
     db.session.commit()
 @app.cli.command()
@@ -32,9 +34,11 @@ def passwd(username, password):
     from .models import User
     from hashlib import sha256
     m = sha256()
-    m.update(password.encode())
+    avec_sel = password+"21rt"
+    m.update(avec_sel.encode())
     u = User.query.get(username)
-    u.password = m.hexdigest()
+    passw = m.hexdigest()
+    u.password = passw
     db.session.commit()
 
 def lecture_parametre_def(id_recherche):

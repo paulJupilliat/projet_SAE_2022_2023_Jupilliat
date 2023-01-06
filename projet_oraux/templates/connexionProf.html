@@ -1,37 +1,30 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="fr">
     <head>
-        {% block head %}
         <meta charset="utf-8">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
-        {% block styles %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-        {% endblock %}
         <title>Connexion</title>
-        {% endblock %}
 
     </head>
     <body><script src="../JS/redir.js"></script>
         <main id="page_connexion">
-            {% block main %}
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo">
-            <div id="conteneur">
+            <form id="conteneur" action="{{ url_for('Connexion', origin ='Prof') }}" method="post" role="form">
+                {{ form.hidden_tag() }}
                 <div id="ident">
-                <label>Nom Enseignant</label>
-                <input type="text" name="identifiant" id="identifiant">
+                    <label for="username">Nom Enseignant</label>
+                    <!-- <input type="text" name="identifiant" id="identifiant" placeholder="identifiant" value=""> -->
+                    {{ form.username(placeholder="Identifiant") }}
                 </div>
                 <div id="mdp">
-                <label>Numéro Enseignant</label>
-                <input type="password" name="mdp" id="motdp">
+                    <label for="password">Mot de passe</label>
+                    <!-- <input type="password" name="password" id="password" placeholder="password" value=""> -->
+                    {{ form.password(placeholder ="Mot de passe") }}
                 </div>
-                <button id="connexion" type="button" ><a href="{{ url_for ('Acceuil') }}">Se connecter</a></button> 
-            </div>
+                <button id="connexion" type="submit" >Se connecter</button> 
+            </form>
                 <button id="retour" type="button"><a href="{{url_for ('route')}}"><img src="{{ url_for('static', filename='img/retour_util.png') }}" alt="retour" height="10em">Retour au choix utilisateur</a></button>
-                {% endblock %}
-            </main>
+        </main>
     </body>
 </html>

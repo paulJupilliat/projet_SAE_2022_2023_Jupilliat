@@ -7,6 +7,7 @@ from flask_login import LoginManager
 import os.path
 
 app = Flask(__name__)
+app.config['SECRET_KEY']='41001fb5-a88c-4779-ac84-0baf15daffdc'
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 bootstrap = Bootstrap(app)
 def mkpath (p):
@@ -20,5 +21,3 @@ app.config['SQLALCHEMY_DATABASE_URI']=(
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
-
-app.config['SECRET_KEY']="020d884c-1cf8-475f-b4b5-2a56787a12c5"
