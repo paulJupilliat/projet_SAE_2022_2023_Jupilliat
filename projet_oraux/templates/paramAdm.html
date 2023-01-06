@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/parametres.css') }}">
 {% endblock %}
 {% block center %}
-    <section class="infos_par">
+<form class="d-flex infos_par" method ="POST" role="save" action ="{{ url_for('save_paramAdm',) }}">
         <div class="gest_heures">
             <div class="titre_div"><h3 class="titre_div">Gestion des heures de soutien</h3>
                 <select name="Semaine" id="sem-select">
@@ -18,8 +18,7 @@
                 <option value="semaine5">semaine5</option>
                 <option value="semaine6">semaine6</option>
             </select></div>           
-            
-                     
+
             <div class="horaire">
                 <input type="date" id="date" name="date">
                 <label for="h_deb">De</label>
@@ -52,12 +51,12 @@
                 <input type="date" id="cgt_p2" name="cgt_p2" value="2023-01-21"></div>
                 <div class="zone_st"><label for="cgt_p3">Date fin P3</label>
                 <input type="date" id="cgt_p3" name="cgt_p3" value="2023-04-21"></div>
+            </div>
         </div>
-    </section>
+    <div>
     <footer>
-        <form class="d-flex" method ="POST" role="save" action ="{{ url_for('save_paramAdm',) }}">
-            <section class="bouts_gen">
-                <input id="save_sett" type="submit" value="Sauvegarder les modifications">
-            </section>
-        </form></footer>
+    <section class="bouts_gen">
+        <input id="save_sett" type="submit" value="Sauvegarder les modifications"></section>
+    </footer></div>
+    </form>
 {% endblock %}
