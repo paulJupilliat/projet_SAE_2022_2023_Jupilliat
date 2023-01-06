@@ -163,6 +163,8 @@ aside{
   border-spacing: 0;
   width: fit-content;
   align-self: center;
+  width: auto;
+
 }
 
 .p4{
