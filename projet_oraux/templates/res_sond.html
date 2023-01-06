@@ -11,32 +11,48 @@
 
 {% endblock %}
 {% block aside %}
-            <div id="aside_filtres">
-                <h2>Filtres</h2>
-                <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep2"/></button>
-            </div>
-            <section id="groupe_filtre">
-                <select name="semaines" id="selec-sem">
-                    {% for semaine in semaines %}
-                        <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
-                    {% endfor %}
-                </select>
-            <div id="aside_grp">
-                <h3>Groupes</h3>
-                <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
-            </div>
-            <ul id="grps_filtres">
-                {% for groupe in groupes %}
-                    <li>
-                        <input type="checkbox" name="{{ groupe }}" id="{{ groupe }}">
-                        <label for="{{ groupe }}">{{ groupe }}</label>
-                    </li>
+<div id="aside_filtres">
+    <h2>Filtres</h2>
+    <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep2"/></button>
+</div>
+<section id="groupe_filtre">
+    <form method="POST" action="">
+        {% if filtres.semaines.errors %}
+        <div class="invalid-feedback">
+            {% for error in filtres.semaines.errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <select name="semaines" id="selec-sem">
+            {% for sem in filtres.semaines %}
+                {{ sem }}
+            {% endfor %}
+        </select>
+        <div id="aside_grp">
+            <h3>Groupes</h3>
+            <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+                <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
+        </div>
+        <fieldset class="form-group" id="grps_filtres">
+            {% if filtres.groupes.errors %}
+            <div class="invalid-feedback">
+                {% for error in filtres.groupes.errors %}
+                    <span>{{ error }}</span>
                 {% endfor %}
-            </ul>
-            <input id="liaison_bd" class="btn_valide" value="Valider" type="button"></input>
-        </section>
+            </div>
+            {% endif %}
+            {% for choice in filtres.groupes %}
+                <div class="form-check">
+                    {{ choice(class="form-check-input") }}
+                    {{ choice.label(class="form-check-label") }}
+                </div>
+            {% endfor %}
+        </fieldset>
+    <input id="liaison_bd" class="btn_valide" value="Valider" type="submit"></input>
+    </form>
+</section>
 {% endblock %}
 {% block center %}
         <div id="encadrer_table">

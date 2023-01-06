@@ -7,11 +7,22 @@
 {% endblock %}
 {% block top %}
             <div id="selection_semaine">
-                <select name="semaines" id="selec-sem">
-                    {% for semaine in semaines %}
-                        <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
-                    {% endfor %}
-                </select>
+                <form method="POST" action="">
+                    {% if filtres.semaines.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in filtres.semaines.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <select name="semaines" id="selec-sem">
+                        {% for sem in filtres.semaines %}
+                            {{ sem }}
+                        {% endfor %}
+                    </select>*
+                    <input id="liaison_bd" class="btn_valide" value="Valider" type="submit"></input>
+                </form>
+
         </div>
         
 {% endblock %}

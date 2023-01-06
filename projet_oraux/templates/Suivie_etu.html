@@ -12,10 +12,7 @@
 
 {% block aside %}
     <h2>Nom, Prenom: </h1>
-        
     <p class="nom_prenom_suivie">{{ eleve.nom }} {{ eleve.prenom }}</p>
-        
-
     <h2>groupe etu</h2>
     {% if semaine_actu.semestre ==1 %}
     <p class="nom_prenom_suivie"> {{ eleve.groupe_s1 }}</p>
@@ -28,7 +25,51 @@
     <button id="dep_fil" type="button" onclick="plie_deplie_matieres()">
         <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
 </div>
-<section id="matieres_gauche">   
+<form method="POST" action="">
+    <section id="matieres_gauche">
+        <fieldset class="form-group" id="grps_filtres">
+            {% if filt_graph.matieres.errors %}
+            <div class="invalid-feedback">
+                {% for error in filt_graph.matieres.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% for choice in filt_graph.matieres %}
+                <div class="form-check">
+                    {{ choice(class="form-check-input") }}
+                    {{ choice.label(class="form-check-label") }}
+                </div>
+            {% endfor %}
+        </fieldset>
+    </section>
+    <section id="dates">
+        {% if filt_graph.date_debut.errors %}
+            <div class="invalid-feedback">
+                {% for error in filt_graph.date_debut.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if filt_graph.date_fin.errors %}
+            <div class="invalid-feedback">
+                {% for error in filt_graph.date_fin.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        <label for="date_debut">De</label>
+        <div class="form-check">
+            {{ filt_graph.date_debut }}
+        </div>
+        <label for="date_fin">À</label>
+        <div class="form-check">
+            {{ filt_graph.date_fin }}
+        </div>
+    </section>
+<input id="liaison_bd" class="btn_valide" value="Valider" type="submit"></input>
+</form>
+<section id="matieres_gauche">
         {% for couple in matieres %}
             <div>
             <ul class="matières">
@@ -49,17 +90,18 @@
             <input type="date" name="date_fin" id="date_fin">
 </section>
 <section>
-    <input type="button" value="Validé" id="btn_valide_creneau" onclick="document.location.reload(false)"> 
+    <input type="submit" value="Validé" id="btn_valide_creneau" onclick="document.location.reload(false)"> 
 </section>
 <section id="semaines_choix">
     <div id="selec_sem">
+
         <select name="semaines" id="selec-sem">
-            {% for semaine in semaines %}
-                <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
-                
+            {% for sem in filtres.semaines %}
+                    {{ sem }}
             {% endfor %}
-            <input type="button" value="Valdié" id="btn_valide_semaine" onclick="document.location.reload(false)">
         </select>
+            <input type="submit" value="Valdié" id="btn_valide_semaine" onclick="document.location.reload(false)">
+        
     </div>
     <section id="para_qcm">
         <h2>QCMs:</h2>

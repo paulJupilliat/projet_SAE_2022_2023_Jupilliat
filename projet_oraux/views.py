@@ -6,7 +6,7 @@ from flask import render_template, request,url_for , redirect
 from .models import *
 from .commands import ecriture_js_suivi
 from flask_wtf import FlaskForm
-from wtforms import StringField , HiddenField,PasswordField
+from wtforms import StringField ,PasswordField,SelectMultipleField,widgets,SelectField,DateField
 from wtforms.validators import DataRequired
 from hashlib import sha256
 from flask_login import login_user , current_user,logout_user
@@ -32,6 +32,21 @@ from flask_login import login_user , current_user,logout_user
 #     price_min = StringField("Price min")
 #     price_max = StringField("Price max")
 #     order = StringField("Order(by title, author, genre, price)")
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class FiltersForm(FlaskForm):
+    semaines=SelectField("Semaine")
+    groupes=MultiCheckboxField("Groupe")
+    matieres=MultiCheckboxField("Matiere")
+
+class SuiviPersoForm(FlaskForm):
+    date_debut=DateField("Date de début")
+    date_fin=DateField("Date de fin")
+    matieres=MultiCheckboxField("Matiere")
 
 class LoginForm(FlaskForm):
     username = StringField("identifiant")
@@ -66,12 +81,17 @@ def route():
     return render_template("index.html",title="Projet soutien", admin=True)
 @app.route("/ResQCM")
 def ResQCM():
+   
+    
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
+    filtform=FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
+    filtform.groupes.choices=groupes
     matieres=["Python","Java","C++"]
     res_bandeau=[("Python", 12), ("Java", 15), ("C++", 18)]
     reps={"matiere_voulue":"Python", "volontaire":"oui"}
@@ -150,7 +170,7 @@ def ResQCM():
     [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
     [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps]]
     return render_template("ResQCM.html",title="Resultat QCM", admin=True,
-    semaines=semaines,matieres=matieres, groupes=groupes,res_bandeau=res_bandeau, resultats=resultats)
+    semaines=semaines,matieres=matieres, groupes=groupes,res_bandeau=res_bandeau, resultats=resultats,filtres=filtform)
 
 @app.route("/Acceuil")
 def Acceuil():
@@ -190,7 +210,10 @@ def Disponibilite():
     matieres=["Python","Java","C++", "BDD", "Reseau", "IHM", "Web", "Dev Efficace"]
     possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"], "Anglade" : ["Python",], "Roza":["Dev Efficace", "Java", "Python"]}
     dispos = [{"nom_prof": "Chabin", "date_oral":"02/01/2023"}, {"nom_prof": "Arzouz","date_oral":"02/01/2023"}]
-    return render_template("Dispo.html",title="Disponibilité", admin=False, semaines=semaines, dispos = dispos, matieres=matieres, possibles= possibles)
+    filtform= FiltersForm()
+    filtform.matieres.choices=matieres
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
+    return render_template("Dispo.html",title="Disponibilité", admin=False, semaines=semaines, dispos = dispos, matieres=matieres, possibles= possibles,filtres=filtform)
 
 @app.route("/GererSesDispo")
 def GererSesDispo():
@@ -202,7 +225,9 @@ def GererSesDispo():
     oraux=[{"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
     {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}, {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
     {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}, {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},]
-    return render_template("GererSesDispo.html", title="Gerer ses disponibilitées", admin = True,semaines=semaines,oraux=oraux)
+    filtform= FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
+    return render_template("GererSesDispo.html", title="Gerer ses disponibilitées", admin = True,semaines=semaines,oraux=oraux,filtres=filtform)
 
 @app.route("/paramAdm")
 def paramAdm():
@@ -234,7 +259,10 @@ def res_sond():
     sondages=[[res_eleve,groupe,res_qs],[ res_eleve,groupe,res_qs], [res_eleve,groupe,res_qs]]
     questions=[{"question":"Quelle matière voulez vous voir en priorité ?","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","id_quest":2}, {"question":"Avez vous des remarques ?","id_quest":3}]
     colspan=len(questions)+5
-    return render_template("res_sond.html",title="Resultat sondage", admin=True,groupes=groupes,sondages=sondages,questions=questions,semaines=semaines,colspan=colspan)
+    filtform= FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
+    filtform.groupes.choices=groupes
+    return render_template("res_sond.html",title="Resultat sondage", admin=True,groupes=groupes,sondages=sondages,questions=questions,semaines=semaines,colspan=colspan,filtres=filtform)
 @app.route("/Soutien")
 def Soutien():
     matieres=[{"id_matiere":1,"nom_matiere":"Python"},{"id_matiere":2,"nom_matiere":"Java"}]
@@ -271,13 +299,17 @@ def Soutien():
                     9:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 10:{"eleve":eleve_bes,"notes_qcm":[17,12]}}
     oraux =[{"id_oral":1,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
     {"id_oral":2,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}]
+    filtform=FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
     return render_template("Soutien.html",title="Soutien", admin=True, 
-    matieres=matieres,semaines=semaines,retenus=retenus,non_retenus=non_retenus,eleves_besoin=eleves_besoin,oraux=oraux,num_qcm=len(matieres))
+    matieres=matieres,semaines=semaines,retenus=retenus,non_retenus=non_retenus,eleves_besoin=eleves_besoin,
+    oraux=oraux,num_qcm=len(matieres),filtres=filtform)
 @app.route("/Suivie_etu/") #<num_etu>
 def Suivie_etu():#num_etudiant
     eleve = {"prenom" : "paul", "nom":"jupilliat", "groupe_s1" : "1a5" ,"groupe_s2": "1a3"}
     # eleve = get_eleve(num_etudiant)
     liste_matieres=["Python","Java","C++","BDD","Reseau","IHM","Web"]
+    
     liste_modif=[]
     cpt=0
     while len(liste_matieres)<0:
@@ -294,6 +326,16 @@ def Suivie_etu():#num_etudiant
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     semaine_actu = semaines[0]
+    debut=semaines[0]["date_debut"]
+    fin=semaines[-4]["date_fin"]
+    filt_graphe=SuiviPersoForm()
+    #transforme debut en date
+    debut=datetime.strptime(debut, '%d/%m/%Y')
+    filt_graphe.date_debut.data=debut
+    filt_graphe.date_fin.data=fin
+    filt_graphe.matieres.choices=liste_matieres
+    filtform=FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
     #cree une liste de 3 qcms avec les resultats
     qcms=[]
     for i in range(len(liste_matieres)):
@@ -348,7 +390,7 @@ def Suivie_etu():#num_etudiant
     return render_template("Suivie_etu.html",title="Suivie étudiant",
         admin=True,matieres=liste_modif,qcms=qcms,
         soutien=soutien,questions=questions,oraux=oraux,
-        semaines=semaines, eleve=eleve, semaine_actu = semaine_actu)
+        semaines=semaines, eleve=eleve, semaine_actu = semaine_actu,filtres=filtform,filt_graph=filt_graphe)
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():
@@ -389,7 +431,10 @@ def SuivieGenEtu():
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
-    return render_template("SuiviGenEtu.html",title="Suivi général étudiant", admin=True,suivi_gen=eleves,semaine_act=semaine_act,semaines=semaines,groupes=groupes)
+    filtform=FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
+    return render_template("SuiviGenEtu.html",title="Suivi général étudiant", admin=True,suivi_gen=eleves,semaine_act=semaine_act,
+    semaines=semaines,groupes=groupes,filtres=filtform)
 @app.route("/SuiviGenEtu/",methods=("POST",))
 def suivi_gen_recherche():
     search = request.form.get("recherche")
@@ -430,6 +475,8 @@ def suivi_gen_recherche():
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
+    if search == "":
+        return render_template("SuiviGenEtu.html",title="Recherche", suivi_gen=eleves, semaines=semaines, semaine_act=semaine_act, groupes=groupes)
     eleves_trouv=[]
     for eleve in eleves:
         #si le nom de leleve est une sous chaine du nom recherché
