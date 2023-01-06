@@ -5,15 +5,13 @@
   margin-top: 3%;
   padding-bottom: 0%;
   margin-bottom: -3%;
+  margin-left: 15%;
 }
 
 h1{
   font-size: larger;
 }
 
-#selection_semaine{
-  text-align: left;
-}
 
 
 #top{
@@ -33,7 +31,7 @@ h1{
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+  margin-left: 20%;
   width: auto;
 }
 #tableaudispo td, #tableaudispo th{
@@ -43,7 +41,6 @@ h1{
   border: 1px solid #333;   
 }
 #tableaudispo table{
-  margin: 0;
   border-spacing: 0;
   width: fit-content;
   align-self: center;
