@@ -331,7 +331,24 @@ def Suivie_etu():
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():
-    return render_template("SuiviGenEtu.html",title="Suivie général étudiant", admin=True)
+    eleves=[{"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
+    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"}]
+    semaine_act={"id_sem":1,"semestre":1,"annee":2018}
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    groupes=["11A","11B","11C","12A","12B","12C"]
+    return render_template("SuiviGenEtu.html",title="Suivi général étudiant", admin=True,suivi_gen=eleves,semaine_act=semaine_act,semaines=semaines,groupes=groupes)
 @app.route("/search/",methods=("POST",))
 def search():
     search = request.form.get("recherche")

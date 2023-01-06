@@ -46,3 +46,7 @@
   display: block;
   border-spacing: 0;
   max-height: 30em;}
+
+  button, input, optgroup, select, textarea {
+    font-size: revert;
+  }

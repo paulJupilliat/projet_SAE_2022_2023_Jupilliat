@@ -1,14 +1,17 @@
 
 function changeColor(e){
     var val = e.value;
-    console.log(val);
     if (val.split(" ")[0] == "dispo")
     {
-        e.style.backgroundColor = "green";
+        e.style.backgroundColor = "#9afa7d";
     }
     else
     {
-        e.style.backgroundColor = "yellow";
+        if (val !="-"){
+        e.style.backgroundColor = "#fae77d";}
+        else{
+            e.style.backgroundColor = "white";
+        }
     }
 
 };
