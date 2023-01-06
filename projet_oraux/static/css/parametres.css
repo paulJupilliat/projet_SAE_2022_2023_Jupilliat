@@ -46,8 +46,9 @@
 }
 
 .bouts_gen{
-    background-color: white;
     justify-content: space-around;
+    flex-direction: row;
+    background-color: white;
 }
 
 .infos_par{
@@ -93,6 +94,19 @@
     flex-direction: row;
     align-items: center;
     justify-items: center;
+}
+.matiere fieldset{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 0.5em;
+    background-color: #d6d6d6;
+}
+.matiere fieldset input{
+    margin: 0.5em;
 }
 .matiere *{
     margin: 1em;

@@ -1,9 +1,12 @@
 ## Models permet de definir les données de l app
 
 
+import datetime
 from .app import db
 from flask_login import UserMixin
 from .app import login_manager
+from .commands import lecture_parametre_def
+from sqlalchemy import func
 
 class Eleve(db.Model):
     """classe Eleve
@@ -35,7 +38,7 @@ class QuestionSondage(db.Model):
     id_quest = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(500))
     #relation pour avoir le sondage d une question
-    sondage = db.relationship("Sondage", backref=db.backref("questionsondage", lazy="dynamic"))
+    sondage = db.relationship(Sondage, backref=db.backref("fk_questionsondage", lazy="dynamic"))
     def __repr__(self):
         """representation de l objet QuestionSondage"""
         return f"QuestionSondage({self.id_sond}, {self.id_quest}, {self.question})"
@@ -58,7 +61,7 @@ class QCM(db.Model):
     #relation pour avoir la matiere d un qcm
     id_matiere = db.Column(db.Integer, db.ForeignKey("matiere.id_matiere"))
     #relation inverse pour avoir les qcm d une matiere
-    matiere = db.relationship("Matiere", backref=db.backref("qcm", lazy="dynamic"))
+    matiere = db.relationship(Matiere, backref=db.backref("fk_matiere_qcm", lazy="dynamic"))
     date_debut = db.Column(db.String(500))
     date_fin = db.Column(db.String(500))
     def __repr__(self):
@@ -95,18 +98,18 @@ class User(db.Model, UserMixin):
 class Oral(db.Model):
     """classe Oral qui contient les oraux(soutien)
     """
-    __tablename__ = "oraux"
+    __tablename__ = "oral"
     id_oral = db.Column(db.Integer, primary_key=True)
     date_oral = db.Column(db.String(500))
     heure_oral = db.Column(db.String(500))
     #relation pour avoir la matiere d un oral
     id_matiere = db.Column(db.Integer, db.ForeignKey("matiere.id_matiere"))
     #relation inverse pour avoir les oraux d une matiere
-    matiere = db.relationship("Matiere", backref=db.backref("oral", lazy="dynamic"))
+    matiere = db.relationship(Matiere, backref=db.backref("fk_matiere_oral", lazy="dynamic"))
     #relation pour avoir le professeur d un oral
     id_prof = db.Column(db.String(500), db.ForeignKey("professeur.id_prof"))
     #relation inverse pour avoir les oraux d un professeur
-    professeur = db.relationship("Professeur", backref=db.backref("oral", lazy="dynamic"))
+    professeur = db.relationship(Professeur, backref=db.backref("fk_professeur_oral", lazy="dynamic"))
     def __repr__(self):
         """representation de l objet Oral"""
         return f"Oral({self.id_oral}, {self.date_oral}, {self.heure_oral})"
@@ -115,13 +118,13 @@ class ParticipantsOral(db.Model):
     """classe ParticipantsOral qui fait la 
     relation entre les oraux et les eleves"""
     __tablename__ = "participantsoral"
-    id_oral = db.Column(db.Integer, db.ForeignKey("oral.idOralz"), primary_key=True)
+    id_oral = db.Column(db.Integer, db.ForeignKey("oral.id_oral"), primary_key=True)
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     commentaire = db.Column(db.String(800))
     #relation pour avoir l oral d un participant
-    oral= db.relationship(Oral, backref=db.backref("oraux", cascade="all, delete-orphan"),overlaps="oral,eleve")
+    oral= db.relationship(Oral, backref=db.backref("fk_participantOral_oral", cascade="all, delete-orphan"),overlaps="oral,eleve")
     #relation pour avoir l eleve d un participant
-    eleve= db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="oral,eleve")
+    eleve= db.relationship(Eleve, backref=db.backref("fk_participantOral_eleve", cascade="all, delete-orphan"),overlaps="oral,eleve")
     def __repr__(self):
         """representation de l objet ParticipantsOral"""
         return f"ParticipantsOral({self.id_oral}, {self.num_etu}, {self.commentaire})"
@@ -133,9 +136,9 @@ class ResultatQCM(db.Model):
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     note = db.Column(db.Integer)
     #un eleve peut avoir qu'une seule note pour un qcm
-    eleve = db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    eleve = db.relationship(Eleve, backref=db.backref("fk_resqcm_eleve", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     #un qcm peut avoir qu'une seule note pour un eleve
-    qcm = db.relationship(QCM, backref=db.backref("qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
+    qcm = db.relationship(QCM, backref=db.backref("fk_resqcm_qcm", cascade="all, delete-orphan"),overlaps="qcm,eleve")
     def __repr__(self):
         """representation de l objet ResultatQCM"""
         return f"ResultatQCM({self.id_qcm}, {self.num_etu}, {self.note})"
@@ -144,17 +147,18 @@ class RepSondage(db.Model):
     """classe RepSondage qui fait la
     relation entre les sondages et les eleves -> reponses"""
     __tablename__ = "repsondage"
-    id_sondage = db.Column(db.Integer, db.ForeignKey("sondage.id_sondage"), primary_key=True)
+    id_sondage = db.Column(db.Integer, db.ForeignKey("sondage.id_sond"), primary_key=True)
     num_etu = db.Column(db.Integer, db.ForeignKey("eleve.num_etu"), primary_key=True)
     matiere_voulue = db.Column(db.String(100))
     volontaire = db.Column(db.String(50))
+    commentaire = db.Column(db.String(800))
     #relation pour avoir le sondage d une reponse
-    sondage = db.relationship(Sondage, backref=db.backref("sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    sondage = db.relationship(Sondage, backref=db.backref("fk_repsond_sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse
-    eleve = db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve")
+    eleve = db.relationship(Eleve, backref=db.backref("fk_repsond_eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     def __repr__(self):
         """representation de l objet RepSondage"""
-        return f"RepSondage({self.participation}, {self.id_sondage}, {self.num_etu}, {self.date_sond}, {self.matiere_voulue}, {self.commentaire})"
+        return f"RepSondage({self.volontaire}, {self.id_sondage}, {self.num_etu}, {self.matiere_voulue}, {self.commentaire})"
 class Periode(db.Model):
     """classe Periode qui contient les periodes
     assignées a leur semestres avec des dates limites"""
@@ -175,7 +179,7 @@ class Semaine(db.Model):
     date_fin = db.Column(db.String(500))
     #ajout de la periode pour faciliter la recherche
     id_periode = db.Column(db.Integer, db.ForeignKey("periode.id_periode"))
-    periode = db.relationship("Periode", backref=db.backref("semaine", lazy="dynamic"))
+    periode = db.relationship(Periode, backref=db.backref("fk_semaine_Periode", lazy="dynamic"))
     def __repr__(self):
         """representation de l objet Semaine"""
         return f"Semaine({self.id_semaine}, {self.date_debut}, {self.date_fin})"
@@ -188,11 +192,11 @@ class PossibiliteSoutien(db.Model):
     id_matiere = db.Column(db.Integer, db.ForeignKey("matiere.id_matiere"), primary_key=True)
     id_periode = db.Column(db.Integer, db.ForeignKey("periode.id_periode"), primary_key=True)
     #relation pour avoir le professeur d une possibilite de soutien
-    professeur = db.relationship(Professeur, backref=db.backref("professeur", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
+    professeur = db.relationship(Professeur, backref=db.backref("fk_idprofesseur_professeur", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
     #relation pour avoir la matiere d une possibilite de soutien
-    matiere = db.relationship(Matiere, backref=db.backref("matiere", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
+    matiere = db.relationship(Matiere, backref=db.backref("fk_idmatiere_matiere", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
     #relation pour avoir la periode d une possibilite de soutien
-    periode = db.relationship(Periode, backref=db.backref("periode", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
+    periode = db.relationship(Periode, backref=db.backref("fk_idperiode_periode", cascade="all, delete-orphan"),overlaps="professeur,matiere,periode")
     def __repr__(self):
         """representation de l objet PossibiliteSoutien"""
         return f"PossibiliteSoutien({self.id_prof}, {self.id_matiere}, {self.id_periode})"
@@ -203,9 +207,9 @@ class EstDisponible(db.Model):
     id_prof = db.Column(db.String(500), db.ForeignKey("professeur.id_prof"), primary_key=True)
     id_oral = db.Column(db.Integer, db.ForeignKey("oral.id_oral"), primary_key=True)
     #relation pour avoir le professeur d une disponibilite
-    professeur = db.relationship(Professeur, backref=db.backref("professeur", cascade="all, delete-orphan"),overlaps="professeur,oral")
+    professeur = db.relationship(Professeur, backref=db.backref("fk_estdisponible_professeur", cascade="all, delete-orphan"),overlaps="professeur,oral")
     #relation pour avoir l oral d une disponibilite
-    oral = db.relationship(Oral, backref=db.backref("oral", cascade="all, delete-orphan"),overlaps="professeur,oral")
+    oral = db.relationship(Oral, backref=db.backref("fk_estdisponible_oral", cascade="all, delete-orphan"),overlaps="professeur,oral")
     def __repr__(self):
         """representation de l objet EstDisponible"""
         return f"EstDisponible({self.id_prof}, {self.id_oral})"
@@ -218,9 +222,9 @@ class ReponseQuestionSondage(db.Model):
     id_quest = db.Column(db.Integer, db.ForeignKey("questionSondage.id_quest"), primary_key=True)
     reponse = db.Column(db.String(500))
     #relation pour avoir l eleve d une reponse a une question
-    eleve = db.relationship(Eleve, backref=db.backref("eleves", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
+    eleve = db.relationship(Eleve, backref=db.backref("fk_ReponseQuestionSondage_eleve", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
     #relation pour avoir la question d une reponse a une question
-    question = db.relationship(QuestionSondage, backref=db.backref("questionSondage", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
+    question = db.relationship(QuestionSondage, backref=db.backref("fk_ReponseQuestionSondage_questionSondage", cascade="all, delete-orphan"),overlaps="sondage,eleve,questionSondage")
     def __repr__(self):
         """representation de l objet ReponseQuestionSondage"""
         return f"ReponseQuestionSondage({self.num_etu}, {self.id_quest}, {self.reponse})"
@@ -250,7 +254,39 @@ def get_recap_etudiant(id_etu:int,num_semaine:int)->tuple:
     sem=Semaine.query.filter(Semaine.numSemaine==num_semaine).first().id_semaine
     qcms=get_res_QCM_eleve(id_etu,sem)
     soutien=get_soutiens_etudiant(id_etu,sem)
-    return qcms,soutien
+    sondage=get_sondage_etudiant(id_etu,sem)
+    return qcms,soutien,sondage
+
+def get_res_QCM_eleve(id_etu:int,id_semaine:int)->list:
+    """fonction qui recupere les qcms de l etudiant
+    Args:
+        id_etu: l id de l etudiant
+        id_semaine: l id de la semaine
+    Return:
+        qcms: les qcms de l etudiant"""
+    ids_qcms = ResultatQCM.query.filter(ResultatQCM.num_etu == id_etu).filter(ResultatQCM.id_semaine==id_semaine).all()
+    qcms = []
+    for id_qcm in ids_qcms:
+        qcm=QCM.query.join(ResultatQCM).filter(QCM.id_qcm == id_qcm.id_qcm).first()
+        qcms.append(qcm)
+    return qcms
+
+def get_sondage_etudiant(id_etu:int,id_semaine:int)->list:
+    """fonction qui recupere les sondages de l etudiant
+    Args:
+        id_etu: l id de l etudiant
+        id_semaine: l id de la semaine
+    Return:
+        sondage: les reponses au sondage de l etudiant"""
+    sem=Semaine.query.filter(Semaine.id_semaine==id_semaine).first()
+    sondage_sem=Sondage.query.filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+    question_sondage=QuestionSondage.query.filter(QuestionSondage.id_sondage==sondage_sem.id_sondage).all()
+    reponse=RepSondage.query.filter(RepSondage.id_quest==sondage_sem.id_sondage).filter(RepSondage.num_etu==id_etu).first()
+    if question_sondage is not None:
+        reponse_quest=ReponseQuestionSondage.query.join(QuestionSondage).filter(ReponseQuestionSondage.id_quest==question_sondage.id_quest).filter(ReponseQuestionSondage.num_etu==id_etu).first()
+    else:
+        reponse_quest=None
+    return reponse,reponse_quest
 
 def get_soutiens_etudiant(id_etu:int)->list:
     """fonction qui recupere les soutiens de l etudiant
@@ -261,8 +297,8 @@ def get_soutiens_etudiant(id_etu:int)->list:
     ids_oraux = ParticipantsOral.query.filter(ParticipantsOral.num_etu == id_etu).all()
     oraux = []
     for id_oral in ids_oraux:
-        oral=Oral.query.join(ParticipantsOral).filter(Oral.id_oral == id_oral.id_oral).first()
-        semaine=Semaine.query.filter(Semaine.date_debut <= oral.date).filter(Semaine.date_fin >= oral.date).first()
+        oral=Oral.query.join(ParticipantsOral).join(Matiere).filter(Oral.id_oral == id_oral.id_oral).first()
+        semaine=Semaine.query.filter(Semaine.date_debut <= oral.date).filter(Semaine.date_fin >= oral.date).first().id_semaine
         oraux.append((oral,semaine))
     return oraux
 
@@ -299,7 +335,7 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
                 #calcule l ecart
                 ecart=note-moyenne
                 liste_sem.append(ecart)
-        str_js+="\tdata.addRow("+liste_sem+");"
+        str_js+="\tdata.addRow("+liste_sem+");\n"
     str_js+= "var options = {\n"
     str_js+=" chart: {\n"
     str_js+=" title: 'Ecart par rapport à la moyenne de la promo',\n"
@@ -313,6 +349,14 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
     str_js+=" }"
     return str_js
 
+def get_matieres_etu(id_etu):
+    """fonction qui recupere les matieres d un etudiant
+    Args:
+        id_etu: l id de l etudiant
+    Return:
+        liste_matieres: la liste des matieres"""
+    liste_qcms=QCM.query.filter(QCM.num_etu == id_etu).all()
+    return Matiere.query.filter(Matiere.id_matiere.in_(liste_qcms)).all()
 
 def get_moyenne_groupe(groupe:str,id_qcm:int)->float:
     """fonction qui recupere la moyenne d un groupe pour un qcm
@@ -365,12 +409,12 @@ def get_resultats_qcm_accueil(date:str)->dict:
     #recup moyennes
     moyennes={}
     for qcm in qcms:
-        nom_matiere=Matiere.query.filter(Matiere.id_matiere == qcm.id_matiere).first().nom_matiere
-        moyennes[nom_matiere]={}
+        moyennes[groupe]={}
+        nom_matiere=Matiere.query.filter(Matiere.id_matiere == qcm.id_matiere).first().nomMatiere
         for groupe in groupes:
-            moyennes[nom_matiere][groupe]=get_moyenne_groupe(groupe,qcm.id_qcm,semestre)   
+            moyennes[groupe][nom_matiere]=get_moyenne_groupe(groupe,qcm.id_qcm,semestre)   
         #ajout moyenne generale
-        moyennes[nom_matiere]["generale"]=get_moyenne_generale(qcm.id_qcm)
+        moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
     return moyennes
 
 def get_dispo_enseignant_accueil(semaine:int):
@@ -383,8 +427,23 @@ def get_dispo_enseignant_accueil(semaine:int):
         list: liste des disponibilites
     """
     sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
-    dispo = EstDisponible.query.filter(EstDisponible.oral.date_oral >= sem.date_debut).filter(EstDisponible.oral.date_oral <= sem.date_fin).all()
-    return dispo
+    dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.date_oral >= sem.date_debut).filter(EstDisponible.oral.date_oral <= sem.date_fin).all()
+    #recup les profs qui sont dispo sans doublons
+    profs_dispo=[]
+    for d in dispo:
+        if d.id_prof not in profs_dispo:
+            profs_dispo.append(d.id_prof)    
+    #recup des matieres par prof
+    possibles={}
+    matieres_tot=[]
+    for p in profs_dispo:
+        possibles[p]=[]
+        matieres_prof=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == p).all()
+        for m in matieres_prof:
+            possibles[p].append(m.nom_matiere)
+            if m.nom_matiere not in matieres_tot:
+                matieres_tot.append(m.nom_matiere)
+    return possibles,matieres_tot
 
 def get_res_sondage_accueil(date:str)->dict:
     """fonction recuperant les resultats du sondage pour une date
@@ -421,24 +480,104 @@ def get_res_QCMs(semaine:int,liste_groupes=[])->list:
         list: liste des resultats de QCM
     """
     sem = Semaine.query.filter(Semaine.id_semaine == semaine).first()
-    qcms=QCM.query.filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all()
+    semestre="S"+str(Periode.query.filter(Periode.id_periode == sem.id_periode).first().semestre)
+    qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all().order_by(Matiere.nom_matiere)
     resultats=[]
     if len(liste_groupes)==0:
-        for qcm in qcms:
-            res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.id_qcm==qcm.id_qcm).all()
-            resultats.append(res_QCM)
+        #recup les eleves qui ont fait le QCM
+        eleves=Eleve.query.join(ResultatQCM).join(QCM).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all()
+        for eleve in eleves:
+            el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
+            rep=[]
+            res_eleve=[el]
+            if semestre == "S1":
+                res_eleve.append(el.groupe_s1)
+            else:
+                res_eleve.append(el.groupe_s2)
+            res_eleve.append(rep)
+            for qcm in qcms:
+                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+                res_eleve[2].append(res_QCM.note)
+            rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+            res_eleve.append(rep_sond)
+            resultats.append(res_eleve)
     else:
-        semestre="S"+str(Periode.query.filter(Periode.id_periode == sem.id_periode).first().semestre)
         if semestre == "S1":
-            for qcm in qcms:
-                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.groupe_s1.in_(liste_groupes)).all()
-                resultats.append(res_QCM)
+            eleves=Eleve.query.join(ResultatQCM).join(QCM).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).filter(Eleve.groupe_s1.in_(liste_groupes)).all()
+            for eleve in eleves:
+                el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
+                rep=[]
+                res_eleve=[el,el.groupe_s1,rep]
+                for qcm in qcms:
+                    res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+                    res_eleve[2].append(res_QCM.note)
+                rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+                res_eleve.append(rep_sond)
+                resultats.append(res_eleve)
         else:
-            for qcm in qcms:
-                res_QCM=ResultatQCM.query.join(QCM).join(Eleve).join(Matiere).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.groupe_s2.in_(liste_groupes)).all()
-                resultats.append(res_QCM)
+            eleves=Eleve.query.join(ResultatQCM).join(QCM).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).filter(Eleve.groupe_s2.in_(liste_groupes)).all()
+            for eleve in eleves:
+                rep=[]
+                el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
+                res_eleve=[el,el.groupe_s2,rep]
+                for qcm in qcms:
+                    res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
+                    res_eleve[2].append(res_QCM)
+                rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
+                res_eleve.append(rep_sond)
+                resultats.append(res_eleve)
     return resultats
 
+def get_moyennes_res_QCMs(semaine:int,id:str)->dict:
+    """fonction recuperant les resultats de QCM pour une date
+    en fonction de l id de groupe
+    Args:
+        date (String): date du QCM
+    Returns:
+        dict: dico des resultats de QCM
+    """
+    sem = Semaine.query.filter(Semaine.id_semaine == semaine).first()
+    qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all().order_by(Matiere.nom_matiere)
+    resultats={}
+    if id=="generale":
+        for qcm in qcms:
+            res_QCM=get_moyenne_generale(qcm.id_qcm)
+            resultats[qcm.nom_matiere]=res_QCM
+    else:
+        for qcm in qcms:
+            res_QCM=get_moyenne_groupe(id,qcm.id_qcm)
+            mat=Matiere.query.filter(Matiere.id_matiere==qcm.id_matiere).first()
+            resultats[qcm.nom_matiere]=res_QCM
+    return resultats
+        
+def get_semaines()->list:
+    """fonction recuperant les semaines
+
+    Returns:
+        list: liste des semaines
+    """
+    semaines=Semaine.query.all()
+    return semaines
+
+def get_groupes(semestre:int)->list:
+    """fonction recuperant les groupes
+
+    Returns:
+        list: liste des groupes
+    """
+    if semestre == 1:
+        eleves=Eleve.query.filter(Eleve.groupe_s1 != None).all()
+        groupes=[]
+        for e in eleves:
+            if e.groupe_s1 not in groupes:
+                groupes.append(e.groupe_s1)
+    else:
+        eleves=Eleve.query.filter(Eleve.groupe_s2 != None).all()
+        groupes=[]
+        for e in eleves:
+            if e.groupe_s2 not in groupes:
+                groupes.append(e.groupe_s2)
+    return groupes
 def get_res_sondages(semaine:int,liste_groupes=[])->list:
     """fonction recuperant les resultats de sondage pour une date
 
@@ -517,7 +656,7 @@ def get_eleves_groupe(groupe:int, date:str):
         eleves = Eleve.query.filter(Eleve.groupe_s1 == groupe).filter(Eleve.date_debut >= sem.date_debut).filter(Eleve.date_debut <= sem.date_fin).all()
     eleves = Eleve.query.filter(Eleve.groupe_s2 == groupe).filter(Eleve.date_fin >= sem.date_debut).filter(Eleve.date_fin <= sem.date_fin).all()
     return eleves
-    
+
 def disponibilites_enseignant(id_enseignant:int, date:str)->list:
     """fonction recuperant les disponibilites d un enseignant pour une date
 
@@ -629,19 +768,52 @@ def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, 
                         matiere_voulue = matiere_voulu, commentaire = commentaire)
         db.session.add(rep)
         db.session.commit()
-def ajouter_commentaire(idOral,numEtu,commentaire):
-    oral=Oral.query.filter(Oral.idOral==idOral).first()
-    etu=Eleve.query.filter(Eleve.numEtu==numEtu).first()
-    part=ParticipantsOral.query.filter(ParticipantsOral.idOral==oral.idOral).filter(ParticipantsOral.numEtu==etu.numEtu).first()
+
+def init_periode_semaines():
+    #crea des periodes
+    rentree=lecture_parametre_def("Date rentree")
+    fin_p1=lecture_parametre_def("Date fin P1")
+    fin_p2=lecture_parametre_def("Date fin P2")
+    fin_p3=lecture_parametre_def("Date fin P3")
+    fin_annee=lecture_parametre_def("Date fin annee")
+    date_rentree=datetime.strptime(rentree,"%d/%m/%Y")
+    date_fin_p1=datetime.strptime(fin_p1,"%d/%m/%Y")
+    date_fin_p2=datetime.strptime(fin_p2,"%d/%m/%Y")
+    date_fin_p3=datetime.strptime(fin_p3,"%d/%m/%Y")
+    date_fin_annee=datetime.strptime(fin_annee,"%d/%m/%Y")
+    p1=Periode(id_periode=1,date_debut=date_rentree,date_fin=date_fin_p1,semestre=1)
+    p2=Periode(id_periode=2,date_debut=date_fin_p1+datetime.timedelta(days=1),date_fin=date_fin_p2,semestre=1)
+    p3=Periode(id_periode=3,date_debut=date_fin_p2+datetime.timedelta(days=1),date_fin=date_fin_p3,semestre=2)
+    p4=Periode(id_periode=4,date_debut=date_fin_p3+datetime.timedelta(days=1),date_fin=date_fin_annee,semestre=2)
+    db.session.add(p1)
+    db.session.add(p2)
+    db.session.add(p3)
+    db.session.add(p4)
+
+    #crea des semaines
+    date=date_rentree
+    id_semaine=1
+    while date<date_fin_annee:
+        semaine=Semaine(id_semaine=id_semaine,date_debut=date,date_fin=date+datetime.timedelta(days=6))
+        date=date+datetime.timedelta(days=7)
+        id_semaine=id_semaine+1
+        db.session.add(semaine)
+    db.session.commit()
+
+
+def ajouter_commentaire(id_oral,num_etu,commentaire):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
+    etu=Eleve.query.filter(Eleve.num_etu==num_etu).first()
+    part=ParticipantsOral.query.filter(ParticipantsOral.id_oral==oral.id_oral).filter(ParticipantsOral.num_etu==etu.num_etu).first()
     part.commentaire=commentaire
     db.session.commit()
 
-def ajouter_dispo(idOral,idProf):
-    oral=Oral.query.filter(Oral.idOral==idOral).first()
+def ajouter_dispo(id_oral,idProf):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
     prof=Professeur.query.filter(Professeur.idProf==idProf).first()
-    dispo=EstDisponible.query.filter(EstDisponible.idOral==oral.idOral).filter(EstDisponible.idProf==prof.idProf).first()
+    dispo=EstDisponible.query.filter(EstDisponible.id_oral==oral.id_oral).filter(EstDisponible.idProf==prof.idProf).first()
     if dispo is None:
-        dispo=EstDisponible(idOral=oral.idOral,idProf=prof.idProf)
+        dispo=EstDisponible(id_oral=oral.id_oral,idProf=prof.idProf)
         db.session.add(dispo)
     else:
         pass
@@ -658,6 +830,79 @@ def suppression_oral(date:str,heure:str)->None:
         db.session.delete(oral)
         db.session.commit()
 
+def ajouter_resultat_eleve(id_QCM,num_etu,note):
+    nb_rep = ResultatQCM.query.filter(numEtu = num_etu).filter(idQCM = id_QCM).count()
+    if nb_rep == 0:
+        res = ResultatQCM(idQCM = id_QCM, numEtu = num_etu, note = note)
+        db.session.add(res)
+        db.session.commit()
+    else:
+        pass
+
+def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
+    nb_rep = RepSondage.query.filter(numEtu = num_etu).filter(idSondage = id_sondage).filter(dateSondage = date_sondage).count()
+    if nb_rep == 0:
+        rep = RepSondage(participation = participation, idSondage = id_sondage, numEtu = num_etu, dateSondage = date_sondage,
+                        matiereVoulu = matiere_voulu, commentaire = commentaire)
+        db.session.add(rep)
+        db.session.commit()
+    else:
+        pass
+
+def creation_existe(num_etu, nom, prenom, groupeS1, groupeS2):
+    res = Eleve.query.filter(numEtu = num_etu).count()
+    if res == 0:
+        eleve = Eleve(numEtu = num_etu, nom = nom, prenom = prenom, groupeS1 = groupeS1, groupeS2 = groupeS2)
+        db.session.add(eleve)
+        db.session.commit()
+
+def get_id_QCM(nom_matiere, url, id_matiere):
+    id_qcm = 0
+    res = QCM.query.filter(urlQCM = url).count()
+    if res == 0:
+        id_qcm = get_id_QCM_max() + 1
+        qcm = QCM(idQCM = id_qcm, nomQCM = nom_matiere, urlQCM = url, idMatiere = id_matiere)
+        db.session.add(qcm)
+        db.session.commit()
+    else:
+        id_qcm = QCM.query.filter(urlQCM = url).first().idQCM
+    return id_qcm
+
+def get_id_sondage(url):
+    id = 0
+    res = Sondage.query.filter(urlQCM = url).count()
+    if res == 0:
+        id = get_id_sondage_max() + 1
+        sondage = Sondage(idSond = id, urlQCM = url)
+        db.session.add(sondage)
+        db.session.commit()
+        return id
+    else:
+        id = Sondage.query.filter(urlQCM = url).first().idSond
+    return id
+
+def get_id_matiere(nom_matiere):
+    id = 0
+    res = Matiere.query.filter(Matiere = nom_matiere).count()
+    if res == 0:
+        id = get_id_matiere_max() + 1
+        matiere = Matiere(idMatiere = id, Matiere = nom_matiere)
+        db.session.add(matiere)
+        db.session.commit()
+        return id
+    else:
+        id = Matiere.query.filter(Matiere = nom_matiere).first().idMatiere
+    return id
+        
+def get_id_matiere_max():
+    return db.session.query(func.max(Matiere.idMatiere)).scalar()
+        
+def get_id_QCM_max():
+    return db.session.query(func.max(QCM.idQCM)).scalar()
+        
+def get_id_sondage_max():
+    return db.session.query(func.max(Sondage.idSond)).scalar()
+
 @login_manager.user_loader
 def load_user(username):
-    return User.query.get(username)
+    return User.get(username).first()

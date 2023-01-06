@@ -13,6 +13,10 @@ table{
     margin: 3%;
 }
 
+#grp4{
+    padding-top: 3%;
+}
+
 /* ---BODY------------------ */
 body{
     display: flex;
@@ -37,4 +41,6 @@ input[type=checkbox]:checked + label {
     display: none;}
 
 
-
+.in_filtres{
+    appearance: none;
+}

@@ -11,7 +11,7 @@
             {{ bootstrap.load_css() }}
             <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
         {% endblock %}
-        <title>Ma bibliothèque SF</title>
+        <title>Gestion de soutien Admin</title>
         {% endblock %}
     </head>
     <body>
@@ -44,7 +44,7 @@
         {% block center %}
         {% endblock %}
         </div>
-        <div id="content">
+        <div id="content" style="display: block;">
         {% block right %}
         {% endblock %}
         </div>

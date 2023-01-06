@@ -4,25 +4,21 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/parametres.css') }}">
 {% endblock %}
-{% block top %}
-        <section class="bouts_gen">
-        <select name="Semaine" id="sem-select">
-            <option value="">Semaine</option>
-            <!-- remplir avec le selenium -->
-            <option value="semaine1">semaine1</option>
-            <option value="semaine2">semaine2</option>
-            <option value="semaine3">semaine3</option>
-            <option value="semaine4">semaine4</option>
-            <option value="semaine5">semaine5</option>
-            <option value="semaine6">semaine6</option>
-        </select>
-
-    
-{% endblock %}
 {% block center %}
-    <section class="infos_par">
+<form class="d-flex infos_par" method ="POST" role="save" action ="{{ url_for('save_paramAdm',) }}">
         <div class="gest_heures">
-            <h3 class="titre_div">Gestion des heures de soutien</h3>
+            <div class="titre_div"><h3 class="titre_div">Gestion des heures de soutien</h3>
+                <select name="Semaine" id="sem-select">
+                <option value="">Semaine</option>
+                <!-- remplir avec le selenium -->
+                <option value="semaine1">semaine1</option>
+                <option value="semaine2">semaine2</option>
+                <option value="semaine3">semaine3</option>
+                <option value="semaine4">semaine4</option>
+                <option value="semaine5">semaine5</option>
+                <option value="semaine6">semaine6</option>
+            </select></div>           
+
             <div class="horaire">
                 <input type="date" id="date" name="date">
                 <label for="h_deb">De</label>
@@ -43,16 +39,24 @@
             <div class="default_sett">
                 <div class="zone_st">
                 <label for="jour">Jour de soutien</label>
-                <input type="text" id="jour" name="jourS"></div>
+                <input type="text" id="jour" name="jourS" value="Mercredi"></div>
+                <div class="zone_st">
+                <label for="heure">Heure de soutien</label>
+                <input type="time" value="14:00" time_format="24" id="heure" name="heureS"></div>
                 <div class="zone_st"><label for="seuil">Seuil pour les groupes</label>
-                <input type="number" id="seuil" name="seuil"></div>
-                <div class="zone_st"><label for="cgt_sem">Date changement de semestre</label>
-                <input type="date" id="cgt_sem" name="cgt_s"></div>
+                <input type="number" id="seuil" name="seuil" min="0" max="1" step="0.01"></div>
+                <div class="zone_st"><label for="cgt_p1">Date fin P1</label>
+                <input type="date" id="cgt_p1" name="cgt_p1" value="2022-10-21"></div>
+                <div class="zone_st"><label for="cgt_p2">Date fin P2</label>
+                <input type="date" id="cgt_p2" name="cgt_p2" value="2023-01-21"></div>
+                <div class="zone_st"><label for="cgt_p3">Date fin P3</label>
+                <input type="date" id="cgt_p3" name="cgt_p3" value="2023-04-21"></div>
+            </div>
         </div>
-    </section>
+    <div>
     <footer>
-        </select>
-        <input id="save_sett" type="button" value="Sauvegarder les modifications">
-        </section>
-    </footer>
+    <section class="bouts_gen">
+        <input id="save_sett" type="submit" value="Sauvegarder les modifications"></section>
+    </footer></div>
+    </form>
 {% endblock %}

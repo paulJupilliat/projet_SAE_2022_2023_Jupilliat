@@ -18,7 +18,7 @@
         <main id="page_connexion">
             {% block main %}
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo">
-            <div id="conteneur">
+            <form id="conteneur" action="{{ url_for('Connexion', origin ='Admin') }}" method="POST">
                 <div id="ident">
                     <label>Identifiant</label>
                 <input type="text" name="identifiant" id="identifiant">
