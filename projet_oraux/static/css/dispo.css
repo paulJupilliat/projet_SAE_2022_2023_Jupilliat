@@ -10,3 +10,7 @@
   tr{
     display: flex;
   }
+
+  #div_main{
+    margin-left: 0;
+  }
