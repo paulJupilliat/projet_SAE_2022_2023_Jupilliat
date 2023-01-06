@@ -75,7 +75,7 @@
             <tbody>
             {% for eleve,groupe,qcms,rep_sond in resultats %}
                 <tr>
-                    <td>{{ eleve.nom }} {{ eleve.prenom }}</td>
+                    <td><a href="{{url_for ('Suivie_etu')}}"> {{ eleve.nom }} {{ eleve.prenom }}</a></td>
                     <td>{{ groupe }}</td>
                     {% for qcm in qcms %}
                         <td>{{ qcm }}</td>
