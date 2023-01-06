@@ -23,8 +23,8 @@ class Sondage(Base):
     """
     __tablename__ = "sondage"
     id_sond = Column(Integer, primary_key=True)
-    url_sond = Column(String(500))
-    date_sond = Column(String(500))
+    url_sond = Column(String(50))
+    date_sond = Column(String(50))
     def __repr__(self):
         """representation de l objet Sondage"""
         return f"Sondage({self.id_sond}, {self.url_sond})"
@@ -43,13 +43,13 @@ class QCM(Base):
     __tablename__ = "qcm"
     id_qcm = Column(Integer, primary_key=True)
     nom_qcm = Column(String(50))
-    url_qcm = Column(String(500))
+    url_qcm = Column(String(50))
     #relation pour avoir la matiere d un qcm
     id_matiere = Column(Integer, ForeignKey("matiere.id_matiere"))
     #relation inverse pour avoir les qcm d une matiere
     matiere = relationship(Matiere, backref=backref("fk_matiere_qcm", lazy="dynamic"))
-    date_debut = Column(String(500))
-    date_fin = Column(String(500))
+    date_debut = Column(String(50))
+    date_fin = Column(String(50))
     def __repr__(self):
         """representation de l objet QCM"""
         return f"QCM({self.id_qcm}, {self.nom_qcm}, {self.url_qcm}, {self.date_debut}, {self.date_fin})"
@@ -77,7 +77,7 @@ class RepSondage(Base):
     num_etu = Column(Integer, ForeignKey("eleve.num_etu"), primary_key=True)
     matiere_voulue = Column(String(100))
     volontaire = Column(String(50))
-    commentaire = Column(String(800))
+    commentaire = Column(String(80))
     #relation pour avoir le sondage d une reponse
     sondage = relationship(Sondage, backref=backref("fk_repsond_sondage", cascade="all, delete-orphan"),overlaps="sondage,eleve")
     #relation pour avoir l eleve d une reponse

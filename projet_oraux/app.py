@@ -16,7 +16,7 @@ def mkpath (p):
             p))
 
 app.config['SQLALCHEMY_DATABASE_URI']=(
-    'mysql+mysqlconnector://lidec:lidec@localhost/DBlidec')
+    'mysql+mysqlconnector://lidec:lidec@servinfo-mariadb/DBlidec')
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
