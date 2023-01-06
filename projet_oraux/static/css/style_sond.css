@@ -44,3 +44,8 @@ input[type=checkbox]:checked + label {
 .in_filtres{
     appearance: none;
 }
+
+th {
+    text-align: center;
+    vertical-align: middle;
+}

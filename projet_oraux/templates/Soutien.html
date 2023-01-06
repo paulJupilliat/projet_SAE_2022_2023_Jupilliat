@@ -12,33 +12,37 @@
 {% endblock %}
 {% block top %}
         
-            <select name="Semaine" id="sem-select" onchange="load_data()">
-                <option value="">Semaine</option>
-                <!-- remplir avec le selenium -->
-                <option value="semaine1">semaine1</option>
-                <option value="semaine2">semaine2</option>
-                <option value="semaine3">semaine3</option>
-                <option value="semaine4">semaine4</option>
-                <option value="semaine5">semaine5</option>
-                <option value="semaine6">semaine6</option>
+            <select name="semaines" id="selec-sem">
+                {% for semaine in semaines %}
+                    <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                {% endfor %}
             </select>
-        
+            <input id="recup_données_btn" type="button" value="Recuperer les données">
+            <p id="creneaux">Créneaux pour la semaine {{ sem_act.id_semaine }}
+                    {% for oral in oraux %}
+                        <span class="creneau">{{ oral.date_oral }} - {{ oral.heure_oral }}</span>
+                    {% endfor %}
+            </p>
 {% endblock %}
 {% block center %}
+            {% if groupe_crees %}
+
+
+            {% else %}
                 <section id="tableaugen">
                     <table id="labels">
                         <thead id="titre_suivi">
                             <tr>
-                                <th id="titre_tableau_sondage" colspan="6"><H2>Suivi Etudiant</H2></th>
+                                <th id="titre_tableau_sondage" colspan="6"><H2>Creation des groupes</H2></th>
                             </tr>
                             <tr class="colonnes">
                                 <th class="noms">Etudiant</th>
-                                <th class="noms">Python</th>
-                                <th class="noms">Web</th>
-                                <th class="noms">Bd</th>
-                                <th class="noms">volontaire</th>
+                                {% for matiere in matieres %}
+                                    <th class="noms">{{ matiere.nom_matiere }}</th>
+                                {% endfor %
+                                <th class="noms">Volontaire</th>
                                 <th class="noms">Souhait</th>
-                                <th class="noms">Retenue</th>
+                                <th class="noms">Retenu</th>
                                 <th class="noms">Enseignant</th>
                                 <th class="noms">Créneau</th>
                             </tr>    
@@ -46,6 +50,58 @@
                     </table>
                     <table class="scrolable" id="tab2">
                         <tbody>
+                            <!-- 
+        eleves_ret_besoin={}
+    non_retenus={}
+    retenus={}
+    for qcm in qcms:
+        moyenne=get_moyenne_generale(qcm.id_qcm)
+        if len(eleves_volontaires_besoin+eleves_hesitants)>=3:
+            cpt_retenu=0
+            while cpt_retenu<5 or len(possibles)!=0:
+                #verif si l'eleve est dans retenus
+                #si oui alors on ajoute la matiere a ses matieres necessaires et on ajoute la note qcm aux dico note qcm
+                if possibles[0] in retenus:
+                    retenus[possibles[0]]["notes_qcm"][qcm.nom_matiere]=possibles[0].note
+                    retenus[possibles[0]]["matieres_necessaires"].append(qcm.nom_matiere)
+                    possibles.pop(0)
+                #si non alors on ajoute l'eleve a retenus et on ajoute la matiere a ses matieres necessaires et on ajoute la note qcm aux dico note qcm
+                else:
+                    retenus[possibles[0]]={"notes_qcm":{qcm.nom_matiere:possibles[0].note},"matieres_necessaires":[qcm.nom_matiere]}
+                    possibles.pop(0)
+                cpt_retenu+=1
+        while len(possibles)>0:
+            if possibles[0] in non_retenus:
+                non_retenus[possibles[0]]["notes_qcm"][qcm.nom_matiere]=possibles[0].note
+                non_retenus[possibles[0]]["matieres_necessaires"].append(qcm.nom_matiere)
+                possibles.pop(0)
+            else:
+                non_retenus[possibles[0]]={"notes_qcm":{qcm.nom_matiere:possibles[0].note},"matieres_necessaires":[qcm.nom_matiere]}
+                possibles.pop(0)
+
+        for eleve in eleves_besoin:
+            if eleve in eleves_ret_besoin:
+                eleves_ret_besoin[eleve]["notes_qcm"][qcm.nom_matiere]=eleve.note
+                eleves_ret_besoin[eleve]["matieres_necessaires"].append(qcm.nom_matiere)
+            else:
+                eleves_ret_besoin[eleve]={"notes_qcm":{qcm.nom_matiere:eleve.note},"matieres_necessaires":[qcm.nom_matiere]}
+    return eleves_ret_besoin,retenus,non_retenus-->
+                                {% for eleve in retenus %}
+                                    <tr>
+                                        <td class="nom">{{ eleve.nom_eleve }}</td>
+                                        {% for matiere in matieres %}
+                                            <td class="matiere">{{ retenus.eleve.notes_qcm.nom_matiere }}</td>
+                                        {% endfor %}
+                                        <td class="volontaire"> {{ eleve.volontaire }}</td>
+                                        <td class="souhait"> {{ eleve.matiere_voulue }}</td>
+                                        <td class="retenue">{{ retenus.}}     </td>
+                                        <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                            <select name="prof" id="prof">
+                                                <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
+                                                
+                                        </select></form>
+                                        </td>
+
                             <tr>
                                 <td class="nom">Paul</td>
                                 <td class="matiere">10</td>

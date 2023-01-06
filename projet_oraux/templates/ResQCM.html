@@ -18,7 +18,7 @@
     <section id="groupe_filtre">
     <select name="semaines" id="selec-sem">
         {% for semaine in semaines %}
-            <option value="{{ semaine }}">{{ semaine }}</option>
+            <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
         {% endfor %}
     </select>
     
