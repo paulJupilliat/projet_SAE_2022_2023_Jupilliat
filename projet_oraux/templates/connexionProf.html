@@ -10,14 +10,17 @@
     <body><script src="../JS/redir.js"></script>
         <main id="page_connexion">
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" id="logo">
-            <form id="conteneur" action="{{ url_for('Connexion', origin ='Prof') }}" method="post">
+            <form id="conteneur" action="{{ url_for('Connexion', origin ='Prof') }}" method="post" role="form">
+                {{ form.hidden_tag() }}
                 <div id="ident">
-                    <label for="identifiant">Nom Enseignant</label>
-                    <input type="text" name="identifiant" id="identifiant">
+                    <label for="username">Nom Enseignant</label>
+                    <!-- <input type="text" name="identifiant" id="identifiant" placeholder="identifiant" value=""> -->
+                    {{ form.username(placeholder="Identifiant") }}
                 </div>
                 <div id="mdp">
-                    <label for="motdp">Numéro Enseignant</label>
-                    <input type="password" name="motdp" id="motdp">
+                    <label for="password">Mot de passe</label>
+                    <!-- <input type="password" name="password" id="password" placeholder="password" value=""> -->
+                    {{ form.password(placeholder ="Mot de passe") }}
                 </div>
                 <button id="connexion" type="submit" >Se connecter</button> 
             </form>
