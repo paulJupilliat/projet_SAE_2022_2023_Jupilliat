@@ -85,7 +85,7 @@ class User(db.Model, UserMixin):
     """
     __tablename__ = "user"
     username = db.Column(db.String(50), primary_key=True)
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(64))
     est_admin = db.Column(db.String(1))
     def get_id(self):
         return self.username

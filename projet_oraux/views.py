@@ -7,7 +7,7 @@ from .models import *
 from .commands import ecriture_js_suivi
 from flask_wtf import FlaskForm
 from wtforms import StringField , HiddenField,PasswordField
-# from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired
 from hashlib import sha256
 from flask_login import login_user , current_user,logout_user
 
@@ -42,8 +42,11 @@ class LoginForm(FlaskForm):
         if user is None:
             return None
         m = sha256()
-        m.update(self.password.data.encode())
+        avec_sel = self.password.data+"21rt"
+        m.update(avec_sel.encode())
         passwd = m.hexdigest()
+        print(user.password)
+        print(passwd)
         return user if passwd == user.password else None
 
 # class RegisterForm ( FlaskForm ):
@@ -287,13 +290,12 @@ def search():
 def Connexion(origin):
     f = LoginForm()
     if f.validate_on_submit():
-        print("part1")
         user = f.get_authenticated_user()
         if user:
             print("ok")
             if origin == "Admin":
-                if user.get_est_admin():
-                    redirect(url_for("connexionProf"))
+                if not user.get_est_admin():
+                    render_template("connexionProf.html", form=f)
             else:
                 if user.get_est_admin():
                     user.est_admin = "F"
