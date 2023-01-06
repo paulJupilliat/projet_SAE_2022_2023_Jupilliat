@@ -8,13 +8,11 @@
 {% endblock %}
 {% block top %}
             <div id="selection_semaine">
-            <select name="semaines" id="selec-sem">
-                <option value="">Semaine 43</option>
-                <option value="">Semaine 44</option>
-                <option value="">Semaine 45</option>
-                <option value="">Semaine 46</option>
-                <option value="">Semaine 47</option>
-            </select>
+                <select name="semaines" id="selec-sem">
+                    {% for semaine in semaines %}
+                        <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                    {% endfor %}
+                </select>
         </div>
         
 {% endblock %}
@@ -23,126 +21,27 @@
             <table id="labels">
                 <thead id="Dispo_nom">
                     <tr>
-                        <th id="titre_tableau_dispo" colspan="5"><H2>Disponibilités</H2></th>
+                        <th id="titre_tableau_dispo" colspan="5"><H2>S'inscrire pour des oraux</H2></th>
                     </tr>
                 </thead>
                 <tr class="colonnes">
-                    <th class="noms">date</th>
-                    <th class="noms">heure</th>
-                    <th class="noms">salle</th>
+                    <th class="noms">Date</th>
+                    <th class="noms">Heure</th>
+                    <th class="noms">Matiere</th>
                     <th class="noms"></th>
                 </tr>
                 </table>
                 <table class="scrolable">
                     <tbody>
+                    {% for oral in oraux %}
                     <tr>
-                        <td>22/03/2023</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
+                        <td>{{ oral.date_oral }}</td>
+                        <td>{{ oral.heure_oral }}</td>
+                        <td>{{ oral.nom_matiere }}</td>
+                        <td><input class="inscription_bouton" " value="S'inscrire" type="button"></input> </td>
                     </tr>
-                    <tr>
-                        <td>22/03/2023</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>22/03/2023</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr>
-                    <tr>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td><input class="inscription_boutton" " value="S'inscrire" type="button"></input> </td>
-                    </tr></tbody>
+                    {% endfor %}
+                </tbody>
             </table>
 
         </section>  

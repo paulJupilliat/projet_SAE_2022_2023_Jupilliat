@@ -546,7 +546,6 @@ def get_moyennes_res_QCMs(semaine:int,id:str)->dict:
     else:
         for qcm in qcms:
             res_QCM=get_moyenne_groupe(id,qcm.id_qcm)
-            mat=Matiere.query.filter(Matiere.id_matiere==qcm.id_matiere).first()
             resultats[qcm.nom_matiere]=res_QCM
     return resultats
         
@@ -637,6 +636,39 @@ def get_res_sondages(semaine:int,liste_groupes=[])->list:
                     resultats.append([res_eleve,res_eleve.groupe_s2,res_qs])
     return resultats,questions
 
+def get_oraux(id_sem:int)->list:
+    """fonction recuperant les oraux pour une date
+
+    Args:
+        date (String): date du QCM
+    Returns:
+        list: liste des oraux
+    """
+    sem = Semaine.query.filter(Semaine.id_semaine == id_sem).first()
+    oraux=Oral.query.filter(Oral.date_oral >= sem.date_debut).filter(Oral.date_oral <= sem.date_fin).all()
+    return oraux
+
+
+def get_semaine_act()->Semaine:
+    """fonction recuperant la semaine actuelle
+
+    Returns:
+        Semaine: semaine actuelle
+    """
+    date_act = datetime.now()
+    sem = Semaine.query.filter(Semaine.date_debut <= date_act).filter(Semaine.date_fin >= date_act).first()
+    return sem
+
+def get_semaines_choix(soutien=False)->list:
+    """recupere les semaines jusqu'a la semaine actuelle comprise
+    si soutien alors recupere aussi la semaine prochaine"""
+    sem_act = get_semaine_act()
+    semaines = Semaine.query.filter(Semaine.id_semaine <= sem_act.id_semaine).all()
+    if soutien:
+        semaines.append(Semaine.query.filter(Semaine.id_semaine == sem_act.id_semaine+1).first())
+    return semaines
+
+
 def get_res_QCM_eleve(id_eleve:int, id_sem:int)->list:
     """fonction recuperant les resultats du QCM pour un eleve et une date
 
@@ -719,7 +751,7 @@ def ajouter_resultat_eleve(id_QCM:int,num_etu:int,note:float)->None:
         db.session.commit()
     else:
         pass
-def gen_soutien(num_sem:int,seuil:float)->dict:
+def gen_soutien(num_sem:int)->dict:
     """fonction generant les soutiens pour une semaine donnee
 
     Args:
@@ -730,6 +762,13 @@ def gen_soutien(num_sem:int,seuil:float)->dict:
     """
     #genere les soutiens pour la semaine donnee
     sem=Semaine.query.filter(Semaine.numSemaine==num_sem).first()
+    semaine_suivante=Semaine.query.filter(Semaine.numSemaine==num_sem+1).first()
+    #si l'oral de la semaine suivant n'existe pas recup les parametre par defaut pour creer un oral
+    jour_sout=lecture_parametre_def("Jour de soutien")
+    heure_sout=lecture_parametre_def("Heure de soutien")
+    date_sout=semaine_suivante.date_debut+datetime.timedelta(days=jour_sout)+datetime.timedelta(hours=heure_sout)
+
+    seuil=float(lecture_parametre_def("Seuil"))
     qcms_trouve=False
     while not qcms_trouve:
         #cherche une semaine avec des qcms
@@ -739,8 +778,8 @@ def gen_soutien(num_sem:int,seuil:float)->dict:
             num_sem-=1
         else:
             qcms_trouve=True
-    eleves_besoin=[]
-    non_retenus=[]
+    eleves_ret_besoin={}
+    non_retenus={}
     retenus={}
     for qcm in qcms:
         moyenne=get_moyenne_generale(qcm.id_qcm)
@@ -758,19 +797,146 @@ def gen_soutien(num_sem:int,seuil:float)->dict:
         eleves_hesitants.filter(Matiere.nom_matiere==qcm.matiere.nom_matiere).order_by(ResultatQCM.note).all()
         possibles=eleves_volontaires_besoin+eleves_hesitants
         if len(eleves_volontaires_besoin+eleves_hesitants)>=3:
-            retenus_mat=[]
-            while len(retenus_mat)<5 or len(possibles)!=0:
-                retenus_mat.append(possibles.pop(0))
-            retenus[qcm.matiere.nom_matiere]=retenus_mat
-        non_retenus+=possibles
+            cpt_retenu=0
+            while cpt_retenu<5 or len(possibles)!=0:
+                #verif si l'eleve est dans retenus
+                #si oui alors on ajoute la matiere a ses matieres necessaires et on ajoute la note qcm aux dico note qcm
+                if possibles[0] in retenus:
+                    retenus[possibles[0]]["notes_qcm"][qcm.nom_matiere]=possibles[0].note
+                    if retenus[possibles[0]]["matiere_retenue"]["note"] < possibles[0].note:
+                        retenus[possibles[0]]["matiere_retenue"]["note"]=possibles[0].note
+                        retenus[possibles[0]]["matiere_retenue"]["matiere"]=qcm.nom_matiere
+                    profs_dispos=Professeur.query.join(EstDisponible).join(Oral).join(PossibiliteSoutien)
+                    profs_dispos.filter(Oral.date_oral >= semaine_suivante.date_debut).filter(Oral.date_oral <= semaine_suivante.date_fin)
+                    profs_dispos.filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                    for prof in profs_dispos:
+                        if not retenus[possibles[0]]["profs"]["profs_dispos"]:
+                            retenus[possibles[0]]["profs"]["profs_dispos"]=[prof]
+                        else:
+                            if prof not in retenus[possibles[0]]["profs"]["profs_dispos"]:
+                                retenus[possibles[0]]["profs"]["profs_dispos"].append(prof)
+                    profs_possibles=Professeur.query.join(PossibiliteSoutien).filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                    for prof in profs_possibles:
+                        if not retenus[possibles[0]]["profs"]["profs_possibles"]:
+                            retenus[possibles[0]]["profs"]["profs_possibles"]=[prof]
+                        else:
+                            if prof not in retenus[possibles[0]]["profs"]["profs_possibles"]:
+                                retenus[possibles[0]]["profs"]["profs_possibles"].append(prof)
+                    possibles.pop(0)
+                #si non alors on ajoute l'eleve a retenus et on ajoute la matiere a ses matieres necessaires et on ajoute la note qcm aux dico note qcm
+                else:
+                    retenus[possibles[0]]={"notes_qcm":{qcm.nom_matiere:possibles[0].note},"matiere_retenue":{"note":possibles[0].note,"matiere":qcm.nom_matiere}}
+                    profs_dispos=Professeur.query.join(EstDisponible).join(Oral).join(PossibiliteSoutien)
+                    profs_dispos.filter(Oral.date_oral >= semaine_suivante.date_debut).filter(Oral.date_oral <= semaine_suivante.date_fin)
+                    profs_dispos.filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                    for prof in profs_dispos:
+                        if not retenus[possibles[0]]["profs"]["profs_dispos"]:
+                            retenus[possibles[0]]["profs"]["profs_dispos"]=[prof]
+                        else:
+                            if prof not in retenus[possibles[0]]["profs"]["profs_dispos"]:
+                                retenus[possibles[0]]["profs"]["profs_dispos"].append(prof)
+                    profs_possibles=Professeur.query.join(PossibiliteSoutien).filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                    for prof in profs_possibles:
+                        if not retenus[possibles[0]]["profs"]["profs_possibles"]:
+                            retenus[possibles[0]]["profs"]["profs_possibles"]=[prof]
+                        else:
+                            if prof not in retenus[possibles[0]]["profs"]["profs_possibles"]:
+                                retenus[possibles[0]]["profs"]["profs_possibles"].append(prof)
+                    possibles.pop(0)
+                cpt_retenu+=1
+        while len(possibles)>0:
+            if possibles[0] in non_retenus:
+                non_retenus[possibles[0]]["notes_qcm"][qcm.nom_matiere]=possibles[0].note
+                if non_retenus[possibles[0]]["matiere_retenue"]["note"] < possibles[0].note:
+                    non_retenus[possibles[0]]["matiere_retenue"]["note"]=possibles[0].note
+                    non_retenus[possibles[0]]["matiere_retenue"]["matiere"]=qcm.nom_matiere
+                profs_dispos=Professeur.query.join(EstDisponible).join(Oral).join(PossibiliteSoutien)
+                profs_dispos.filter(Oral.date_oral >= semaine_suivante.date_debut).filter(Oral.date_oral <= semaine_suivante.date_fin)
+                profs_dispos.filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_dispos:
+                    if not non_retenus[possibles[0]]["profs"]["profs_dispos"]:
+                        non_retenus[possibles[0]]["profs"]["profs_dispos"]=[prof]
+                    else:
+                        if prof not in non_retenus[possibles[0]]["profs"]["profs_dispos"]:
+                            non_retenus[possibles[0]]["profs"]["profs_dispos"].append(prof)
+                profs_possibles=Professeur.query.join(PossibiliteSoutien).filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_possibles:
+                    if not non_retenus[possibles[0]]["profs"]["profs_possibles"]:
+                        non_retenus[possibles[0]]["profs"]["profs_possibles"]=[prof]
+                    else:
+                        if prof not in non_retenus[possibles[0]]["profs"]["profs_possibles"]:
+                            non_retenus[possibles[0]]["profs"]["profs_possibles"].append(prof)
+                
+                possibles.pop(0)
+            else:
+                non_retenus[possibles[0]]={"notes_qcm":{qcm.nom_matiere:possibles[0].note},"matieres_necessaires":{"note":possibles[0].note,"matiere":qcm.nom_matiere}}
+                profs_dispos=Professeur.query.join(EstDisponible).join(Oral).join(PossibiliteSoutien)
+                profs_dispos.filter(Oral.date_oral >= semaine_suivante.date_debut).filter(Oral.date_oral <= semaine_suivante.date_fin)
+                profs_dispos.filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_dispos:
+                    if not non_retenus[possibles[0]]["profs"]["profs_dispos"]:
+                        non_retenus[possibles[0]]["profs"]["profs_dispos"]=[prof]
+                    else:
+                        if prof not in non_retenus[possibles[0]]["profs"]["profs_dispos"]:
+                            non_retenus[possibles[0]]["profs"]["profs_dispos"].append(prof)
+                profs_possibles=Professeur.query.join(PossibiliteSoutien).filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_possibles:
+                    if not non_retenus[possibles[0]]["profs"]["profs_possibles"]:
+                        non_retenus[possibles[0]]["profs"]["profs_possibles"]=[prof]
+                    else:
+                        if prof not in non_retenus[possibles[0]]["profs"]["profs_possibles"]:
+                            non_retenus[possibles[0]]["profs"]["profs_possibles"].append(prof)
+                
+                possibles.pop(0)
 
-        eleves_besoin+=ResultatQCM.join(RepSondage,ResultatQCM.num_etu==RepSondage.num_etu)
+        eleves_besoin=ResultatQCM.join(RepSondage,ResultatQCM.num_etu==RepSondage.num_etu)
         eleves_besoin.join(QCM,ResultatQCM.id_qcm==QCM.id_qcm).join(Matiere,QCM.id_matiere==Matiere.id_matiere)
         eleves_besoin.join(Eleve,ResultatQCM.num_etu==Eleve.num_etu)
         eleves_besoin.filter(ResultatQCM.id_qcm == qcm.id_qcm)
         eleves_besoin.filter(ResultatQCM.note < seuil*moyenne).filter(RepSondage.volontaire=='non')
         eleves_besoin.order_by(ResultatQCM.note).all()
-    return retenus,eleves_besoin,non_retenus
+        for eleve in eleves_besoin:
+            if eleve in eleves_ret_besoin:
+                eleves_ret_besoin[eleve]["notes_qcm"][qcm.nom_matiere]=eleve.note
+                if eleves_ret_besoin[eleve]["matiere_retenue"]["note"] < eleve.note:
+                    eleves_ret_besoin[eleve]["matiere_retenue"]["note"]=eleve.note
+                    eleves_ret_besoin[eleve]["matiere_retenue"]["matiere"]=qcm.nom_matiere
+                profs_dispos=Professeur.query.join(EstDisponible).join(Oral).join(PossibiliteSoutien)
+                profs_dispos.filter(Oral.date_oral >= semaine_suivante.date_debut).filter(Oral.date_oral <= semaine_suivante.date_fin)
+                profs_dispos.filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_dispos:
+                    if not eleves_ret_besoin[eleve]["profs"]["profs_dispos"]:
+                        eleves_ret_besoin[eleve]["profs"]["profs_dispos"]=[prof]
+                    else:
+                        if prof not in eleves_ret_besoin[eleve]["profs"]["profs_dispos"]:
+                            eleves_ret_besoin[eleve]["profs"]["profs_dispos"].append(prof)
+                profs_possibles=Professeur.query.join(PossibiliteSoutien).filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_possibles:
+                    if not eleves_ret_besoin[eleve]["profs"]["profs_possibles"]:
+                        eleves_ret_besoin[eleve]["profs"]["profs_possibles"]=[prof]
+                    else:
+                        if prof not in eleves_ret_besoin[eleve]["profs"]["profs_possibles"]:
+                            eleves_ret_besoin[eleve]["profs"]["profs_possibles"].append(prof)
+                
+            else:
+                eleves_ret_besoin[eleve]={"notes_qcm":{qcm.nom_matiere:eleve.note},"matieres_necessaires":{"note":eleve.note,"matiere":qcm.nom_matiere}}
+                profs_dispos=Professeur.query.join(EstDisponible).join(Oral).join(PossibiliteSoutien)
+                profs_dispos.filter(Oral.date_oral >= semaine_suivante.date_debut).filter(Oral.date_oral <= semaine_suivante.date_fin)
+                profs_dispos.filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_dispos:
+                    if not eleves_ret_besoin[eleve]["profs"]["profs_dispos"]:
+                        eleves_ret_besoin[eleve]["profs"]["profs_dispos"]=[prof]
+                    else:
+                        if prof not in eleves_ret_besoin[eleve]["profs"]["profs_dispos"]:
+                            eleves_ret_besoin[eleve]["profs"]["profs_dispos"].append(prof)
+                profs_possibles=Professeur.query.join(PossibiliteSoutien).filter(PossibiliteSoutien.id_matiere==qcm.id_matiere).all()
+                for prof in profs_possibles:
+                    if not eleves_ret_besoin[eleve]["profs"]["profs_possibles"]:
+                        eleves_ret_besoin[eleve]["profs"]["profs_possibles"]=[prof]
+                    else:
+                        if prof not in eleves_ret_besoin[eleve]["profs"]["profs_possibles"]:
+                            eleves_ret_besoin[eleve]["profs"]["profs_possibles"].append(prof)
+    return eleves_ret_besoin,retenus,non_retenus
 def ajouter_eleve_oral(nom_etu,prenom_etu,nom_mat,nom_prof,date_sout,heure_sout):
     etu=Eleve.query.filter(Eleve.nom==nom_etu).filter(Eleve.prenom==prenom_etu).first()
     matiere=Matiere.query.filter(Matiere.nomMatiere==nom_mat).first()

@@ -9,21 +9,20 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style_acc.css') }}">
 {% endblock %}
 {% block top %}
-        <select name="Semaine" id="sem-select">
-            {% for semaine in semaines %}
-                <option value="{{ semaine.id }}">{{ semaine.id_semaine }}</option>
-            {% endfor %}
-        </select>
+            <select name="semaines" id="selec-sem">
+                {% for semaine in semaines %}
+                    <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                {% endfor %}
+            </select>
             <input id="recup_données_btn" type="button" value="Recuperer les données">
-            <p id="text_mail"> les mails ont été envoyer pour la semaine 3</p> <!-- remplir avec le selenium -->
+            <p id="text_mail"> les mails ont été envoyés pour la semaine 3</p> <!-- remplir avec le selenium -->
 {% endblock %}
 {% block center %}
         <div class="res_qcm">
-            <h2>Resultat QCM</h2>
             <table>
                 <thead>
                     <tr>
-                        <th colspan="4">The table header</th>
+                        <th colspan="4">Resultats QCM</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,11 +46,10 @@
         <section class="dispo_sond">
     
             <div class="res_sond">
-                <h2>Resultat Sondage</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="4">The table header</th>
+                            <th colspan="4">Resultats sondages</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,12 +70,11 @@
                 
             </div>
 
-            <div class="dispo_en"> 
-                <h2>Enseignants disponibles</h2>
+            <div class="dispo_en">
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="4">The table header</th>
+                            <th colspan="4">Enseignants disponibles</th>
                         </tr>
                     </thead>
                     <tbody>

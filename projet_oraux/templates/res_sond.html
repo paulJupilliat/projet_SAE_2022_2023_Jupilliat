@@ -17,13 +17,11 @@
                 <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep2"/></button>
             </div>
             <section id="groupe_filtre">
-            <select name="semaines" id="selec-sem">
-                <option value="">Semaine 43</option>
-                <option value="">Semaine 44</option>
-                <option value="">Semaine 45</option>
-                <option value="">Semaine 46</option>
-                <option value="">Semaine 47</option>
-            </select>
+                <select name="semaines" id="selec-sem">
+                    {% for semaine in semaines %}
+                        <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                    {% endfor %}
+                </select>
             <div id="aside_grp">
                 <h3>Groupes</h3>
                 <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
@@ -45,7 +43,7 @@
             <table id="tableau">
                 <thead>
                     <tr>
-                        <th id="titre_tableau_sondage" colspan="5"><H2>Sondages</H2></th>
+                        <th id="titre_tableau_sondage" colspan="{{ colspan}}"><H2>Sondages</H2></th>
                     </tr>
                 </thead>
                 <tbody>
