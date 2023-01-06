@@ -351,7 +351,7 @@ def Connexion(origin):
             print("ok")
             if origin == "Admin":
                 if not user.get_est_admin():
-                    render_template("connexionProf.html", form=f)
+                    redirect(url_for('Connexion',origin="Prof"))
             else:
                 if user.get_est_admin():
                     user.est_admin = "F"
