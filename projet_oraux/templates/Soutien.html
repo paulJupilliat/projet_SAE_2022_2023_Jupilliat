@@ -48,7 +48,7 @@
                         <tbody>
                                 {% for donnees in retenus.values() %}
                                     <tr>
-                                        <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
+                                        <td class="nom"> <a href="{{url_for ('Suivie_etu')}}"> {{ donnees.eleve.nom_eleve }} </a> </td>
                                         {% for i in range(0, num_qcm) %}
                                             <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
                                         {% endfor %}
