@@ -552,7 +552,7 @@ def get_semaines()->list:
     Returns:
         list: liste des semaines
     """
-    semaines=Semaine.query.all()
+    semaines=Semaine.query.join(Periode).all()
     return semaines
 
 def get_groupes(semestre:int)->list:
@@ -653,14 +653,14 @@ def get_semaine_act()->Semaine:
         Semaine: semaine actuelle
     """
     date_act = datetime.now()
-    sem = Semaine.query.filter(Semaine.date_debut <= date_act).filter(Semaine.date_fin >= date_act).first()
+    sem = Semaine.query.join(Periode).filter(Semaine.date_debut <= date_act).filter(Semaine.date_fin >= date_act).first()
     return sem
 
 def get_semaines_choix(soutien=False)->list:
     """recupere les semaines jusqu'a la semaine actuelle comprise
     si soutien alors recupere aussi la semaine prochaine"""
     sem_act = get_semaine_act()
-    semaines = Semaine.query.filter(Semaine.id_semaine <= sem_act.id_semaine).all()
+    semaines = Semaine.query.join(Periode).filter(Semaine.id_semaine <= sem_act.id_semaine).all()
     if soutien:
         semaines.append(Semaine.query.filter(Semaine.id_semaine == sem_act.id_semaine+1).first())
     return semaines
@@ -748,14 +748,12 @@ def ajouter_resultat_eleve(id_QCM:int,num_etu:int,note:float)->None:
         db.session.commit()
     else:
         pass
-def gen_soutien(num_sem:int)->dict:
+def gen_soutien(num_sem:int):
     """fonction generant les soutiens pour une semaine donnee
 
     Args:
         num_sem (int): numero de la semaine
         seuil (float): seuil de la moyenne
-    Returns:
-        dict: dictionnaire contenant les soutiens
     """
     #genere les soutiens pour la semaine donnee
     sem=Semaine.query.filter(Semaine.numSemaine==num_sem).first()
@@ -940,6 +938,65 @@ def gen_soutien(num_sem:int)->dict:
                         if prof not in eleves_ret_besoin[eleve.num_etu]["profs"]["profs_possibles"]:
                             eleves_ret_besoin[eleve.num_etu]["profs"]["profs_possibles"].append(prof)
     return retenus,non_retenus,eleves_ret_besoin,oraux,matieres
+
+def get_moyenne_gen_etu(id_etu:int)->float:
+    """Retourne la moyenne generale d'un etudiant"""
+    moyenne=0
+    nb_notes=0
+    notes=ResultatQCM.query.filter(ResultatQCM.num_etu==id_etu).all()
+    for note in notes:
+        moyenne+=note.note
+        nb_notes+=1
+    if nb_notes==0:
+        return 0
+    else:
+        return moyenne/nb_notes
+
+def get_dern_comm(id_sem:int,id_etu:int)->str:
+    """Retourne le dernier commentaire d'oral présent à cette semaine
+    """
+    sem_act=Semaine.query.filter(Semaine.id_semaine==id_sem).first()
+    part=ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu==id_etu).filter(Oral.date_oral>=sem_act.date_debut).filter(Oral.date_oral<=sem_act.date_fin)
+    if part:
+        return part.commentaire
+    cpt_sem=id_sem-1
+    while not part and cpt_sem>0:
+        part = ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu == id_etu).filter(
+            Oral.date_oral >= sem_act.date_debut).filter(Oral.date_oral <= sem_act.date_fin)
+        if part:
+            return part.commentaire
+        cpt_sem-=1
+    return ""   
+
+
+def get_suivi_gen(id_sem:int)->list:
+    """Retourne les donnees pour le suivi general d'une semaine
+    {% for eleve in eleves %}
+                    <tr>
+                        <td><a href="{{url_for ('Suivie_etu',num_etu=eleve.num_etu)}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
+                        <td>{{ eleve.nb_part }}</td>
+                        {% if semaine_act.semestre == 1 %}
+                            <td>{{ eleve.eleve.groupe_s1 }}</td>
+                        {% else %}
+                            <td>{{ eleve.eleve.groupe_s2 }}</td>
+                        {% endif %}
+                        <td>{{ eleve.moyenne }}</td>
+                        <td>{{ eleve.dern_comm }}</td>
+                    </tr>
+                {% endfor %} 
+    """
+    eleves=Eleve.query.all()
+    suivi_gen=[]
+    for eleve in eleves:
+        suivi_et={"eleve":eleve,"nb_part":0,"moyenne":0,"dern_comm":""}
+        parts=ParticipantsOral.query.filter(ParticipantsOral.num_etu==eleve.num_etu).all().count()
+        suivi_et["nb_part"]=parts
+        moyenne=get_moyenne_gen_etu(eleve.num_etu)
+        suivi_et["moyenne"]=moyenne
+        dern_comm=get_dern_comm(id_sem,eleve.num_etu)
+        suivi_et["dern_comm"]=dern_comm
+        suivi_gen.append(suivi_et)
+    return suivi_gen
 
 def ajouter_eleve_oral(nom_etu,prenom_etu,nom_mat,nom_prof,date_sout,heure_sout):
     etu=Eleve.query.filter(Eleve.nom==nom_etu).filter(Eleve.prenom==prenom_etu).first()

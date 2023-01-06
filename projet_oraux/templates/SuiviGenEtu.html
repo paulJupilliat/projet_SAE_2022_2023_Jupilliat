@@ -16,45 +16,24 @@
                 <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
                     <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep2"/></button>
             </div>
-            <section id="groupe_filtre"> 
+            <section id="groupe_filtre">
+            <select name="semaines" id="selec-sem">
+                {% for semaine in semaines %}
+                    <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                {% endfor %}
+            </select>
             <div id="aside_grp">
                 <h3>Groupes</h3>
                 <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
                     <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
             </div>
             <ul id="grps_filtres">
-                <li>
-                    <input type="checkbox" name="11A" id="11A">
-                    <label for="11A">11A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="11B" id="11B">
-                    <label for="11B">11B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="12A" id="12A">
-                    <label for="12A">12A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="12B" id="12B">
-                    <label for="12B">12B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="13A" id="13A">
-                    <label for="13A">13A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="13B" id="13B">
-                    <label for="13B">13B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="14A" id="14A">
-                    <label for="14A">14A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="14B" id="14B">
-                    <label for="14B">14B</label>
-                </li>
+                {% for groupe in groupes %}
+                    <li>
+                        <input type="checkbox" name="{{ groupe }}" id="{{ groupe }}">
+                        <label for="{{ groupe }}">{{ groupe }}</label>
+                    </li>
+                {% endfor %}
             </ul>
             <div id="aside_rec">
                 <form action="{{ url_for('search') }}" method="post" class="recherche_eleve" role="search" >
@@ -72,221 +51,46 @@
         <table id="labels">
             <thead id="titre_suivi">
                 <tr>
-                    <th id="titre_tableau_sondage" colspan="6"><H2>Suivi Etudiant</H2></th>
+                    <th id="titre_tableau_sondage" colspan="5"><H2>Suivi Etudiant</H2></th>
                 </tr>
                 <tr class="colonnes">
                     <th class="noms">Etudiant</th>
-                    <th class="noms">Date</th>
+                    <th class="noms">Nb part oraux</th>
                     <th class="noms">Groupe</th>
-                    <th class="noms">Matiere</th>
-                    <th class="noms">Referent</th>
+                    <th class="noms">Moyenne generale</th>
                     <th class="noms">Commentaire</th>
                 </tr>    
             </thead>
         </table>
         <table class="scrolable" id="tab2">
             <tbody>
-                    
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
-                <tr>
-                    <td><a href="{{url_for ('Suivie_etu')}}">Paul</a></td>
-                    <td>07/11</td>
-                    <td>11A</td>
-                    <td>BDD</td>
-                    <td>Chabin</td>
-                    <td>Lorem ipsum dazdza d dazdazdazdazdza faefafafazfazf azdazdadazdzdzdazd dazdazdazdaz</td>
-                </tr>
+                <!-- {% for eleve in eleves %}
+                    <tr>
+                        <td><a href="{{url_for ('Suivie_etu',num_etu=eleve.num_etu)}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
+                        <td>{{ eleve.nb_part }}</td>
+                        {% if semaine_act.semestre == 1 %}
+                            <td>{{ eleve.eleve.groupe_s1 }}</td>
+                        {% else %}
+                            <td>{{ eleve.eleve.groupe_s2 }}</td>
+                        {% endif %}
+                        <td>{{ eleve.moyenne }}</td>
+                        <td>{{ eleve.dern_comm }}</td>
+                    </tr>
+                {% endfor %}  -->
+                {% for eleve in suivi_gen %}
+                    <tr>
+                        <td><a href="{{url_for ('Suivie_etu')}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
+                        <td>{{ eleve.nb_part }}</td>
+                        {% if semaine_act.semestre == 1 %}
+                            <td>{{ eleve.eleve.groupe_s1 }}</td>
+                        {% else %}
+                            <td>{{ eleve.eleve.groupe_s2 }}</td>
+                        {% endif %}
+                        <td>{{ eleve.moyenne }}</td>
+                        <td>{{ eleve.dern_comm }}</td>
+                    </tr>
+                {% endfor %} 
+                
                 </tbody>
         </table></section>
 {% endblock %}

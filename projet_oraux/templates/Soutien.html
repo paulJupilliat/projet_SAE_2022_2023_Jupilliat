@@ -6,7 +6,6 @@
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
-
 <link rel="stylesheet" href="{{ url_for('static', filename='css/suiviGen.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/soutien.css')}}">
 {% endblock %}
@@ -25,6 +24,7 @@
 
 
             {% else %}
+            {% if admin %}
                 <section id="tableaugen">
                     <table id="labels">
                         <thead id="titre_suivi">
@@ -56,7 +56,7 @@
                                         <td class="souhait"> {{ donnees.eleve.matiere_voulue }}</td>
                                         <td class="retenue"><input type="text" name="retenue" id="retenue" value="{{ donnees.eleve.matiere_retenue.matiere}}" style="width: 50%;"></td>
                                         <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
-                                            <select name="prof" id="prof" onchange="changeColor(this)">
+                                            <select name="prof" id="prof" onchange="changeColor(this)" style="background-color: white;">
                                                 {% for prof in donnees.profs.profs_dispos %}
                                                     <option value="dispo {{ prof.nom_prof }}" class="dispos">{{ prof.nom_prof }}</option>
                                                 {% endfor %}
@@ -86,7 +86,7 @@
                                         <td class="souhait"> {{ donnees.eleve.matiere_voulue }}</td>
                                         <td class="retenue"><input type="text" name="retenue" id="retenue" value="Non retenu" style="width: 50%;"></td>
                                         <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
-                                            <select name="prof" id="prof">
+                                            <select name="prof" id="prof" onchange="changeColor(this)" style="background-color: white;">
                                                 <option value="-" selected>-</option>
                                                 {% for prof in donnees.profs.profs_dispos %}
                                                     <option value="dispo {{ prof.nom_prof }}" class="dispos">{{ prof.nom_prof }}</option>
@@ -140,24 +140,20 @@
                         </tbody>
                     </table></section>
             </div>
+            {% else %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Données non disponibles</h1>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
 
    
         {% endblock %}
-{% block script %}
-    <script >
-        function changeColor(e){
-            var val = e.value;
-            console.log(val);
-            if (val.split(" ")[0] == "dispo")
-            {
-                e.style.backgroundColor = "green";
-            }
-            else
-            {
-                e.style.backgroundColor = "yellow";
-            }
-        
-        };
+{% block scripts %}
+    <script src="{{ url_for('static', filename='JS/soutien.js') }}"></script>
     </script>
 {% endblock %}

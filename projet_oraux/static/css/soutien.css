@@ -45,7 +45,12 @@
   overflow-y: scroll;
   display: block;
   border-spacing: 0;
+  max-height: 30em;}
+
+  button, input, optgroup, select, textarea {
+    font-size: revert;
   max-height: 20em;}
   #tableaugen{
     margin-left: 30%;
   }
+  
