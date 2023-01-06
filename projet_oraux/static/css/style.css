@@ -26,7 +26,7 @@ tfoot {
     border-radius: 10px;
     margin-right:2em;
     padding:2em;
-    width:80%;
+    width:auto
 }
 
 #tableauqcm{
@@ -53,5 +53,11 @@ main {
     justify-content: space-between;
     margin-top: 3% ;}
 
-
+    #recup_données_btn{
+        border-radius: 1em;
+        padding: 1em;
+        background-color: #860061;
+        font-weight: bold;
+        font-size: 1em;
+    }
 

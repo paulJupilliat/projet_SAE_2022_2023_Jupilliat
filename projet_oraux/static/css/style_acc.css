@@ -1,10 +1,4 @@
-#recup_données_btn{
-    border-radius: 1em;
-    padding: 1em;
-    background-color: #860061;
-    font-weight: bold;
-    font-size: 1em;
-}
+
 #div_main{
     display: flex;
     justify-content: space-around;

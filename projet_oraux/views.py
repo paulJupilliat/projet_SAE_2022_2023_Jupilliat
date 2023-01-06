@@ -64,13 +64,14 @@ def route():
     return render_template("index.html",title="Projet soutien", admin=True)
 @app.route("/ResQCM")
 def ResQCM():
-    semaines=[37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
     matieres=["Python","Java","C++"]
     res_bandeau=[("Python", 12), ("Java", 15), ("C++", 18)]
-    # el=Eleve(num_etu=1, nom="Dupont", prenom="Jean", groupe_s1="11A", groupe_s2="11A")
-    # s=Sondage(id_sondage=1, date_sond="2020-10-10")
-    # reps=RepSondage(num_etu=1, id_sondage=1, matiere_voulue="Python", volontaire="oui")
     reps={"matiere_voulue":"Python", "volontaire":"oui"}
     el={"num_etu":1, "nom":"Dupont", "prenom":"Jean", "groupe_s1":"11A", "groupe_s2":"11A"}
     resultats=[[el,el["groupe_s2"],[18,17,12],reps],[el,el["groupe_s2"],[18,17,12],reps],
@@ -163,7 +164,11 @@ def Acceuil():
     sondage = {"Python": { "nb": 10, "Moyenne": 15}, "BDD": { "nb": 8, "Moyenne": 11}, "Java": { "nb": 4, "Moyenne": 13}}
     matieres=["Python","Java","C++"]
     possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"]}
-    semaines=[37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     return render_template(
         "Acceuil.html",title="Acceuil", admin=False,qcm=qcms, matieres_demandées=sondage,
         matieres=matieres, possibles=possibles,semaines=semaines)
@@ -174,13 +179,28 @@ def connexionAdm():
 @app.route("/connexionProf")
 def connexionProf():
     return render_template("connexionProf.html",title="Connexion Professeur",admin = False)
-@app.route("/Dispo")
-def Dispo():
-    return render_template("Dispo.html",title="Disponibilité", admin=False)
+@app.route("/Disponibilite")
+def Disponibilite():
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},{"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    matieres=["Python","Java","C++", "BDD", "Reseau", "IHM", "Web", "Dev Efficace"]
+    possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"], "Anglade" : ["Python",], "Roza":["Dev Efficace", "Java", "Python"]}
+    dispos = [{"nom_prof": "Chabin", "date_oral":"02/01/2023"}, {"nom_prof": "Arzouz","date_oral":"02/01/2023"}]
+    return render_template("Dispo.html",title="Disponibilité", admin=False, semaines=semaines, dispos = dispos, matieres=matieres, possibles= possibles)
 
 @app.route("/GererSesDispo")
 def GererSesDispo():
-    return render_template("GererSesDispo.html", title="Gerer ses disponibilitées", admin = True)
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    oraux=[{"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
+    {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}, {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
+    {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}, {"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},]
+    return render_template("GererSesDispo.html", title="Gerer ses disponibilitées", admin = True,semaines=semaines,oraux=oraux)
 
 @app.route("/paramAdm")
 def paramAdm():
@@ -199,7 +219,20 @@ def save_paramEns():
     return render_template("paramEns.html",title="Paramètres Enseignant")
 @app.route("/res_sond")
 def res_sond():
-    return render_template("res_sond.html",title="Resultat sondage", admin=True)
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    groupes=["11A","11B","11C","12A","12B","12C"]
+    # res_eleve,groupe,res_qs in sondages
+    res_eleve={"nom":"Chabin","prenom":"Alexandre","matiere_voulue":"Java","volontaire":"oui","commentaire":"Je suis motivé"}
+    groupe="11A"
+    res_qs=[{"question":"Quelle matière voulez vous voir en priorité ?","reponse":"Java","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","reponse":"oui","id_quest":2}, {"question":"Avez vous des remarques ?","reponse":"Je suis motivé","id_quest":3}]
+    sondages=[[res_eleve,groupe,res_qs],[ res_eleve,groupe,res_qs], [res_eleve,groupe,res_qs]]
+    questions=[{"question":"Quelle matière voulez vous voir en priorité ?","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","id_quest":2}, {"question":"Avez vous des remarques ?","id_quest":3}]
+    colspan=len(questions)+5
+    return render_template("res_sond.html",title="Resultat sondage", admin=True,groupes=groupes,sondages=sondages,questions=questions,semaines=semaines,colspan=colspan)
 @app.route("/Soutien")
 def Soutien():
     return render_template("Soutien.html",title="Soutien", admin=True)
@@ -216,7 +249,12 @@ def Suivie_etu():
             mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
             liste_modif[-1].append(mat)
         cpt+=1
-    semaines=[37,38,39,40,41,42,43,44,45,46,47,48]
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
+    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+
     #cree une liste de 3 qcms avec les resultats
     qcms=[]
     for i in range(len(liste_matieres)):

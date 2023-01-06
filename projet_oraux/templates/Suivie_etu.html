@@ -41,11 +41,11 @@
 </section>
 <section id="semaines_choix">
     <div id="selec_sem">
-    <select name="semaines" id="selec-sem">
-        {% for semaine in semaines %}
-            <option value="{{ semaine.id_semaine }}">{{ semaine.id_semaine }}</option>
-        {% endfor %}
-    </select>
+        <select name="semaines" id="selec-sem">
+            {% for semaine in semaines %}
+                <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+            {% endfor %}
+        </select>
     </div>
     <section id="para_qcm">
         <h2>QCMs:</h2>
