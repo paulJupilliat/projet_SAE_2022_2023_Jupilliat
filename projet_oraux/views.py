@@ -61,7 +61,6 @@ from wtforms import StringField , HiddenField,PasswordField
 
 @app.route("/")
 def route():
-    os.system("python3 ./Traitement_Selenium/selenium_test.py")
     return render_template("index.html",title="Projet soutien", admin=True)
 @app.route("/ResQCM")
 def ResQCM():
