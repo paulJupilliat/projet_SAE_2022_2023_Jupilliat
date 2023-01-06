@@ -60,7 +60,7 @@
                     
                     {% for res_eleve,groupe,res_qs in sondages %}
                     <tr>
-                        <td class="etu">{{ res_eleve.nom }} {{ res_eleve.prenom }}</td>
+                        <td class="etu"> <a id="color_noir" href="{{url_for ('Suivie_etu')}}"> {{ res_eleve.nom }} {{ res_eleve.prenom }}</a></td>
                         <td class="grp">{{ groupe }}</td>
                         <td class="soutien">{{ res_eleve.volontaire }}</td>
                         <td class="mat">{{ res_eleve.matiere_voulue }}</td>
