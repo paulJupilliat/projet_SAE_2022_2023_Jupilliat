@@ -8,8 +8,8 @@ from .commands import ecriture_js_suivi
 from flask_wtf import FlaskForm
 from wtforms import StringField , HiddenField,PasswordField
 # from wtforms.validators import DataRequired
-# from hashlib import sha256
-# from flask_login import login_user , current_user,logout_user
+from hashlib import sha256
+from flask_login import login_user , current_user,logout_user
 
 # class AuthorForm(FlaskForm):
 #     id = HiddenField("id")
@@ -33,19 +33,18 @@ from wtforms import StringField , HiddenField,PasswordField
 #     price_max = StringField("Price max")
 #     order = StringField("Order(by title, author, genre, price)")
 
-# class LoginForm ( FlaskForm ):
-#     username = StringField("Username")
-#     password = PasswordField("Password")
-#     next = HiddenField()
-#     id = HiddenField()
-#     def get_authenticated_user(self):
-#         user = User.query.get(self.username.data)
-#         if user is None:
-#             return None
-#         m = sha256()
-#         m.update(self.password.data.encode())
-#         passwd = m.hexdigest()
-#         return user if passwd == user.password else None
+class LoginForm(FlaskForm):
+    username = StringField("identifiant")
+    password = PasswordField("password")
+
+    def get_authenticated_user(self):
+        user = User.query.get(self.username.data)
+        if user is None:
+            return None
+        m = sha256()
+        m.update(self.password.data.encode())
+        passwd = m.hexdigest()
+        return user if passwd == user.password else None
 
 # class RegisterForm ( FlaskForm ):
 #     username = StringField("Username")
@@ -284,16 +283,24 @@ def search():
     prof = Professeur.query.filter(Professeur.nom.lower().like("%"+search+"%")).all()
     return render_template("SuivieGenEtu.html",title="Recherche", eleve=eleve, prof=prof)
 
-@app.route("/Connexion/<origin>", methods = ("POST",))
+@app.route("/Connexion/<origin>", methods = ("POST","GET"))
 def Connexion(origin):
     f = LoginForm()
     if f.validate_on_submit():
+        print("part1")
         user = f.get_authenticated_user()
         if user:
+            print("ok")
+            if origin == "Admin":
+                if user.get_est_admin():
+                    redirect(url_for("connexionProf"))
+            else:
+                if user.get_est_admin():
+                    user.est_admin = "F"
             login_user(user)
             return redirect(url_for("Acceuil"))
     if origin == "Admin":
-        return redirect(url_for("connexionAdm"))
+        return render_template("connexionAdm.html", form=f)
     else:
-        return redirect(url_for("connexionProf"))
+        return render_template("connexionProf.html", form=f)
 

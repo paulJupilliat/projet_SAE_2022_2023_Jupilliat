@@ -86,10 +86,10 @@ class User(db.Model, UserMixin):
     __tablename__ = "user"
     username = db.Column(db.String(50), primary_key=True)
     password = db.Column(db.String(50))
-    est_admin = db.Column(db.String(10))
+    est_admin = db.Column(db.String(1))
     def get_id(self):
         return self.username
-    def est_admin(self):
+    def get_est_admin(self):
         return self.est_admin=="T"
     def __repr__(self):
         """representation de l objet User"""

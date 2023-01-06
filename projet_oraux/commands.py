@@ -21,7 +21,7 @@ def newuser(username , password ):
     from hashlib import sha256
     m =sha256()
     m.update(password.encode())
-    u = User(username =username , password=m.hexdigest ())
+    u = User(username =username , password=m.hexdigest(), est_admin = "F")
     db.session.add(u)
     db.session.commit()
 @app.cli.command()
