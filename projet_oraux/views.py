@@ -180,9 +180,16 @@ def connexionAdm():
 @app.route("/connexionProf")
 def connexionProf():
     return render_template("connexionProf.html",title="Connexion Professeur",admin = False)
-@app.route("/Dispo")
-def Dispo():
-    return render_template("Dispo.html",title="Disponibilité", admin=False)
+@app.route("/Disponibilite")
+def Disponibilite():
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},{"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
+    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
+    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
+    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    matieres=["Python","Java","C++"]
+    possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"]}
+    dispos = [{"nom_prof": "Chabin", "date_oral":"02/01/2023"}, {"nom_prof": "Arzouz","date_oral":"02/01/2023"}]
+    return render_template("Dispo.html",title="Disponibilité", admin=False, semaines=semaines, dispos = dispos, matieres=matieres, possibles= possibles)
 
 @app.route("/GererSesDispo")
 def GererSesDispo():

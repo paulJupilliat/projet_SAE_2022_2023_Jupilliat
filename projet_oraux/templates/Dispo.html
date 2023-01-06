@@ -18,11 +18,9 @@
             </div>
             <section id="groupe_filtre">
             <select name="semaines" id="selec-sem">
-                <option value="">Semaine 43</option>
-                <option value="">Semaine 44</option>
-                <option value="">Semaine 45</option>
-                <option value="">Semaine 46</option>
-                <option value="">Semaine 47</option>
+                {% for semaine in semaines %}
+                    <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                {% endfor %}
             </select>
             <div id="aside_grp">
                 <h3>Matières</h3>
@@ -59,145 +57,37 @@
             <table id="labels">
                 <thead id="Dispo_nom">
                     <tr>
-                        <th id="titre_tableau_dispo" colspan="5"><H2>Disponibilités</H2></th>
+                        <th id="titre_tableau_dispo" colspan="4"><H2>Disponibilités</H2></th>
                     </tr>
                 </thead>
                 <tr class="colonnes">
                     <th class="noms">Enseignant</th>
-                    <th class="noms">matiere1</th>
-                    <th class="noms">matiere2</th>
-                    <th class="noms">matiere3</th>
-                    <th class="noms">date</th>
+                    {% for matiere in matieres %}
+                        <th class="noms">{{ matiere }}</th>
+                    {% endfor %}
+                   
+                    
                 </tr>
                 </table>
                 <table class="scrolable">
                     <tbody>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr>
-                    <tr>
-                        <td>Paul</td>
-                        <td>11A</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                        <td>12.5</td>
-                    </tr></tbody>
+                        
+                        {% for prof in possibles.keys() %}
+                            <tr>
+                                <td> {{ prof }}</td>
+                                {% for matiere in matieres %}
+                                    {% if matiere in possibles[prof] %}
+                                        <td> OUI </td>
+                                    {% else %}
+                                        <td> NON </td>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                
+                                
+                            </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
 
         </section>  

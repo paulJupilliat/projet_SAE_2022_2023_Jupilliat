@@ -427,12 +427,8 @@ def get_dispo_enseignant_accueil(semaine:int):
         list: liste des disponibilites
     """
     sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
-    dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.date_oral >= sem.date_debut).filter(EstDisponible.oral.date_oral <= sem.date_fin).all()
-    #recup les profs qui sont dispo sans doublons
-    profs_dispo=[]
-    for d in dispo:
-        if d.id_prof not in profs_dispo:
-            profs_dispo.append(d.id_prof)    
+    profs_dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.date_oral >= sem.date_debut).filter(EstDisponible.oral.date_oral <= sem.date_fin).all()
+     
     #recup des matieres par prof
     possibles={}
     matieres_tot=[]
