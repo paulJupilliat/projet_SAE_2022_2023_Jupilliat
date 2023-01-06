@@ -17,12 +17,8 @@
                     <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
                 {% endfor %}
             </select>
-            <input id="recup_données_btn" type="button" value="Recuperer les données">
-            <p id="creneaux">Créneaux pour la semaine {{ sem_act.id_semaine }}
-                    {% for oral in oraux %}
-                        <span class="creneau">{{ oral.date_oral }} - {{ oral.heure_oral }}</span>
-                    {% endfor %}
-            </p>
+            <input class="données_btn" type="button" value="Envoi données">
+            
 {% endblock %}
 {% block center %}
             {% if groupe_crees %}
@@ -33,13 +29,13 @@
                     <table id="labels">
                         <thead id="titre_suivi">
                             <tr>
-                                <th id="titre_tableau_sondage" colspan="6"><H2>Creation des groupes</H2></th>
+                                <th id="titre_tableau_sondage" colspan="{{ colspan }}"><H2>Creation des groupes</H2></th>
                             </tr>
                             <tr class="colonnes">
                                 <th class="noms">Etudiant</th>
                                 {% for matiere in matieres %}
                                     <th class="noms">{{ matiere.nom_matiere }}</th>
-                                {% endfor %
+                                {% endfor %}
                                 <th class="noms">Volontaire</th>
                                 <th class="noms">Souhait</th>
                                 <th class="noms">Retenu</th>
@@ -48,141 +44,120 @@
                             </tr>    
                         </thead>
                     </table>
-                    <table class="scrolable" id="tab2">
+                    <table class="scrolable" id="tab_volontaires">
                         <tbody>
-                            <!-- 
-        eleves_ret_besoin={}
-    non_retenus={}
-    retenus={}
-    for qcm in qcms:
-        moyenne=get_moyenne_generale(qcm.id_qcm)
-        if len(eleves_volontaires_besoin+eleves_hesitants)>=3:
-            cpt_retenu=0
-            while cpt_retenu<5 or len(possibles)!=0:
-                #verif si l'eleve est dans retenus
-                #si oui alors on ajoute la matiere a ses matieres necessaires et on ajoute la note qcm aux dico note qcm
-                if possibles[0] in retenus:
-                    retenus[possibles[0]]["notes_qcm"][qcm.nom_matiere]=possibles[0].note
-                    retenus[possibles[0]]["matieres_necessaires"].append(qcm.nom_matiere)
-                    possibles.pop(0)
-                #si non alors on ajoute l'eleve a retenus et on ajoute la matiere a ses matieres necessaires et on ajoute la note qcm aux dico note qcm
-                else:
-                    retenus[possibles[0]]={"notes_qcm":{qcm.nom_matiere:possibles[0].note},"matieres_necessaires":[qcm.nom_matiere]}
-                    possibles.pop(0)
-                cpt_retenu+=1
-        while len(possibles)>0:
-            if possibles[0] in non_retenus:
-                non_retenus[possibles[0]]["notes_qcm"][qcm.nom_matiere]=possibles[0].note
-                non_retenus[possibles[0]]["matieres_necessaires"].append(qcm.nom_matiere)
-                possibles.pop(0)
-            else:
-                non_retenus[possibles[0]]={"notes_qcm":{qcm.nom_matiere:possibles[0].note},"matieres_necessaires":[qcm.nom_matiere]}
-                possibles.pop(0)
-
-        for eleve in eleves_besoin:
-            if eleve in eleves_ret_besoin:
-                eleves_ret_besoin[eleve]["notes_qcm"][qcm.nom_matiere]=eleve.note
-                eleves_ret_besoin[eleve]["matieres_necessaires"].append(qcm.nom_matiere)
-            else:
-                eleves_ret_besoin[eleve]={"notes_qcm":{qcm.nom_matiere:eleve.note},"matieres_necessaires":[qcm.nom_matiere]}
-    return eleves_ret_besoin,retenus,non_retenus-->
-                                {% for eleve in retenus %}
+                                {% for donnees in retenus.values() %}
                                     <tr>
-                                        <td class="nom">{{ eleve.nom_eleve }}</td>
-                                        {% for matiere in matieres %}
-                                            <td class="matiere">{{ retenus.eleve.notes_qcm.nom_matiere }}</td>
+                                        <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
+                                        {% for i in range(0, num_qcm) %}
+                                            <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
                                         {% endfor %}
-                                        <td class="volontaire"> {{ eleve.volontaire }}</td>
-                                        <td class="souhait"> {{ eleve.matiere_voulue }}</td>
-                                        <td class="retenue">{{ retenus.}}     </td>
+                                        <td class="volontaire"> {{ donnees.eleve.volontaire }}</td>
+                                        <td class="souhait"> {{ donnees.eleve.matiere_voulue }}</td>
+                                        <td class="retenue"><input type="text" name="retenue" id="retenue" value="{{ donnees.eleve.matiere_retenue.matiere}}" style="width: 50%;"></td>
                                         <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
-                                            <select name="prof" id="prof">
-                                                <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
-                                                
+                                            <select name="prof" id="prof" onchange="changeColor(this)">
+                                                {% for prof in donnees.profs.profs_dispos %}
+                                                    <option value="dispo {{ prof.nom_prof }}" class="dispos">{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                                {% for prof in donnees.profs.profs_possibles %}
+                                                    <option value="{{ prof.nom_prof }}" >{{ prof.nom_prof }}</option>
+                                                {% endfor %}
                                         </select></form>
                                         </td>
-
+                                        <td class="creneau"> <form action="choix_crenau">
+                                            <label for="cren">
+                                                <select name="cren" id="cren" >
+                                                    {% for oral in oraux %}
+                                                        <option value="{{ oral.id_oral }}">{{ oral.date_oral }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </form></td>
+                                    </tr>
+                                {% endfor %}
+                                {% for donnees in non_retenus.values() %}
+                                    <tr>
+                                        <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
+                                        {% for i in range(0, num_qcm) %}
+                                            <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
+                                        {% endfor %}
+                                        <td class="volontaire "> {{ donnees.eleve.volontaire }}</td>
+                                        <td class="souhait"> {{ donnees.eleve.matiere_voulue }}</td>
+                                        <td class="retenue"><input type="text" name="retenue" id="retenue" value="Non retenu" style="width: 50%;"></td>
+                                        <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                            <select name="prof" id="prof">
+                                                <option value="-" selected>-</option>
+                                                {% for prof in donnees.profs.profs_dispos %}
+                                                    <option value="dispo {{ prof.nom_prof }}" class="dispos">{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                                {% for prof in donnees.profs.profs_possibles %}
+                                                    <option value="{{ prof.nom_prof }}" >{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                        </select></form>
+                                        </td>
+                                        <td class="creneau"> <form action="choix_crenau">
+                                            <label for="cren">
+                                                <select name="cren" id="cren" >
+                                                    <option value="-" selected>-</option>
+                                                    {% for oral in oraux %}
+                                                        <option value="{{ oral.id_oral }}">{{ oral.date_oral }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </form></td>
+                                    </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    <table id="labels">
+                        <thead id="titre_suivi">
                             <tr>
-                                <td class="nom">Paul</td>
-                                <td class="matiere">10</td>
-                                <td class="matiere">12</td>
-                                <td class="matiere">16</td>
-                                <td class="volontaire">oui</td>
-                                <td class="souhait">Python</td>
-                                <td class="retenue">Python</td>
-                                <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
-                                <select name="prof" id="prof">
-                                    <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
-                                    <option value="Anglade">Anglade</option>
-                                    <option value="Arzouz">Arzouz</option>
-                                </select></form>
-                                </td>
-                                <td class="creneau"> <form action="choix_crenau">
-                                    <label for="cren">
-                                        <select name="cren" id="cren" >
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                        </select>
-                                    </label>
-                                </form></td>
-
-                                
+                                <th id="titre_tableau_sondage" colspan="{{ colspan }}"><H2>Eleves non volontaires qui auraient besoin</H2></th>
                             </tr>
-                            <tr>
-                                <td class="nom">Paul</td>
-                                <td class="matiere">10</td>
-                                <td class="matiere">12</td>
-                                <td class="matiere">16</td>
-                                <td class="volontaire">oui</td>
-                                <td class="souhait">Python</td>
-                                <td class="retenue">Python</td>
-                                <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
-                                <select name="prof" id="prof">
-                                    <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
-                                    <option value="Anglade">Anglade</option>
-                                    <option value="Arzouz">Arzouz</option>
-                                </select></form>
-                                </td>
-                                <td class="creneau"> <form action="choix_crenau">
-                                    <label for="cren">
-                                        <select name="cren" id="cren" >
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                        </select>
-                                    </label>
-                                </form></td>
-
-                                
-                            </tr>
-                            <tr>
-                                <td class="nom">Paul</td>
-                                <td class="matiere">10</td>
-                                <td class="matiere">12</td>
-                                <td class="matiere">16</td>
-                                <td class="volontaire">oui</td>
-                                <td class="souhait">Python</td>
-                                <td class="retenue">Python</td>
-                                <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
-                                <select name="prof" id="prof">
-                                    <!-- gerer les option en fonction de la matiere retenue et des prof disponible pour cette matiere -->
-                                    <option value="Anglade">Anglade</option>
-                                    <option value="Arzouz">Arzouz</option>
-                                </select></form>
-                                </td>
-                                <td class="creneau"> <form action="choix_crenau">
-                                    <label for="cren">
-                                        <select name="cren" id="cren" >
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                        </select>
-                                    </label>
-                                </form></td>
-
-                                
-                            </tr>
-
+                            <tr class="colonnes">
+                                <th class="nom">Etudiant</th>
+                                {% for matiere in matieres %}
+                                    <th class="matiere">{{ matiere.nom_matiere }}</th>
+                                {% endfor %}
+                                <th class="volontaire">Volontaire</th>
+                                <th class="ajout_el" >Ajouter aux groupes</th>
+                            </tr>    
+                        </thead>
+                    </table>
+                    <table class="scrolable" id="tab_besoin">
+                        <tbody>
+                            {% for donnees in eleves_besoin.values() %}
+                                <tr>
+                                    <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
+                                    {% for i in range(0, num_qcm) %}
+                                            <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
+                                        {% endfor %}
+                                    <td class="volontaire "> {{ donnees.eleve.volontaire }}</td>
+                                    <td class="ajout_el" ><input type="button"value="Ajouter aux groupes"></td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table></section>
             </div>
+        {% endif %}
+
    
         {% endblock %}
+{% block script %}
+    <script >
+        function changeColor(e){
+            var val = e.value;
+            console.log(val);
+            if (val.split(" ")[0] == "dispo")
+            {
+                e.style.backgroundColor = "green";
+            }
+            else
+            {
+                e.style.backgroundColor = "yellow";
+            }
+        
+        };
+    </script>
+{% endblock %}

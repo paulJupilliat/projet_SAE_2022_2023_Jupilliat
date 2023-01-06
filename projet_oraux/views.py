@@ -235,7 +235,25 @@ def res_sond():
     return render_template("res_sond.html",title="Resultat sondage", admin=True,groupes=groupes,sondages=sondages,questions=questions,semaines=semaines,colspan=colspan)
 @app.route("/Soutien")
 def Soutien():
-    return render_template("Soutien.html",title="Soutien", admin=True)
+    matieres=[{"id_matiere":1,"nom_matiere":"Python"},{"id_matiere":2,"nom_matiere":"Java"}]
+    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"}, {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"}]
+    eleve_ret={"nom_eleve":"Paul","volontaire":"oui","matiere_voulue":"Python","matiere_retenue":{"matiere":"Python","note":12}}
+    retenus ={1:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+              2:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                3:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                4:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                5:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
+    eleve_non_ret={"nom_eleve":"Paul","volontaire":"~","matiere_voulue":"Python"}
+    non_retenus = {1:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                2:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+                3:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
+    eleve_bes={"nom_eleve":"Paul","volontaire":"non"}
+    eleves_besoin = {1:{"eleve":eleve_bes,"notes_qcm":[17,12]}, 2:{"eleve":eleve_bes,"notes_qcm":[17,12]},
+                    3:{"eleve":eleve_bes,"notes_qcm":[17,12]}}
+    oraux =[{"id_oral":1,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"},
+    {"id_oral":2,"date_oral":"02/01/2023","heure_oral":"15:00","nom_matiere":"Python"}]
+    return render_template("Soutien.html",title="Soutien", admin=True, 
+    matieres=matieres,semaines=semaines,retenus=retenus,non_retenus=non_retenus,eleves_besoin=eleves_besoin,oraux=oraux,num_qcm=len(matieres))
 @app.route("/Suivie_etu")
 def Suivie_etu():
     liste_matieres=["Python","Java","C++","BDD","Reseau","IHM","Web"]
