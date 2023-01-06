@@ -41,7 +41,7 @@ function change_nav(){
             '<a href="./paramAdm.html" class="navbar__links"> <img src="'+img_param+'" height="50em" alt=""></a>'+
             '<a href="./index.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a></div>'}
     if (id=="prof" && window.location.href.split("/").pop()=="Acceuil.html"){
-        document.getElementById("recup_données_btn").style.display="none";
+        document.getElementsByClassName("donnees_btn").style.display="none";
         document.getElementById("text_mail").style.display="none";
     }
 }
