@@ -34,9 +34,9 @@
     #top{
         display: flex;
         justify-content: left;
-        margin-top: 5%;
+        margin-top: 2%;
         padding-bottom: 0%;
-        margin-bottom: 0%;
+        margin-bottom: -5%;
         padding-left: 10%;
       }
   .scrolable {
@@ -49,4 +49,8 @@
 
   button, input, optgroup, select, textarea {
     font-size: revert;
+  max-height: 20em;}
+  #tableaugen{
+    margin-left: 30%;
   }
+  
