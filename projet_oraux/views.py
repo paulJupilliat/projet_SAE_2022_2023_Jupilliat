@@ -1,6 +1,6 @@
 ##views permet de definir les routes de l app donc des differents pages
 
-import os
+from datetime import datetime as dt
 from .app import app
 from flask import render_template, request,url_for , redirect
 from .models import *
@@ -37,16 +37,18 @@ from flask_login import login_user , current_user,logout_user
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
+    def getlist(self):
+        return [self.choices]
 
 class FiltersForm(FlaskForm):
     semaines=SelectField("Semaine")
     groupes=MultiCheckboxField("Groupe")
-    matieres=MultiCheckboxField("Matiere")
+    
 
 class SuiviPersoForm(FlaskForm):
     date_debut=DateField("Date de début")
     date_fin=DateField("Date de fin")
-    matieres=MultiCheckboxField("Matiere")
+    matieres=MultiCheckboxField("Matière")
 
 class LoginForm(FlaskForm):
     username = StringField("identifiant")
@@ -308,18 +310,21 @@ def Soutien():
 def Suivie_etu():#num_etudiant
     eleve = {"prenom" : "paul", "nom":"jupilliat", "groupe_s1" : "1a5" ,"groupe_s2": "1a3"}
     # eleve = get_eleve(num_etudiant)
-    liste_matieres=["Python","Java","C++","BDD","Reseau","IHM","Web"]
+    liste_matieres=[{"id_matiere":1,"nom_matiere":"Python"},{"id_matiere":2,"nom_matiere":"Java"},{"id_matiere":3,"nom_matiere":"C++"},
+    {"id_matiere":4,"nom_matiere":"C"},{"id_matiere":5,"nom_matiere":"HTML"},{"id_matiere":6,"nom_matiere":"CSS"},
+    {"id_matiere":7,"nom_matiere":"Javascript"},{"id_matiere":8,"nom_matiere":"PHP"},{"id_matiere":9,"nom_matiere":"SQL"}]
+
     
-    liste_modif=[]
-    cpt=0
-    while len(liste_matieres)<0:
-        if cpt %2 ==0:
-            mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
-            liste_modif.append(mat)
-        else:
-            mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
-            liste_modif[-1].append(mat)
-        cpt+=1
+    # liste_modif=[]
+    # cpt=0
+    # while len(liste_matieres)<0:
+    #     if cpt % 3 ==0:
+    #         mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
+    #         liste_modif.append(mat)
+    #     else:
+    #         mat={"id_matiere":cpt,"nom_matiere":liste_matieres[cpt]}
+    #         liste_modif[-1].append(mat)
+    #     cpt+=1
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023", "semestre" : "1"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
@@ -329,11 +334,20 @@ def Suivie_etu():#num_etudiant
     debut=semaines[0]["date_debut"]
     fin=semaines[-4]["date_fin"]
     filt_graphe=SuiviPersoForm()
-    #transforme debut en date
-    debut=datetime.strptime(debut, '%d/%m/%Y')
+    debut=dt.strptime(debut, '%d/%m/%Y')
+    fin=dt.strptime(fin, '%d/%m/%Y')
     filt_graphe.date_debut.data=debut
     filt_graphe.date_fin.data=fin
-    filt_graphe.matieres.choices=liste_matieres
+    filt_graphe.matieres.choices=[str(mat["id_matiere"])+" "+ mat["nom_matiere"] for mat in liste_matieres]
+    list=filt_graphe.matieres.getlist()
+    nb_couples=len(liste_matieres)//3 +1
+    # couples=[]
+    # cpt=1
+    # for couple in liste_modif:
+    #     couples.append("couple"+str(cpt))
+    #     filt_graphe.__setattr__("couple"+str(cpt),MultiCheckboxField("couple"+str(cpt),choices=[mat for mat in couple]))
+    # nom="matieres"
+    # filt_graphe.__getattribute__(nom).choices=liste_matieres
     filtform=FiltersForm()
     filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
     #cree une liste de 3 qcms avec les resultats
@@ -349,7 +363,7 @@ def Suivie_etu():#num_etudiant
     for i in range(len(semaines)):
         if i%3!=0:
             oral={"id_oral":i,"id_matiere":i%len(liste_matieres),"date_oral":"2020-10-10",
-            "heure_oral":"10:00","num_etu":22107932,"commentaire":liste_matieres[i%len(liste_matieres)]+" oral "}
+            "heure_oral":"10:00","num_etu":22107932,"commentaire":liste_matieres[i%len(liste_matieres)]["nom_matiere"]+" oral "}
             oraux.append((oral,i))
         else:
             oraux.append((None,i))
@@ -388,9 +402,9 @@ def Suivie_etu():#num_etudiant
     str_js+=" }"
     ecriture_js_suivi(str_js)
     return render_template("Suivie_etu.html",title="Suivie étudiant",
-        admin=True,matieres=liste_modif,qcms=qcms,
+        admin=True,matieres=liste_matieres,qcms=qcms,
         soutien=soutien,questions=questions,oraux=oraux,
-        semaines=semaines, eleve=eleve, semaine_actu = semaine_actu,filtres=filtform,filt_graph=filt_graphe)
+        semaines=semaines, eleve=eleve, semaine_actu = semaine_actu,filtres=filtform,filt_graph=filt_graphe,nbc=nb_couples,list=list)
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():
@@ -475,6 +489,8 @@ def suivi_gen_recherche():
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
+    filtform=FiltersForm()
+    filtform.semaines.choices=[str(semaine["id_semaine"])+" - "+semaine["date_debut"] for semaine in semaines]
     if search == "":
         return render_template("SuiviGenEtu.html",title="Recherche", suivi_gen=eleves, semaines=semaines, semaine_act=semaine_act, groupes=groupes)
     eleves_trouv=[]
@@ -482,7 +498,7 @@ def suivi_gen_recherche():
         #si le nom de leleve est une sous chaine du nom recherché
         if search.upper() in eleve["eleve"]["nom"].upper() or search.upper() in eleve["eleve"]["prenom"].upper():
             eleves_trouv.append(eleve)
-    return render_template("SuiviGenEtu.html",title="Recherche", suivi_gen=eleves_trouv, semaines=semaines, semaine_act=semaine_act, groupes=groupes)
+    return render_template("SuiviGenEtu.html",title="Recherche", suivi_gen=eleves_trouv, semaines=semaines, semaine_act=semaine_act, groupes=groupes,filtres=filtform)
 
 @app.route("/Connexion/<origin>", methods = ("POST","GET"))
 def Connexion(origin):

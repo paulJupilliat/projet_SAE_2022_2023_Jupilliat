@@ -27,22 +27,32 @@
 </div>
 <form method="POST" action="">
     <section id="matieres_gauche">
-        <fieldset class="form-group" id="grps_filtres">
-            {% if filt_graph.matieres.errors %}
+        {% if filt_graph.matieres.errors %}
             <div class="invalid-feedback">
                 {% for error in filt_graph.matieres.errors %}
                     <span>{{ error }}</span>
                 {% endfor %}
             </div>
             {% endif %}
-            {% for choice in filt_graph.matieres %}
-                <div class="form-check">
-                    {{ choice(class="form-check-input") }}
-                    {{ choice.label(class="form-check-label") }}
-                </div>
-            {% endfor %}
+
+           <p> {{ list[0] }} </p>
+        <fieldset class="form-group" id="grps_matieres" style="display:flex; flex-direction:row">
+                {% for idc in range(0, nbc) %}
+                    <div>
+                    <ul class="matières">
+                    {% for idm in range (0, 3) %}
+                    <li style="display:flex">
+                        <!-- <input type="checkbox" id="{{ matieres[idc+idm].nom_matiere }}" name="{{ matieres[idc+idm].nom_matiere }}" value="{{ matieres[idc+idm].nom_matiere }}">
+                        <label for="{{ matieres[idc+idm].nom_matiere }}" style="padding-left:5%">{{ matieres[idc+idm].nom_matiere }}</label> -->
+                        {{ filt_graph.matieres.choices[idc+idm](class="form-check-input") }}
+                        {{ filt_graph.matieres.choices[idc+idm].label(class="form-check-label") }}
+                    </li>
+                    {% endfor %}
+                    </ul>
+                    </div>
+                {% endfor %}
         </fieldset>
-    </section>
+        </section>
     <section id="dates">
         {% if filt_graph.date_debut.errors %}
             <div class="invalid-feedback">
@@ -69,26 +79,6 @@
     </section>
 <input id="liaison_bd" class="btn_valide" value="Valider" type="submit"></input>
 </form>
-<section id="matieres_gauche">
-        {% for couple in matieres %}
-            <div>
-            <ul class="matières">
-            {% for matiere in couple %}
-            <li >
-                <input type="checkbox" id="{{ matiere.nom_matiere }}" name="{{ matiere.nom_matiere }}" value="{{ matiere.nom_matiere }}">
-                <label for="{{ matiere.nom_matiere }}">{{ matiere.nom_matiere }}</label>
-            </li>
-            {% endfor %}
-            </ul>
-            </div>
-        {% endfor %}
-</section>
-<section id="dates">
-            <label for="date_debut">De</label>
-            <input type="date" name="date_debut" id="date_debut">
-            <label for="date_fin">À</label>
-            <input type="date" name="date_fin" id="date_fin">
-</section>
 <section>
     <input type="submit" value="Validé" id="btn_valide_creneau" onclick="document.location.reload(false)"> 
 </section>
