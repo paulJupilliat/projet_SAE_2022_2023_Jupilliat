@@ -24,6 +24,9 @@
     width: 81Vw;
     align-self: center;
   }
+  .selec_sem{
+    margin-right: 100px;
+  }
 
   /* met le div_main au centre */
     #div_main{

@@ -16,7 +16,7 @@
                     <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
                 {% endfor %}
             </select>
-            <input class="données_btn" type="button" value="Envoi données">
+            <input type="button" class='style_btn2' value="valider groupe">
             
 {% endblock %}
 {% block center %}
@@ -32,6 +32,7 @@
                                 <th id="titre_tableau_sondage" colspan="{{ colspan }}"><H2>Creation des groupes</H2></th>
                             </tr>
                             <tr class="colonnes">
+                                <th class="supprimer">Supprimer</th>
                                 <th class="noms">Etudiant</th>
                                 {% for matiere in matieres %}
                                     <th class="noms">{{ matiere.nom_matiere }}</th>
@@ -46,8 +47,13 @@
                     </table>
                     <table class="scrolable" id="tab_volontaires">
                         <tbody>
+                            <tr>
+                            
                                 {% for donnees in retenus.values() %}
-                                    <tr>
+                                
+                                    <td class="supprimer"><input type="button" value= "Supprimer" class='style_btn'></td>
+                                    
+                                        
                                         <td class="nom"> <a href="{{url_for ('Suivie_etu')}}"> {{ donnees.eleve.nom_eleve }} </a> </td>
                                         {% for i in range(0, num_qcm) %}
                                             <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
@@ -77,7 +83,9 @@
                                     </tr>
                                 {% endfor %}
                                 {% for donnees in non_retenus.values() %}
+                                    
                                     <tr>
+                                        <td class="supprimer"><input type="button" value= "Supprimer" class ="style_btn"></td>
                                         <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
                                         {% for i in range(0, num_qcm) %}
                                             <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
@@ -134,7 +142,7 @@
                                             <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
                                         {% endfor %}
                                     <td class="volontaire "> {{ donnees.eleve.volontaire }}</td>
-                                    <td class="ajout_el" ><input type="button"value="Ajouter aux groupes"></td>
+                                    <td class="ajout_el" ><input type="button" class='style_btn2' value="Ajouter"></td>
                                 </tr>
                             {% endfor %}
                         </tbody>

@@ -49,7 +49,7 @@
             <input type="date" name="date_fin" id="date_fin">
 </section>
 <section>
-    <input type="button" value="Validé" id="btn_valide_creneau" onclick="document.location.reload(false)"> 
+    <input type="button" class="style_btn" Value="Valider" id="btn_valide_creneau" onclick="document.location.reload(false)"> 
 </section>
 <section id="semaines_choix">
     <div id="selec_sem">
@@ -58,7 +58,7 @@
                 <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
                 
             {% endfor %}
-            <input type="button" value="Valdié" id="btn_valide_semaine" onclick="document.location.reload(false)">
+            <input type="button" class="style_btn" value="Valdié" id="btn_valide_semaine" onclick="document.location.reload(false)">
         </select>
     </div>
     <section id="para_qcm">

@@ -111,10 +111,7 @@
     margin-top: 1em;
   }
 
-  #btn_valide_semaine{
-    margin-left:1em;
-    margin-top: 1em;
-    flex-basis: 50%;  }
+  
 
   #selec-sem{
     display: flex;
