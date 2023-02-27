@@ -1,3 +1,4 @@
+-- Active: 1677486538660@@127.0.0.1@3306@soutien
 DROP TABLE EST_DISPONIBLE;
 DROP TABLE SOUTENIR;
 DROP TABLE PARTICIPE;
@@ -125,66 +126,69 @@ Create TABLE EST_DISPONIBLE(
 
 delimiter |
 
-create or replace trigger max_etu_oraux before insert on PARTICIPE for each row
+CREATE TRIGGER max_etu_oraux 
+BEFORE INSERT ON PARTICIPE 
+FOR EACH ROW
 BEGIN 
-    declare mes VARCHAR(100) default '';
-    declare nombreEle int; 
-    declare eleMax int;
-    select nbEleveMax into eleMax from ORAUX where ORAUX.idOral = new.idOral;
-    select count(numEtu) into nombreEle from PARTICIPE where PARTICIPE.idOral = new.idOral; 
-    if nombreEle+1 > eleMax then 
-        set mes = concat("l'oral ",new.idOral," ne peut pas etre créé car il comporte plus que ", eleMax ," étudiants");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = mes;
-    end if ;
-end |
+    DECLARE mes VARCHAR(100) DEFAULT '';
+    DECLARE nombreEle INT; 
+    DECLARE eleMax INT;
+    SELECT nbEleveMax INTO eleMax FROM ORAUX WHERE ORAUX.idOral = NEW.idOral;
+    SELECT COUNT(numEtu) INTO nombreEle FROM PARTICIPE WHERE PARTICIPE.idOral = NEW.idOral; 
+    IF nombreEle + 1 > eleMax THEN 
+        SET mes = CONCAT('l\'oral ', NEW.idOral, ' ne peut pas être créé car il comporte plus que ', eleMax ,' étudiants');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = mes;
+    END IF ;
+END;
 delimiter ;
 
 -- un profs a un oral doit etre en capacite de faire la matiere de l'oral
 
 delimiter |
-create or replace trigger prof_capable_oraux before insert on ORAUX for each row
+DROP TRIGGER IF EXISTS prof_capable_oraux;
+DELIMITER //
+CREATE TRIGGER prof_capable_oraux BEFORE INSERT ON ORAUX FOR EACH ROW
 BEGIN 
-    declare matiere_possible VARCHAR(25) default '';
-    declare matiere_oral VARCHAR(25) default '';
-    declare messa VARCHAR(100) default '';
-    declare fini boolean DEFAULT false;
-    declare nomProfActu VARCHAR(100);
-    declare peut_faire boolean default false;
-    declare matiere_prof int;
-    declare nombreOral int; 
-    declare prof int;
-    declare lesMatieres cursor for
-        select idMatiere from SOUTENIR where new.idProf = SOUTENIR.idProf;
-    declare continue handler for not found set fini = true;
-    open lesMatieres;
+    DECLARE matiere_possible VARCHAR(25) DEFAULT '';
+    DECLARE matiere_oral VARCHAR(25) DEFAULT '';
+    DECLARE messa VARCHAR(100) DEFAULT '';
+    DECLARE fini BOOLEAN DEFAULT false;
+    DECLARE nomProfActu VARCHAR(100);
+    DECLARE peut_faire BOOLEAN DEFAULT false;
+    DECLARE matiere_prof INT;
+    DECLARE nombreOral INT; 
+    DECLARE prof INT;
+    DECLARE lesMatieres CURSOR FOR SELECT idMatiere FROM SOUTENIR WHERE new.idProf = SOUTENIR.idProf;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET fini = true;
+    OPEN lesMatieres;
 
-    while not fini do
-        fetch lesMatieres into matiere_prof;
-        if not fini then
-            if matiere_prof = new.idMatiere then
-                set peut_faire = true;
-            end if;
-        end if;
-    end while;
-    close lesMatieres;
-    select nomProf into nomProfActu from PROF where PROF.idProf = new.idProf;
-    if not peut_faire then 
-        set messa = concat("le professeur ",nomProfActu,"  n'est pas en capacité d'assurer ce cours ");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-    end if ;
-    if new.idProf is not null then 
-        select idProf into prof from EST_DISPONIBLE where new.idProf = EST_DISPONIBLE.idProf and new.idOral = EST_DISPONIBLE.idOral;
-        if prof is not null then
-            set messa = concat("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
-            signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-        end if;
-    end if ;
-    select count(idOral) into nombreOral from ORAUX where ORAUX.idProf = new.idProf and ORAUX.dateOral = new.dateOral; 
-    if nombreOral > 1 then 
-        set messa = concat("l'oral ne peut pas etre créé car le prof comporte plus que 1 oral");
-        signal SQLSTATE '45000' set MESSAGE_TEXT = messa;
-    end if ;
-end |
+    WHILE NOT fini DO
+        FETCH lesMatieres INTO matiere_prof;
+        IF NOT fini THEN
+            IF matiere_prof = new.idMatiere THEN
+                SET peut_faire = true;
+            END IF;
+        END IF;
+    END WHILE;
+    CLOSE lesMatieres;
+    SELECT nomProf INTO nomProfActu FROM PROF WHERE PROF.idProf = new.idProf;
+    IF NOT peut_faire THEN 
+        SET messa = CONCAT("le professeur ",nomProfActu," n'est pas en capacité d'assurer ce cours");
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = messa;
+    END IF ;
+    IF new.idProf IS NOT NULL THEN 
+        SELECT idProf INTO prof FROM EST_DISPONIBLE WHERE new.idProf = EST_DISPONIBLE.idProf AND new.idOral = EST_DISPONIBLE.idOral;
+        IF prof IS NOT NULL THEN
+            SET messa = CONCAT("le professeur ",new.idProf," n'est pas disponible pour l'oral ",new.idOral);
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = messa;
+        END IF;
+    END IF ;
+    SELECT COUNT(idOral) INTO nombreOral FROM ORAUX WHERE ORAUX.idProf = new.idProf AND ORAUX.dateOral = new.dateOral; 
+    IF nombreOral > 1 THEN 
+        SET messa = CONCAT("l'oral ne peut pas être créé car le prof comporte plus que 1 oral");
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = messa;
+    END IF ;
+END //
 delimiter ;
 
 -- trigger pour que le prof soit disponible pour l'oral
