@@ -8,12 +8,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 10%;
+  margin-left: 10vw;
   width: auto;
 }
 #tableauqcm td, #tableauqcm th{
-  padding: 0.5em;
-  width: 10em;
+  padding: 0.5vw;
+  width: 9vw;
   text-align: center; 
   border: 1px solid #333;   
 }
@@ -30,13 +30,16 @@
       flex-direction: column;
       align-items: center;
   }
+
+  /* changer la taille de la barre scrollable */
   .scrolable {
-    margin-right: 0%;
-    padding-right: 0%;
+    margin-right: 0vw;
+    padding-right: 0vw;
     overflow-y: scroll;
     display: block;
     border-spacing: 0;
-    max-height: 30em;}
+    width: 1vw;
+    max-height: 20vw;}
 
 #titre_tableau_sondage{
   background-color: #860061;
@@ -50,4 +53,12 @@ tr a{
   color: #000;
 }
 
+
+table{
+  font-size: 1vw;
+}
+
+#aside_filtes{
+  width: 10vw;
+}
 
