@@ -48,6 +48,7 @@ nav a:active
     nav
     {
         height: 60px;
+        
     }
  
     nav .main_pages 
@@ -56,10 +57,13 @@ nav a:active
         flex-direction: column;
         background: #d9d9d9;
         height: 340px;
+        position: relative;
+        z-index: 10;
     }
  
     nav .main_pages a {
         width: 50%;
+        align-self: center;
     }
     .label_nav 
     {
@@ -75,5 +79,10 @@ nav a:active
     #toggle:checked + .main_pages {
         display: flex;
         color:black;
-    }}
+    }
+
+    .navbar__link:hover{
+        color:purple;
+    }
+}
 
