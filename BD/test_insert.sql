@@ -56,6 +56,6 @@ insert into PARTICIPE values("paul s'améliore en maths", 1, 1);
 insert into PARTICIPE values("maxime s'améliore en maths", 2, 1);
 insert into PARTICIPE values("erwan s'améliore en maths", 3, 1);
 
-
+insert into USER VALUES("admin", "admin", 1);
 
 

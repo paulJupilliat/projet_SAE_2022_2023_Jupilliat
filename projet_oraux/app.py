@@ -17,7 +17,7 @@ def mkpath (p):
             p))
 
 app.config['SQLALCHEMY_DATABASE_URI']=(
-    'mysql+mysqlconnector://jupilliat:jupilliat@servinfo-mariadb/DBjupilliat')
+    'mysql+mysqlconnector://paul:paul@localhost/soutien?charset=utf8mb4')
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
