@@ -13,8 +13,8 @@
     align-items: left;
 }
 #dep{
-    margin-top: 1em;
-    max-height: 2em;
+    margin-top: 1vw;
+    max-height: 2vw;
 }
 
 
@@ -34,18 +34,18 @@ table {
   border-spacing: 0;
 }
 .scrolable {
-  margin-right: 0%;
-  padding-right: 0%;
+  margin-right: 0vw;
+  padding-right: 0vw;
   overflow-y: scroll;
   display: block;
   border-spacing: 0;
-  width: 100%;
-  max-height: 30em;}
+  width: 100vw;
+  max-height: 30vw;}
 
 
 #tableauqcm td, #tableauqcm th{
-    padding: 0.5em;
-    width: 10em;
+    padding: 0.5vw;
+    width: 10vw;
     text-align: center; 
     border: 1px solid #333;   
 }
@@ -54,15 +54,15 @@ table {
 
 
 #tableaugen td, #tableaugen th{
-  padding: 0.5em;
-  width: 10em;
+  padding: 0.5vw;
+  width: 10vw;
   text-align: center; 
   border: 1px solid #333;   
 }
 
 #section_tableau th , #section_tableau td{
-  padding: 0.5em;
-  width: 10em;
+  padding: 0.5vw;
+  width: 10vw;
   text-align: center; 
   border: 1px solid #333;   
 }
@@ -85,16 +85,16 @@ tfoot{
 #matieres_gauche {
   display: flex;
   flex-wrap: nowrap;
-  margin-left: 0%;
-  padding-left: 0%;
-  margin-right: 0%;
-  padding-right: 0%;
+  margin-left: 0vw;
+  padding-left: 0vw;
+  margin-right: 0vw;
+  padding-right: 0vw;
 }
 #matieres_gauche > div {
-  margin-left: 0%;
-  padding-left: 0%;
-  margin-right: 0%;
-  padding-right: 0%;
+  margin-left: 0vw;
+  padding-left: 0vw;
+  margin-right: 0vw;
+  padding-right: 0vw;
 }
 
 
@@ -105,17 +105,17 @@ tfoot{
   margin:auto;
 }
 #partie_gauche {
-  width: 30%;
-  margin: 1em;
+  width: 30vw;
+  margin: 1vw;
 }
 #dates {
   display: flex;
 }
 #dates > * {
-  margin-left: 1%;
-  padding-left: 1%;
-  margin-right: 1%;
-  padding-right: 1%;
+  margin-left: 1vw;
+  padding-left: 1vw;
+  margin-right: 1vw;
+  padding-right: 1vw;
 }
 
 tbody {
@@ -124,7 +124,7 @@ tbody {
 }
 
 aside{
-  margin: 2em;
+  margin: 2vw;
   flex-grow: 0;
   flex-wrap: nowrap;
   flex-direction: column;

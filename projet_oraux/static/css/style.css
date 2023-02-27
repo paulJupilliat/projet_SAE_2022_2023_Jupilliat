@@ -21,12 +21,10 @@ tfoot {
     color: #fff;
 }
 
-#encadrer_table, #tableaugen{
+#tableaugen{
     background-color: lightgrey;
     border-radius: 10px;
     margin-right:2vw;
-    padding:2vw;
-    width:auto
 }
 
 #tableauqcm{
