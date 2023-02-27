@@ -14,13 +14,9 @@
     color: #000;
   }
   #liaison_bd{
-    margin-top: 5%;
+    margin-top: 5vw;
   }
 
   #tableaugen{
-    width: 79.5%;
+    width: 79.5vw;
   }
-
-#div_main{
-  margin-left: 7%;
-}
