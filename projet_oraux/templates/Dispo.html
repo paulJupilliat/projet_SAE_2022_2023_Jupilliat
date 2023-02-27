@@ -1,233 +1,96 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <title>DIspos Enseignant</title>
-</head>
-<body>
-    <nav>
-        <label for="toggle">☰</label>
-        <input type="checkbox" id="toggle">
-        <div class="main_pages">
-            <a href="./Acceuil.html" id="navbar_home"> 
-                <img src="../img/acceuil_act.png" height="50em" alt="" height="60em">
-            </a>
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dispo.css')}}">
 
-            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
-       
+{% endblock %}
+{% block aside %}
+            <div id="aside_filtres">
+                <h2>Filtres</h2>
+                <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep2"/></button>
+            </div>
+            <section id="groupe_filtre">
+            <select name="semaines" id="selec-sem">
+                {% for semaine in semaines %}
+                    <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                {% endfor %}
+            </select>
+            <div id="aside_grp">
+                <h3>Matières</h3>
+                <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+                    <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
+            </div>
+            <ul id="grps_filtres">
+                <li>
+                    <input type="checkbox" name="Python" id="Python">
+                    <label for="Python">Python</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="BDD" id="BDD">
+                    <label for="BDD">BDD</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="Java" id="Java">
+                    <label for="Java">Java</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="Bash" id="Bash">
+                    <label for="Bash">Bash</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="Maths" id="Maths">
+                    <label for="Maths">Maths</label>
+                </li>
+            </ul>
+            <input id="liaison_bd" class="style_btn" value="Valider" type="button"></input>
+            </section>
+{% endblock %}
+{% block center%}
+        <section id="tableaudispo">
+            <table id="labels">
+                <thead id="Dispo_nom">
+                    <tr>
+                        <th id="titre_tableau_dispo"><H2>Disponibilités</H2></th>
+                    </tr>
+                </thead>
+                <tr class="colonnes">
+                    <th class="noms">Enseignant</th>
+                    {% for matiere in matieres %}
+                        <th class="noms">{{ matiere }}</th>
+                    {% endfor %}
+                   
+                    
+                </tr>
+                </table>
+                <table class="scrolable">
+                    <tbody>
+                        
+                        {% for prof in possibles.keys() %}
+                            <tr>
+                                <td> {{ prof }}</td>
+                                {% for matiere in matieres %}
+                                    {% if matiere in possibles[prof] %}
+                                        <td> OUI </td>
+                                    {% else %}
+                                        <td> NON </td>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                
+                                
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
 
-            <a href="./res_sond.html" class="navbar__links">Sondages</a>
-        
-
-            <a href="./Dispo.html" class="navbar__links">Disponibilité Enseignant</a>
-       
-
-            <a href="/" class="navbar__links">Gerer ses disponibilités</a>
-       
-            <a href="/" class="navbar__links">Voir le soutien</a>
-        
-            <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
-
-            <a href="/" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
-
-            <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
-
-        </div>
-    </nav>
-    <aside>
-        <div id="aside_filtres">
-            <h2>Filtres</h2>
-            <img src="../img/deplie.png" alt="deplie" id="dep"/>
-        </div>
-        <select name="semaines" id="selec-sem">
-            <option value="">Semaine 43</option>
-            <option value="">Semaine 44</option>
-            <option value="">Semaine 45</option>
-            <option value="">Semaine 46</option>
-            <option value="">Semaine 47</option>
-        </select>
-        <div id="aside_grp">
-            <h3>Matières</h3>
-            <img src="../img/deplie.png" alt="deplie" id="dep"/>
-        </div>
-        <ul id="grps_filtres">
-            <li>
-                <input type="checkbox" name="Python" id="Python">
-                <label for="Python">Python</label>
-            </li>
-            <li>
-                <input type="checkbox" name="BDD" id="BDD">
-                <label for="BDD">BDD</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Java" id="Java">
-                <label for="Java">Java</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Bash" id="Bash">
-                <label for="Bash">Bash</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Maths" id="Maths">
-                <label for="Maths">Maths</label>
-            </li>
-        </ul>
-    </aside>
-    <main>
-        <h1>Disponibilitées</h1>
-        <table id="Dispo">
-            <tr id="colonnes">
-                <th id="noms">Enseignant</th>
-                <th id="noms">matiere1</th>
-                <th id="noms">matiere2</th>
-                <th id="noms">matière3</th>
-                <th id="noms">date</th>
-            </tr>
-            <tr>
-                <td>Arsouze</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-        </table>
-    </main>
-</body>
-=======
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <script src="../JS/dispo.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <title>DIspos Enseignant</title>
-</head>
-<body>
-    <!-- TODO: menu nav bar paul -->
-    <aside>
-        <div id="aside_filtres">
-            <h2>Filtres</h2>
-            <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
-                <img src="../img/deplie.png" alt="plie" id="dep2"/></button>
-        </div>
-        <section id="groupe_filtre">
-        <select name="semaines" id="selec-sem">
-            <option value="">Semaine 43</option>
-            <option value="">Semaine 44</option>
-            <option value="">Semaine 45</option>
-            <option value="">Semaine 46</option>
-            <option value="">Semaine 47</option>
-        </select>
-        <div id="aside_grp">
-            <h3>Matières</h3>
-            <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
-                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
-        </div>
-        <ul id="grps_filtres">
-            <li>
-                <input type="checkbox" name="Python" id="Python">
-                <label for="Python">Python</label>
-            </li>
-            <li>
-                <input type="checkbox" name="BDD" id="BDD">
-                <label for="BDD">BDD</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Java" id="Java">
-                <label for="Java">Java</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Bash" id="Bash">
-                <label for="Bash">Bash</label>
-            </li>
-            <li>
-                <input type="checkbox" name="Maths" id="Maths">
-                <label for="Maths">Maths</label>
-            </li>
-        </ul>
-        </section>
-    </aside>
-    <main>
-        <h1>Disponibilitées</h1>
-        <table id="Dispo">
-            <tr id="colonnes">
-                <th id="noms">Enseignant</th>
-                <th id="noms">matiere1</th>
-                <th id="noms">matiere2</th>
-                <th id="noms">matière3</th>
-                <th id="noms">date</th>
-            </tr>
-            <tr>
-                <td>Arsouze</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-                <td>Maths</td>
-                <td>2021-11-11</td>
-            </tr>
-        </table>
-    </main>
-</body>
-</html>
+        </section>  
+{% endblock %}
+{% block scripts %}
+<script src="{{url_for('static', filename='JS/dispo.js')}}"></script>
+{% endblock %}

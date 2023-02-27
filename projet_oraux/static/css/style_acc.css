@@ -1,49 +1,43 @@
 
-#recup_données_btn, #save_sett{
-    margin-left: 4%;
-    margin-right: 4%;
-    background-color: #860061;
-    color: white;
-    
-}
-main{
+#div_main{
     display: flex;
-    
+    justify-content: space-around;
 }
 
 .res_qcm{
     background-color: lightgray;
     border-radius: 10px;
-    margin-top: 3%;
-    padding: 3%;
+    margin-top: 8vw;
+    height: 18vw;
+    padding: 1.25vw;
     text-align: center;
-    flex-basis: 50%;
+    flex-basis: 50vw;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    
 }
 
-.info-acc, .info_par{
+#div_main{
     display: flex;
+    padding-top: 0vw;
+    margin-top: 0vw;
 }
 
 .res_sond{
     background-color: lightgray;
     border-radius: 10px;
-    padding: 3%;
+    padding: 1.25vw;
     text-align: center;
     display: flex;
     flex-direction: column;
-    padding: 3%;
-    margin-top: 3%;
+    margin-top: 3vw;
 }
 
 .dispo_en{
     background-color: lightgray;
     border-radius: 10px;
-    margin-top: 3%;
-    padding: 3%;
+    margin-top: 2vw;
+    padding: 1.25vw;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -53,17 +47,17 @@ main{
 .sond_dispo{
     display: inline;
     background-color: lightgray;
-    flex-basis: 10%;
+    flex-basis: 10vw;
     flex-grow: 1;
 }
 .dispo_sond{
     display: flex;
     flex-direction: column;
-    margin-left: 4%;
-    margin-right: 4%;
-    padding: 3%;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    padding: 3vw;
     margin-bottom: 10px;
-    flex-basis: 50%;
+    flex-basis: 50vw;
     flex-grow: 1;
 
 }
@@ -71,11 +65,22 @@ main{
 /* les tab */
 table,
 td {
-    border: 1px solid #333;
+    border: 0.15vw solid #333;
 }
 
 thead,
 tfoot {
     background-color: #860061;
     color: #fff;
+}
+
+/* met le top au centre */
+#top {
+    margin-top: 2vw;
+    text-align: center;
+    margin-bottom: -3vw;
+}
+
+table{
+    font-size: 1vw;
 }

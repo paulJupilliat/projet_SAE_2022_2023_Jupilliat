@@ -3,20 +3,19 @@ body{
     display: flex;
     flex-direction: column;
 }
+
 nav{
-    display: flex;
-    flex-basis: 80%;
-    flex-grow: 1;
+    
     height: 100px;
     background: #d9d9d9;
-    justify-content: center;
 }
  
 
 nav .main_pages{
     display: flex;
+    flex-basis: 80%;
+    flex-grow: 1;
     justify-content: space-around;
-    align-items: center;
 }
  
 nav .main_pages a 
@@ -31,12 +30,16 @@ nav .main_pages a
     color: black;
 }
  
-nav a:hover 
+nav a:hover
 {
     color:purple;
 }
-
-label, #toggle
+/* garder la couleur du bouton une fois sur la page */
+nav a:active
+{
+    color:purple;
+}
+.label_nav, #toggle
 {
     display: none;
 }
@@ -45,6 +48,7 @@ label, #toggle
     nav
     {
         height: 60px;
+        
     }
  
     nav .main_pages 
@@ -53,12 +57,15 @@ label, #toggle
         flex-direction: column;
         background: #d9d9d9;
         height: 340px;
+        position: relative;
+        z-index: 10;
     }
  
     nav .main_pages a {
         width: 50%;
+        align-self: center;
     }
-    label 
+    .label_nav 
     {
         width: 30px;
         display: flex;
@@ -72,9 +79,10 @@ label, #toggle
     #toggle:checked + .main_pages {
         display: flex;
         color:black;
-    }}
-
-    .navbar__links{
-        padding-right: 9%;
-        padding-left: 9%;
     }
+
+    .navbar__link:hover{
+        color:purple;
+    }
+}
+

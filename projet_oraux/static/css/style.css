@@ -1,0 +1,130 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.style_btn{
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: #bfa5c0;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 1em;
+}
+.style_btn:hover{
+    background-color:  #cc5fad;
+}
+.style_btn2{
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: #90ca93;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 1em;
+}
+.style_btn2:hover{
+    background-color: #49914d;
+}
+button{
+    border: none;
+    background-color: #fff;
+  }
+  button img{
+    width: 1.5vw;
+    height: 1.5vw;
+  }
+
+/* pour le tableau */
+table,
+td {
+    border: 1px solid #333;
+}
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
+
+#tableaugen{
+    background-color: lightgrey;
+    border-radius: 10px;
+    margin-right:2vw;
+}
+
+#tableauqcm{
+    background-color: lightgrey;
+    border-radius: 10px;
+    margin-right:20vw;
+    padding:1vw;
+    
+}
+
+#tableaudispo{
+    background-color: lightgrey;
+    border-radius: 10px;
+    margin-right:20vw;
+    padding:2vw;
+    
+}
+#div_main{
+    margin-top: 3% ;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3% ;}
+
+.donnees_btn{
+    border-radius: 1vw;
+    padding: 1vw;
+    background-color: #860061;
+    font-weight: bold;
+    font-size: 1vw;
+}
+.p-4{
+    margin-left: 3%;
+  }
+
+  h2{
+    font-size: 2vw;
+  }
+  h3{
+    font-size: 1.5vw;
+  }
+
+select{
+    width: 8vw;
+    font-size: 0.82vw;
+}
+
+label{
+    font-size: 1vw;
+}
+
+/* réduit la taille des points sur les li */
+li{
+    font-size: 1vw;
+}
+
+/* réduit la taille des checkboxs */
+input[type=checkbox]{
+    width: 1vw;
+    height: 1vw;
+}

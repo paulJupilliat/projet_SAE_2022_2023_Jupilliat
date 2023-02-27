@@ -1,142 +1,134 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <script src="../JS/suivie_etu.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/suivi_etu.css">
-    <title>Suivis etu</title>
-</head>
-<body>
-    <section id="partie_gauche">
-            <h2>num Etudiant</h1>
-            <h2>groupe etu</h2>
-        </div>
-        <div id="section_grp">
-            <h3>Matières</h3>
-            <button id="dep_fil" type="button" onclick="plie_deplie_matieres()">
-                <img src="../img/deplie.png" alt="plie" id="dep"/></button>
-        </div>
-        <section id="matieres_gauche">
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtres.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/suivi_etu.css')}}">
+{% endblock %}
+
+{% block aside %}
+    <h2>Nom, Prenom: </h1>
+        
+    <p class="nom_prenom_suivie">{{ eleve.nom }} {{ eleve.prenom }}</p>
+        
+
+    <h2>groupe etu</h2>
+    {% if semaine_actu.semestre ==1 %}
+    <p class="nom_prenom_suivie"> {{ eleve.groupe_s1 }}</p>
+    {% else %}
+    <p class="nom_prenom_suivie"> {{ eleve.groupe_s2 }}</p>
+    {% endif %}
+</div>
+<div id="section_grp">
+    <h3>Matières</h3>
+    <button id="dep_fil" type="button" onclick="plie_deplie_matieres()">
+        <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="plie" id="dep"/></button>
+</div>
+<section id="matieres_gauche">   
+        {% for couple in matieres %}
             <div>
             <ul class="matières">
-                <li>
-                    <input type="checkbox" name="Python" id="Python">
-                    <label for="Python">Python</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="BDD" id="BDD">
-                    <label for="BDD">BDD</label>
-                </li>
+            {% for matiere in couple %}
+            <li >
+                <input type="checkbox" id="{{ matiere.nom_matiere }}" name="{{ matiere.nom_matiere }}" value="{{ matiere.nom_matiere }}">
+                <label for="{{ matiere.nom_matiere }}">{{ matiere.nom_matiere }}</label>
+            </li>
+            {% endfor %}
             </ul>
             </div>
-            <div>
-                <ul class="matières">
-                    <li>
-                        <input type="checkbox" name="Java" id="Java">
-                        <label for="Java">Java</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" name="Bash" id="Bash">
-                        <label for="Bash">Bash</label>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <ul class="matières">
-                    <li>
-                        <input type="checkbox" name="Maths" id="Maths">
-                        <label for="Maths">Maths</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" name="Eco" id="Eco">
-                        <label for="Eco">Eco</label>
-                    </li>
-                </ul>
-            </div>
-        </section>
-        <section id="dates">
-                    <label for="date_debut">De</label>
-                    <input type="date" name="date_debut" id="date_debut">
-                    <label for="date_fin">À</label>
-                    <input type="date" name="date_fin" id="date_fin">
-        </section>
-        <section id="semaines_choix">
-            <div id="selec_sem">
-            <select name="semaines" id="selec-sem">
-                <option value="">Semaine 43</option>
-                <option value="">Semaine 44</option>
-                <option value="">Semaine 45</option>
-                <option value="">Semaine 46</option>
-                <option value="">Semaine 47</option>
-            </select>
-            </div>
-            <section id="para_qcm">
-                <h2>QCMs:</h2>
-                <div id="qcm">
-                    <p>QCM1</p>
-                    <p>QCM2</p>
-                    <p>QCM3</p>
-                    <p>QCM4</p>
-                    <p>QCM5</p>
-                </div>
-            </section>
-            <section id="para_soutien">
-                <h2>SOUTIEN</h2>
-                <div id="soutien">
-                    <p>Soutien1</p>
-                    <p>Soutien2</p>
-                    <p>Soutien3</p>
-                    <p>Soutien4</p>
-                    <p>Soutien5</p>
-                </div>
-            </section>
-        </section>
-    </section>
-    <section id="partie_milieu">
-        <h2>Suivi Etudiant</h2>
-        <section id="graphique">
-            <img src="../img/fond_graphique.png" alt="graphique">
-        </section>
-    </section>
-    <div id="content">
-        <table id="suivie_etu_table">
-            <tr id="colonnes">
-                <th id="noms">Sem</th>
-                <th id="noms">Matière</th>
-                <th id="noms">Commentaire</th>
-            </tr>
-            <tr>
-                <td>Arsouze</td>
-                <td>Python</td>
-                <td>Java</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-            </tr>
-            <tr>
-                <td>Paul</td>
-                <td>Python</td>
-                <td>Java</td>
-            </tr>
-        </table>
+        {% endfor %}
+</section>
+<section id="dates">
+            <label for="date_debut">De</label>
+            <input type="date" name="date_debut" id="date_debut">
+            <label for="date_fin">À</label>
+            <input type="date" name="date_fin" id="date_fin">
+</section>
+<section>
+    <input type="button" class="style_btn" Value="Valider" id="btn_valide_creneau" onclick="document.location.reload(false)"> 
+</section>
+<section id="semaines_choix">
+    <div id="selec_sem">
+        <select name="semaines" id="selec-sem">
+            {% for semaine in semaines %}
+                <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                
+            {% endfor %}
+            <input type="button" class="style_btn" value="Valdié" id="btn_valide_semaine" onclick="document.location.reload(false)">
+        </select>
     </div>
-    <button type="button" id="collapsible" onclick="collapse()">
-    <img src="../img/moins.png" alt="-" height="10em"></button>
-</body>
-</html>
+    <section id="para_qcm">
+        <h2>QCMs:</h2>
+        <div id="qcm">
+           {% for qcm in qcms %}
+                {% if qcm.note_qcm > 10 %}
+                <p class="couleur_bonne">{{ qcm.nom_matiere }} : {{ qcm.note_qcm}} </p>
+                {% else %}
+                <p class="couleur_mauvaise">{{ qcm.nom_matiere }} : {{ qcm.note_qcm}} </p>
+                {% endif %}
+           {% endfor %}
+        </div>
+    </section>
+    <section id="para_soutien">
+        <h2>SOUTIEN</h2>
+        <div id="soutien">
+            <p>Volontaire: {{ soutien.volontaire }} </p>
+            <p>Matiere souhaitée: {{ soutien.matiere_voulue }}  </p>
+        <!-- si questions n'est pas None -->
+        {% if questions %}
+        {% for question in questions %}
+            <p>Question: {{ question.question }} </p>
+            <p>Réponse: {{ question.reponse }}  </p>
+        {% endfor %}
+        {% endif %}
+        </div>
+    </section>
+</section> 
+{% endblock %}
+{% block center %}
+<section id="partie_milieu">
+    <h2>Suivi Etudiant</h2>
+    <section id="graphique">
+        <div id="linechart_material" style="width: 900px; height: 500px"></div>
+    </section>
+</section>
+{% endblock %}
+{% block right %}
+    <table id="suivie_etu_table">
+        <tr id="colonnes">
+            <th id="noms">Sem</th>
+            <th id="noms">Matière</th>
+            <th id="noms">Commentaire</th>
+        </tr>
+        {% for oral,semaine in oraux %}
+        <tr>
+            {% if oral %}
+            <td>{{ semaine.id_semaine }}</td>
+            <td>{{ oral.nom_matiere }}</td>
+            <td>{{ oral.commentaire }}</td>
+            {% else %}
+            <td>{{ semaine.id_semaine }}</td>
+            <td>-</td>
+            <td>-</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+<button type="button" id="collapsible" onclick="collapse()">
+
+<img src="{{ url_for('static', filename='img/moins.png') }}" alt="-" height="10em"></button>
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='JS/suivi_etu.js') }}">
+</script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="{{ url_for('static', filename='JS/suivi_graphe.js') }}"></script>
+{% endblock %}
+ 

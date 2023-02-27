@@ -1,0 +1,83 @@
+/* pour le tableau */
+table,
+td {
+    border: 2px solid #333;
+    text-align: center;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
+table{
+    margin: 3vw;
+}
+
+#grp4{
+    padding-top: 3vw;
+}
+
+/* ---BODY------------------ */
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+main{
+    display: flex;
+    margin-top: 3vw ;
+}
+
+
+
+/* ----------------------- */
+
+#titre_tableau_sondage{
+    background-color: #860061;
+    color: white;
+    font-size: 2vw;
+}
+
+input[type=checkbox]:checked + label {
+    display: none;}
+
+
+.in_filtres{
+    appearance: none;
+}
+
+th {
+    text-align: center;
+    vertical-align: middle;
+    border: 2px solid #333;
+}
+
+ #div_main{
+    margin-left: 5vw;
+}
+
+#color_noir{
+    color: black;
+}
+
+#color_noir :hover{
+    color: blue;
+}
+#tableau{
+    width: 52.5vw;
+    align-self: center;
+    height: 20vw;
+    background-color: lightgrey;
+    border-radius: 10px;
+    font-size: 1vw;
+}
+
+#encadrer_table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: -2vw;
+}

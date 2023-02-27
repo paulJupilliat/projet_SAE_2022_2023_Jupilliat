@@ -1,0 +1,167 @@
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/suiviGen.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/soutien.css')}}">
+{% endblock %}
+{% block top %}
+        
+            <select name="semaines" id="selec-sem">
+                {% for semaine in semaines %}
+                    <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+                {% endfor %}
+            </select>
+            <input type="button" class='style_btn2' value="valider groupe">
+            
+{% endblock %}
+{% block center %}
+            {% if groupe_crees %}
+
+
+            {% else %}
+            {% if admin %}
+                <section id="tableaugen">
+                    <table id="labels">
+                        <thead id="titre_suivi">
+                            <tr>
+                                <th id="titre_tableau_sondage" colspan="{{ colspan }}"><H2>Creation des groupes</H2></th>
+                            </tr>
+                            <tr class="colonnes">
+                                <th class="supprimer">Supprimer</th>
+                                <th class="noms">Etudiant</th>
+                                {% for matiere in matieres %}
+                                    <th class="noms">{{ matiere.nom_matiere }}</th>
+                                {% endfor %}
+                                <th class="noms">Volontaire</th>
+                                <th class="noms">Souhait</th>
+                                <th class="noms">Retenu</th>
+                                <th class="noms">Enseignant</th>
+                                <th class="noms">Créneau</th>
+                            </tr>    
+                        </thead>
+                    </table>
+                    <table class="scrolable" id="tab_volontaires">
+                        <tbody>
+                            <tr>
+                            
+                                {% for donnees in retenus.values() %}
+                                
+                                    <td class="supprimer"><input type="button" value= "Supprimer" class='style_btn'></td>
+                                    
+                                        
+                                        <td class="nom"> <a href="{{url_for ('Suivie_etu')}}"> {{ donnees.eleve.nom_eleve }} </a> </td>
+                                        {% for i in range(0, num_qcm) %}
+                                            <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
+                                        {% endfor %}
+                                        <td class="volontaire"> {{ donnees.eleve.volontaire }}</td>
+                                        <td class="souhait"> {{ donnees.eleve.matiere_voulue }}</td>
+                                        <td class="retenue"><input type="text" name="retenue" id="retenue" value="{{ donnees.eleve.matiere_retenue.matiere}}" style="width: 50%;"></td>
+                                        <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                            <select name="prof" id="prof" onchange="changeColor(this)" style="background-color: white;">
+                                                {% for prof in donnees.profs.profs_dispos %}
+                                                    <option value="dispo {{ prof.nom_prof }}" class="dispos">{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                                {% for prof in donnees.profs.profs_possibles %}
+                                                    <option value="{{ prof.nom_prof }}" >{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                        </select></form>
+                                        </td>
+                                        <td class="creneau"> <form action="choix_crenau">
+                                            <label for="cren">
+                                                <select name="cren" id="cren" >
+                                                    {% for oral in oraux %}
+                                                        <option value="{{ oral.id_oral }}">{{ oral.date_oral }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </form></td>
+                                    </tr>
+                                {% endfor %}
+                                {% for donnees in non_retenus.values() %}
+                                    
+                                    <tr>
+                                        <td class="supprimer"><input type="button" value= "Supprimer" class ="style_btn"></td>
+                                        <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
+                                        {% for i in range(0, num_qcm) %}
+                                            <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
+                                        {% endfor %}
+                                        <td class="volontaire "> {{ donnees.eleve.volontaire }}</td>
+                                        <td class="souhait"> {{ donnees.eleve.matiere_voulue }}</td>
+                                        <td class="retenue"><input type="text" name="retenue" id="retenue" value="Non retenu" style="width: 50%;"></td>
+                                        <td class="enseignant"> <form action="choix_enseigant"><label for="prof">prof : </label>
+                                            <select name="prof" id="prof" onchange="changeColor(this)" style="background-color: white;">
+                                                <option value="-" selected>-</option>
+                                                {% for prof in donnees.profs.profs_dispos %}
+                                                    <option value="dispo {{ prof.nom_prof }}" class="dispos">{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                                {% for prof in donnees.profs.profs_possibles %}
+                                                    <option value="{{ prof.nom_prof }}" >{{ prof.nom_prof }}</option>
+                                                {% endfor %}
+                                        </select></form>
+                                        </td>
+                                        <td class="creneau"> <form action="choix_crenau">
+                                            <label for="cren">
+                                                <select name="cren" id="cren" >
+                                                    <option value="-" selected>-</option>
+                                                    {% for oral in oraux %}
+                                                        <option value="{{ oral.id_oral }}">{{ oral.date_oral }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </form></td>
+                                    </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    <table id="labels">
+                        <thead id="titre_suivi">
+                            <tr>
+                                <th id="titre_tableau_sondage" colspan="{{ colspan }}"><H2>Eleves non volontaires qui auraient besoin</H2></th>
+                            </tr>
+                            <tr class="colonnes">
+                                <th class="nom">Etudiant</th>
+                                {% for matiere in matieres %}
+                                    <th class="matiere">{{ matiere.nom_matiere }}</th>
+                                {% endfor %}
+                                <th class="volontaire">Volontaire</th>
+                                <th class="ajout_el" >Ajouter aux groupes</th>
+                            </tr>    
+                        </thead>
+                    </table>
+                    <table class="scrolable" id="tab_besoin">
+                        <tbody>
+                            {% for donnees in eleves_besoin.values() %}
+                                <tr>
+                                    <td class="nom">{{ donnees.eleve.nom_eleve }}</td>
+                                    {% for i in range(0, num_qcm) %}
+                                            <td class="matiere">{{ donnees.notes_qcm[i] }}</td>
+                                        {% endfor %}
+                                    <td class="volontaire "> {{ donnees.eleve.volontaire }}</td>
+                                    <td class="ajout_el" ><input type="button" class='style_btn2' value="Ajouter"></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table></section>
+            </div>
+            {% else %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Données non disponibles</h1>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+   
+        {% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='JS/soutien.js') }}"></script>
+    </script>
+{% endblock %}

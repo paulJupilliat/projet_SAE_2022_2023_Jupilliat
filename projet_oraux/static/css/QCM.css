@@ -1,0 +1,64 @@
+#tableauqcm table{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
+}
+#tableauqcm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10vw;
+  width: auto;
+}
+#tableauqcm td, #tableauqcm th{
+  padding: 0.5vw;
+  width: 9vw;
+  text-align: center; 
+  border: 1px solid #333;   
+}
+#tableauqcm table{
+  margin: 0;
+  border-spacing: 0;
+  width: fit-content;
+  align-self: center;
+}
+
+/* met le div_main au centre */
+  #div_main{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  /* changer la taille de la barre scrollable */
+  .scrolable {
+    margin-right: 0vw;
+    padding-right: 0vw;
+    overflow-y: scroll;
+    display: block;
+    border-spacing: 0;
+    width: 1vw;
+    max-height: 20vw;}
+
+#titre_tableau_sondage{
+  background-color: #860061;
+  flex-grow: 1;
+}
+tr{
+  display: flex;
+}
+tr a{
+  text-decoration: none;
+  color: #000;
+}
+
+
+table{
+  font-size: 1vw;
+}
+
+#aside_filtes{
+  width: 10vw;
+}
+

@@ -1,0 +1,71 @@
+
+#top{
+  display: flex;
+  justify-content: center;
+  margin-top: 3vw;
+  padding-bottom: 0vw;
+  margin-bottom: -3vw;
+  margin-left: 15vw;
+}
+
+h1{
+  font-size: larger;
+}
+
+
+
+#top{
+  padding-right: 30vw;
+}
+#titre_tableau_dispo{
+  background-color: #860061;
+  flex-grow: 1;
+}
+#tableaudispo table{
+  margin: 0;
+  border-spacing: 0;
+  width: 100vw;
+  align-self: center;
+}
+#tableaudispo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 20vw;
+  width: auto;
+}
+#tableaudispo td, #tableaudispo th{
+  padding: 0.5vw;
+  width: 10vw;
+  text-align: center; 
+  border: 1px solid #333;   
+}
+#tableaudispo table{
+  border-spacing: 0;
+  width: 41vw;
+  align-self: center;
+  font-size: 1.5vw;
+}
+
+/* met le div_main au centre */
+  #div_main{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .scrolable {
+    margin: 0vw;
+    padding: 0vw;
+    overflow-y: scroll;
+    display: block;
+    max-width: 100vw;
+    max-height: 30vw;}
+    tr{
+      display: flex;
+    }
+    tr a{
+      text-decoration: none;
+      color: #000;
+    }
+
+/* met la barre pour scroller a droite du tableau */

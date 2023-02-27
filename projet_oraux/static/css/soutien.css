@@ -1,0 +1,55 @@
+
+  #tableaugen table{
+    margin: 0;
+    border-spacing: 0;
+    width: fit-content;
+    align-self: center;
+  }
+#tableaugen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.1vw;
+    width: auto;
+  }
+  #tableaugen td, #tableaugen th{
+    padding: 0.5vw;
+    width: 10vw;
+    text-align: center; 
+    border: 1px solid #333;   
+  }
+  #tableaugen table{
+    margin: 0;
+    border-spacing: 0;
+    width: 81Vw;
+    align-self: center;
+  }
+  .selec_sem{
+    margin-right: 100px;
+  }
+
+  /* met le div_main au centre */
+    #div_main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #top{
+        display: flex;
+        justify-content: left;
+        margin-top: 2vw;
+        padding-bottom: 0vw;
+        margin-bottom: -5vw;
+        padding-left: 10vw;
+      }
+  .scrolable {
+  overflow-y: scroll;
+  display: block;
+  border-spacing: 0;
+  max-height: 15vw;}
+
+  button, input, optgroup, select, textarea {
+    font-size: 0.8vw;
+    width: 8vw;
+  max-height: 8vw;}
+  

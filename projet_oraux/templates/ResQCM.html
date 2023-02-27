@@ -1,276 +1,92 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <script src="../JS/res_qcm.js"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/filtres.css">
-    <!-- <link rel="stylesheet" href="../static/style.css"> -->
-    <link rel="stylesheet" href="../static/nav.css">
-    <title>Resultat QCM</title>
-</head>
-<body>
-    <nav>
-        <label for="toggle">☰</label>
-        <input type="checkbox" id="toggle">
-        <div class="main_pages">
-            <a href="./Acceuil.html" id="navbar_home"> 
-                <img src="../img/acceuil_act.png" height="50em" alt="" height="60em">
-            </a>
-
-            <a href="./ResQCM.html" class="navbar__links">Resultats QCM</a>
-       
-
-            <a href="./res_sond.html" class="navbar__links">Sondages</a>
-        
-
-            <a href="./Dispo.html" class="navbar__links">Disponibilité Enseignant</a>
-       
-
-            <a href="/" class="navbar__links">Gerer ses disponibilités</a>
-       
-            <a href="/" class="navbar__links">Voir le soutien</a>
-        
-            <a href="./SuiviGenEtu.html" class="navbar__links">Suivi Etudiant</a>
-
-            <a href="/" class="navbar__links"> <img src="../img/reglages.png" height="50em" alt=""></a>
-
-            <a href="./connexionProf.html" class="navbar__links"><img src="../img/deconnexion.png" height="40em" alt=""></a>
-
-        </div>
-    </nav>
-    <main>
-        <aside>
-            <div id="aside_filtres">
-                <h2>Filtres</h2>
-                <button id="dep_fil" type="button">
-                <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
-            </div>
-            <select name="semaines" id="selec-sem">
-                <option value="">Semaine 43</option>
-                <option value="">Semaine 44</option>
-                <option value="">Semaine 45</option>
-                <option value="">Semaine 46</option>
-                <option value="">Semaine 47</option>
-            </select>
-            <div id="aside_grp">
-                <h3>Groupes</h3>
-                <button id="dep_grp" type="button">
-                    <img src="../img/deplie.png" alt="deplie" id="dep"/></button>
-            </div>
-            <ul id="grps_filtres">
-                <li>
-                    <input type="checkbox" name="11A" id="11A">
-                    <label for="11A">11A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="11B" id="11B">
-                    <label for="11B">11B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="12A" id="12A">
-                    <label for="12A">12A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="12B" id="12B">
-                    <label for="12B">12B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="13A" id="13A">
-                    <label for="13A">13A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="13B" id="13B">
-                    <label for="13B">13B</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="14A" id="14A">
-                    <label for="14A">14A</label>
-                </li>
-                <li>
-                    <input type="checkbox" name="14B" id="14B">
-                    <label for="14B">14B</label>
-                </li>
-            </ul>
-        </aside>
+{% if admin %}
+    {% extends 'BaseAdmin.html' %}
+{% else %}
+    {% extends 'BaseEnsiegnant.html' %}
+{% endif %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/QCM.css')}}">
+{% endblock %}
+{% block aside %}
+    <div id="aside_filtres">
+        <h2>Filtres</h2>
+        <button id="dep_fil" type="button" onclick="plie_deplie_semaines()">
+        <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep2"/></button>
+    </div>
+    <section id="groupe_filtre">
+    <select name="semaines" id="selec-sem">
+        {% for semaine in semaines %}
+            <option value="{{ semaine.id_semaine }}">Sem {{ semaine.id_semaine }} {{ semaine.date_debut }}</option>
+        {% endfor %}
+    </select>
     
+    <div id="aside_grp">
+        <h3>Groupes</h3>
+        <button id="dep_grp" type="button" onclick="plie_deplie_filtres()">
+            <img src="{{ url_for('static', filename='img/deplie.png') }}" alt="deplie" id="dep"/></button>
+    </div>
+    <ul id="grps_filtres">
+        {% for groupe in groupes %}
+            <li>
+                <input type="checkbox" name="{{ groupe }}" id="{{ groupe }}">
+                <label for="{{ groupe }}">{{ groupe }}</label>
+            </li>
+        {% endfor %}
         
-        <table id="labels">
-            <tr class="colonnes">
-                <th class="noms">Etudiant</th>
-                <th class="noms">Groupe</th>
-                <th class="noms">matiere1</th>
-                <th class="noms">matiere2</th>
-                <th class="noms">Soutien</th>
-                <th class="noms">Voeu matiere</th>
+    </ul>
+    <input id="liaison_bd" class="style_btn" value="Valider" type="button"></input>
+</section>
+{% endblock %}
+{% block center %}
+<section id="tableauqcm">
+    <div class="jsp">
+    <table id="labels">
+        <thead id="QCM">
+            <tr>
+                <th id="titre_tableau_sondage" colspan="5"><H2>QCM</H2></th>
             </tr>
-            <tr id="moyennes">
-                <th class="moy">Moyenne</th>
-                <th class="moy">
-                    <select>
-                        <option value="gen">Generale</option>
-                        <option value="11A">11A</option>
-                        <option value="11B">11B</option>
-                        <option value="12A">12A</option>
-                        <option value="12B">12B</option>
-                        <option value="13A">13A</option>
-                        <option value="13B">13B</option>
-                        <option value="14A">14A</option>
-                        <option value="14B">14B</option>
-                    </select>
-                </th>
-                <th class="moy">12.5</th>
-                <th class="moy">12.5</th>
-            </tr>
-            </table>
-            <table class="scrolable">
-                
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>
-                <tr>
-                    <td>Paul</td>
-                    <td>11A</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                    <td>12.5</td>
-                </tr>            
+        </thead>
+        <tr class="colonnes">
+            <th class="noms">Etudiant</th>
+            <th class="noms">Groupe</th>
+            {% for matiere in matieres %}
+                <th class="noms">{{ matiere }}</th>
+            {% endfor %}
+            <th class="noms">Soutien</th>
+            <th class="noms">Voeu matiere</th>
+        </tr>
+        <tr id="moyennes">
+            <th class="moy">Moyenne</th>
+            <th class="moy">
+                <select>
+                    <option value="generale">Generale</option>
+                    {% for groupe in groupes %}
+                        <option value="{{ groupe }}">{{ groupe }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            {% for matiere,moyenne in res_bandeau %}
+                <th class="moy">{{ moyenne }}</th>
+            {% endfor %}
+        </tr>
         </table>
-    </main>
-</body>
-</html>
+        <table class="scrolable">
+            <tbody>
+            {% for eleve,groupe,qcms,rep_sond in resultats %}
+                <tr>
+                    <td><a href="{{url_for ('Suivie_etu')}}"> {{ eleve.nom }} {{ eleve.prenom }}</a></td>
+                    <td>{{ groupe }}</td>
+                    {% for qcm in qcms %}
+                        <td>{{ qcm }}</td>
+                    {% endfor %}
+                    <td>{{ rep_sond.volontaire }}</td>
+                    <td>{{ rep_sond.matiere_voulue }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+    </table></div></section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='JS/res_qcm.js') }}"></script>
+{% endblock %}
