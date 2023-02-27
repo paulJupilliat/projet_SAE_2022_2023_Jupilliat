@@ -6,8 +6,8 @@ button{
     background-color: #fff;
   }
   button img{
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.5vw;
+    height: 1.5vw;
   }
 
 /* pour le tableau */
@@ -24,24 +24,24 @@ tfoot {
 #encadrer_table, #tableaugen{
     background-color: lightgrey;
     border-radius: 10px;
-    margin-right:2em;
-    padding:2em;
+    margin-right:2vw;
+    padding:2vw;
     width:auto
 }
 
 #tableauqcm{
     background-color: lightgrey;
     border-radius: 10px;
-    margin-right:20em;
-    padding:2em;
+    margin-right:20vw;
+    padding:1vw;
     
 }
 
 #tableaudispo{
     background-color: lightgrey;
     border-radius: 10px;
-    margin-right:20em;
-    padding:2em;
+    margin-right:20vw;
+    padding:2vw;
     
 }
 #div_main{
@@ -54,12 +54,39 @@ main {
     margin-top: 3% ;}
 
 .donnees_btn{
-    border-radius: 1em;
-    padding: 1em;
+    border-radius: 1vw;
+    padding: 1vw;
     background-color: #860061;
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1vw;
 }
 .p-4{
     margin-left: 3%;
   }
+
+  h2{
+    font-size: 2vw;
+  }
+  h3{
+    font-size: 1.5vw;
+  }
+
+select{
+    width: 8vw;
+    font-size: 0.82vw;
+}
+
+label{
+    font-size: 1vw;
+}
+
+/* réduit la taille des points sur les li */
+li{
+    font-size: 1vw;
+}
+
+/* réduit la taille des checkboxs */
+input[type=checkbox]{
+    width: 1vw;
+    height: 1vw;
+}
