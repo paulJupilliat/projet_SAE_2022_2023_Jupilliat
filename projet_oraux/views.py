@@ -235,13 +235,13 @@ def res_sond():
 def Soutien():
     matieres=[{"id_matiere":1,"nom_matiere":"Python"},{"id_matiere":2,"nom_matiere":"Java"}]
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"}, {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"}]
-    eleve_ret={"nom_eleve":"Paul","volontaire":"oui","matiere_voulue":"Python","matiere_retenue":{"matiere":"Python","note":12}}
+    eleve_ret={"id_etu":4,"nom_eleve":"Paul","volontaire":"oui","matiere_voulue":"Python","matiere_retenue":{"matiere":"Python","note":12}}
     retenus ={1:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
               2:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 3:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 4:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 5:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
-    eleve_non_ret={"nom_eleve":"Paul","volontaire":"~","matiere_voulue":"Python"}
+    eleve_non_ret={"id_etu":4,"nom_eleve":"Paul","volontaire":"~","matiere_voulue":"Python"}
     non_retenus = {1:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 2:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 3:{"eleve":eleve_non_ret,"notes_qcm":[18,16],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}}}
@@ -377,15 +377,14 @@ def Connexion(origin):
         return render_template("connexionProf.html", form=f)
 
 
-@app.route("/supprimer_etu_soutien/<id_etu>")
+@app.route("/supprimer_eleve_soutien/<int:id_etu>")
 def supprimer_eleve_soutien(id_etu):
-    eleve = ParticipantsOral.query.filter_by(id_etu=id_etu).first()
-    if eleve != None:
-        db.session.delete(eleve)
-        db.session.commit()
+    eleve = ParticipantsOral.query.filter_by(num_etu=id_etu).first()
+    db.session.delete(eleve)
+    db.session.commit()
     return redirect(url_for("Soutien"))
 
-@app.route("/ajouter_etu_oral/<id_etu>")
+@app.route("/ajouter_etu_oral/<int:id_etu>")
 def ajouter_eleve_oral(id_etu):
     eleve = PossibiliteSoutien.query.filter_by(id_etu=id_etu).first()
     if eleve:

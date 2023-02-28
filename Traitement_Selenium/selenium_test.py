@@ -8,7 +8,7 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
-engine = create_engine('mysql+mysqlconnector://paul:paul@localhost/soutien', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 # engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 session = Session(engine)
 Base = declarative_base()
@@ -102,7 +102,7 @@ os.environ['MOZ_HEADLESS'] = '1'
 user = input("Entrer votre nom utilisateur :")
 mdp = getpass("Entrer votre mot de passe :")
 
-list_telechargement = [["(BUT2)","QCM (26/10/2022)","Sondage (11/11/2022)"]]
+list_telechargement = [["Projet QCM (BUT2)","Test QCM (26/10/2022)","Sondage (11/11/2022)"]]
 
 list_move = []
 

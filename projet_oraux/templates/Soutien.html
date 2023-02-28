@@ -51,7 +51,7 @@
                             
                                 {% for donnees in retenus.values() %}
                                 
-                                    <td class="supprimer"><a value= "Supprimer" class='style_btn' href="{{ url_for('supprimer_eleve_soutien', id_etu = donnees.eleve.num_etu)}}" ></td>
+                                    <td class="supprimer"><a value= "Supprimer" class='style_btn' href="{{ url_for('supprimer_eleve_soutien', id_etu=donnees.eleve.id_etu)}}" ></td>
                                     
                                         
                                         <td class="nom"> <a href="{{url_for ('Suivie_etu')}}"> {{ donnees.eleve.nom_eleve }} </a> </td>
