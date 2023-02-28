@@ -1,4 +1,4 @@
-{% if admin %}
+{% if current_user.get_est_admin() %}
     {% extends 'BaseAdmin.html' %}
 {% else %}
     {% extends 'BaseEnsiegnant.html' %}
@@ -24,7 +24,7 @@
 
 
             {% else %}
-            {% if admin %}
+            {% if current_user.get_est_admin() %}
                 <section id="tableaugen">
                     <table id="labels">
                         <thead id="titre_suivi">
