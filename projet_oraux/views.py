@@ -66,11 +66,7 @@ def route():
     return render_template("index.html",title="Projet soutien")
 @app.route("/ResQCM")
 def ResQCM():
-    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
-    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
-    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
-    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
-    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
+    semaines= get_semaines()
     groupes=["11A","11B","11C","12A","12B","12C"]
     matieres=["Python","Java","C++"]
     res_bandeau=[("Python", 12), ("Java", 15), ("C++", 18)]
@@ -379,4 +375,25 @@ def Connexion(origin):
         return render_template("connexionAdm.html", form=f)
     else:
         return render_template("connexionProf.html", form=f)
+
+
+@app.route("/supprimer_etu_soutien/<id_etu>")
+def supprimer_eleve_soutien(id_etu):
+    eleve = ParticipantsOral.query.filter_by(id_etu=id_etu).first()
+    if eleve != None:
+        db.session.delete(eleve)
+        db.session.commit()
+    return redirect(url_for("Soutien"))
+
+@app.route("/ajouter_etu_oral/<id_etu>")
+def ajouter_eleve_oral(id_etu):
+    eleve = PossibiliteSoutien.query.filter_by(id_etu=id_etu).first()
+    if eleve:
+        db.session.delete(eleve)
+        db.session.commit()
+        # ajouter mtn l'éléve dans la table des participants
+        ele = ParticipantsOral(id_etu=id_etu)
+        db.session.add(ele)
+        db.session.commit()
+    return redirect(url_for("Soutien"))
 
