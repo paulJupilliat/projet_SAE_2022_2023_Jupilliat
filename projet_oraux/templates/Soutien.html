@@ -1,4 +1,4 @@
-{% if admin %}
+{% if current_user.get_est_admin() %}
     {% extends 'BaseAdmin.html' %}
 {% else %}
     {% extends 'BaseEnsiegnant.html' %}

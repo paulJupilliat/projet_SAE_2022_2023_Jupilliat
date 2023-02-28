@@ -1,4 +1,6 @@
-{% if admin %}
+<!-- regarder si un user est connecté -->
+
+{% if current_user.get_est_admin() %}
     {% extends 'BaseAdmin.html' %}
 {% else %}
     {% extends 'BaseEnsiegnant.html' %}
