@@ -151,13 +151,7 @@ def ResQCM():
 @app.route("/Acceuil")
 def Acceuil():
     #moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
-    qcms= {"generale":{"Python": 12, "Java": 15, "C++": 18},
-    "11A":{"Python": 12, "Java": 15, "C++": 18},
-    "12A":{"Python": 12, "Java": 15, "C++": 18},
-    "11B":{"Python": 12, "Java": 15, "C++": 18},
-    "12B":{"Python": 12, "Java": 15, "C++": 18},
-    "11C":{"Python": 12, "Java": 15, "C++": 18},
-    "12C":{"Python": 12, "Java": 15, "C++": 18}}
+    qcms= get_resultats_qcm_accueil()
     #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
     sondage = {"Python": { "nb": 10, "Moyenne": 15}, "BDD": { "nb": 8, "Moyenne": 11}, "Java": { "nb": 4, "Moyenne": 13}}
     matieres=["Python","Java","C++"]

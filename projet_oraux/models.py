@@ -381,7 +381,7 @@ def get_moyenne_groupe(groupe:str,id_qcm:int)->float:
     moyenne = moyenne / len(qcm_eleves)
     return moyenne
 
-def get_resultats_qcm_accueil(date:str)->dict:
+def get_resultats_qcm_accueil()->dict:
     """fonction recuperant les resultats de QCM pour une date en renvoyant les moyennes par groupe et par matiere
 
     Args:
@@ -391,7 +391,7 @@ def get_resultats_qcm_accueil(date:str)->dict:
         dict: dictionnaire contenant les moyennes par matiere et par groupe
     """
     #on regarde dans quelle semaine on est
-    sem = Semaine.query.filter(Semaine.date_debut <= date).filter(Semaine.date_fin >= date).first()
+    sem = get_semaine_act()
     #calcul periode
     periode = Periode.query.filter(Periode.id_periode == sem.id_periode).first()
     semestre="S"+str(periode.semestre)
@@ -652,7 +652,7 @@ def get_semaine_act()->Semaine:
     Returns:
         Semaine: semaine actuelle
     """
-    date_act = datetime.now()
+    date_act = datetime.date.today()
     sem = Semaine.query.join(Periode).filter(Semaine.date_debut <= date_act).filter(Semaine.date_fin >= date_act).first()
     return sem
 
