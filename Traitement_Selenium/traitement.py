@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
 Base = declarative_base()
-engine = create_engine('mysql+mysqlconnector://lidec:lidec@servinfo-mariadb/DBlidec', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 session = Session(engine)
 
 class Eleve(Base):
@@ -160,5 +160,6 @@ def main(fichier_ouvrir):
                         creation_existe(separe[idenfiant],separe[nom],separe[prenom],None,None)
                         note_total = float(separe[note][1:]) + float(separe[note + 1][:-1])
                         ajouter_resultat_eleve(idpartie,separe[idenfiant],(note_total/sur_combien)*20)
-
-# main([(1,"Sondage (11112022).csv","")])
+                        print("l'étudiant d'identifiant " + separe[idenfiant] + " a eu la note de " + separe[note][1:] + " et " + separe[note + 1][:-1] + " sur " + str(sur_combien))
+                        
+                        

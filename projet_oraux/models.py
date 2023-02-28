@@ -1165,4 +1165,3 @@ def get_id_sondage_max():
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)
-    
