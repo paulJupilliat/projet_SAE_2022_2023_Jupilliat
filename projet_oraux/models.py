@@ -1165,3 +1165,12 @@ def get_id_sondage_max():
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)
+
+def get_eleves_retenus(id_oral):
+    """focntion qui renvois les élèves retenus pour un oral"""
+    
+def get_eleves_non_retenus(id_oral):
+    """fonction qui renvois les élèves non retenus pour un oral"""
+    
+def get_eleves_besoin(id_oral):
+    """fonction qui renvois les élèves qui ont besoin d un oral"""
