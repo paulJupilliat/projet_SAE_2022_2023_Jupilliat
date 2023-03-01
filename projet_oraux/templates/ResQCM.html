@@ -77,8 +77,18 @@
                 <tr>
                     <td><a href="{{url_for ('Suivie_etu')}}"> {{ eleve.nom }} {{ eleve.prenom }}</a></td>
                     <td>{{ groupe }}</td>
-                    {% for qcm in qcms %}
+                    <!-- ici il faut avoir les notes des qcms et si il y en a pas, on met '-'   -->
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {% for qcm in qcms %} 
+                        {% if qcm == ""%}
+                        <td>-</td>
+                        {% else %}
                         <td>{{ qcm }}</td>
+                        {% endif %}
                     {% endfor %}
                     <td>{{ rep_sond.volontaire }}</td>
                     <td>{{ rep_sond.matiere_voulue }}</td>
