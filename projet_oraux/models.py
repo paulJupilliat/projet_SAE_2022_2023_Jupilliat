@@ -428,7 +428,7 @@ def get_dispo_enseignant_accueil(semaine:int):
         list: liste des disponibilites
     """
     # select nom_prof from Enseignant natural join EstDisponible natural join Oral where date_oral = semaine
-    sem = Semaine.query.filter(Semaine.numSemaine == semaine).first()
+    sem = get_semaine_act()
     profs_dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.date_oral >= sem.date_debut).filter(EstDisponible.oral.date_oral <= sem.date_fin).all()
      
     #recup des matieres par prof

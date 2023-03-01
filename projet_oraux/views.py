@@ -154,7 +154,7 @@ def Acceuil():
     #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
     sondage = {"Python": { "nb": 10, "Moyenne": 15}, "BDD": { "nb": 8, "Moyenne": 11}, "Java": { "nb": 4, "Moyenne": 13}}
     matieres=["Python","Java","C++"]
-    possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"]}
+    possibles=get_dispo_enseignant_accueil()
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
