@@ -1,3 +1,4 @@
+-- Active: 1677486538660@@127.0.0.1@3306@soutien
 insert into SONDAGE values(1,'url1');
 
 insert into MATIERE values(100, "maths");
@@ -53,6 +54,7 @@ insert into PARTICIPE values("paul s'améliore en maths", 1, 1);
 insert into PARTICIPE values("maxime s'améliore en maths", 2, 1);
 insert into PARTICIPE values("erwan s'améliore en maths", 3, 1);
 
+insert into periode VALUES(1,STR_TO_DATE('2023/01/27','%Y/%m/%d'),STR_TO_DATE('2023/10/22','%Y/%m/%d'), 2);
 
 
-
+insert into semaine VALUES(1,STR_TO_DATE('2023/02/27','%Y/%m/%d'),STR_TO_DATE('2023/03/05','%Y/%m/%d'), 1);
