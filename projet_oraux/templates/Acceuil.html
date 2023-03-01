@@ -30,7 +30,8 @@
                 <tbody>
                     <tr>
                         <th id="Groupe">Groupe</td>
-                        {% for matiere in qcm["generale"].keys() %}
+                        
+                        {% for matiere in qcm['generale'].keys() %}
                             <th id="{{ matiere }}">{{ matiere }}</td>
                         {% endfor %}
                     </tr>
