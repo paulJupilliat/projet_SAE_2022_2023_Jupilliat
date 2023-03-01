@@ -1174,3 +1174,10 @@ def get_eleves_non_retenus(id_oral):
     
 def get_eleves_besoin(id_oral):
     """fonction qui renvois les élèves qui ont besoin d un oral"""
+    
+def get_matieres_semestre(semestre):
+    """fonction qui renvois les matières d'un semestre"""
+    
+def get_matieres():
+    """fonction qui renvois toutes les matières"""
+    
