@@ -17,7 +17,7 @@
                 {% endfor %}
             </select>
             <input class="donnees_btn" type="button" value="Recuperer les données">
-            <p id="text_mail"> les mails ont été envoyés pour la semaine 3</p> <!-- remplir avec le selenium -->
+            <p id="text_mail">Les mails ont été envoyés pour la semaine 3</p> <!-- remplir avec le selenium -->
 {% endblock %}
 {% block center %}
         <div class="res_qcm">
@@ -30,7 +30,8 @@
                 <tbody>
                     <tr>
                         <th id="Groupe">Groupe</td>
-                        {% for matiere in qcm["generale"].keys() %}
+                        
+                        {% for matiere in qcm['generale'].keys() %}
                             <th id="{{ matiere }}">{{ matiere }}</td>
                         {% endfor %}
                     </tr>

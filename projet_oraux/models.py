@@ -381,7 +381,7 @@ def get_moyenne_groupe(groupe:str,id_qcm:int)->float:
     moyenne = moyenne / len(qcm_eleves)
     return moyenne
 
-def get_resultats_qcm_accueil(date:str)->dict:
+def get_resultats_qcm_accueil()->dict:
     """fonction recuperant les resultats de QCM pour une date en renvoyant les moyennes par groupe et par matiere
 
     Args:
@@ -391,9 +391,9 @@ def get_resultats_qcm_accueil(date:str)->dict:
         dict: dictionnaire contenant les moyennes par matiere et par groupe
     """
     #on regarde dans quelle semaine on est
-    sem = Semaine.query.filter(Semaine.date_debut <= date).filter(Semaine.date_fin >= date).first()
+    sem = get_semaine_act()
     #calcul periode
-    periode = Periode.query.filter(Periode.id_periode == sem.id_periode).first()
+    periode = Periode.query.filter(Periode.id_periode == 1).first()
     semestre="S"+str(periode.semestre)
     eleves=Eleve.query.all()
     groupes=[]
@@ -405,15 +405,16 @@ def get_resultats_qcm_accueil(date:str)->dict:
         if groupe not in groupes:
             groupes.append(groupe)
     #recup qcms
-    qcms=QCM.query.filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all()
+    qcms=QCM.query.filter(QCM.date_fin >= '2023/02/27').filter(QCM.date_fin <= '2023/03/05').all()
     #recup moyennes
     moyennes={}
     for qcm in qcms:
         moyennes[groupe]={}
-        nom_matiere=Matiere.query.filter(Matiere.id_matiere == qcm.id_matiere).first().nomMatiere
+        nom_matiere=Matiere.query.filter(Matiere.id_matiere == qcm.id_matiere).first().nom_matiere
         for groupe in groupes:
-            moyennes[groupe][nom_matiere]=get_moyenne_groupe(groupe,qcm.id_qcm,semestre)   
+            moyennes[groupe][nom_matiere]=get_moyenne_groupe(groupe,qcm.id_qcm)   
         #ajout moyenne generale
+        moyennes["generale"]={}
         moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
     return moyennes
 
@@ -652,7 +653,7 @@ def get_semaine_act()->Semaine:
     Returns:
         Semaine: semaine actuelle
     """
-    date_act = datetime.now()
+    date_act = datetime.datetime.now()
     sem = Semaine.query.join(Periode).filter(Semaine.date_debut <= date_act).filter(Semaine.date_fin >= date_act).first()
     return sem
 
