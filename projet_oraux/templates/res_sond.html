@@ -40,6 +40,7 @@
 {% endblock %}
 {% block center %}
         <div id="encadrer_table">
+            {{ sondages }}
             <table id="tableau">
                 <thead>
                     <tr>
@@ -57,10 +58,10 @@
                             <th id="grpq{{question.id_quest}}"><input type="checkbox" name="{{question.id_quest}}" id="{{question.id_quest}}" class="question{{question.id_quest}} in_filtres" onclick='cache_colonne()'><label for="{{question.id_quest}}">{{question.question}}</label></th>
                         {% endfor %}
                     </tr>
-                    
+                
                     {% for res_eleve,groupe,res_qs in sondages %}
                     <tr>
-                        <td class="etu"> <a id="color_noir" href="{{url_for ('Suivie_etu')}}"> {{ res_eleve.nom }} {{ res_eleve.prenom }}</a></td>
+                        <td class="etu"> <a id="color_noir" href="{{url_for ('Suivie_etu')}}"> {{ res_eleve.num_etu }} </a></td>
                         <td class="grp">{{ groupe }}</td>
                         <td class="soutien">{{ res_eleve.volontaire }}</td>
                         <td class="mat">{{ res_eleve.matiere_voulue }}</td>

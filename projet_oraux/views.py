@@ -68,83 +68,12 @@ def route():
 def ResQCM():
     semaines= get_semaines()
     groupes=["11A","11B","11C","12A","12B","12C"]
-    matieres=["Python","Java","C++"]
+    matieres=["Python","Java","C++","Projet QCM (BUT2)"]
+
     res_bandeau=[("Python", 12), ("Java", 15), ("C++", 18)]
     reps={"matiere_voulue":"Python", "volontaire":"oui"}
     el={"num_etu":1, "nom":"Dupont", "prenom":"Jean", "groupe_s1":"11A", "groupe_s2":"11A"}
-    resultats=[[el,el["groupe_s2"],[18,17,12],reps],[el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps],[ el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps],
-    [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps], [el,el["groupe_s2"],[18,17,12],reps]]
+    resultats= get_res_QCMs(1, groupes)
     return render_template("ResQCM.html",title="Resultat QCM",
     semaines=semaines,matieres=matieres, groupes=groupes,res_bandeau=res_bandeau, resultats=resultats)
 
@@ -152,9 +81,9 @@ def ResQCM():
 def Acceuil():
     #moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
     #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
-    sondage = {"Python": { "nb": 10, "Moyenne": 15}, "BDD": { "nb": 8, "Moyenne": 11}, "Java": { "nb": 4, "Moyenne": 13}}
+    sondage = get_res_sondage_accueil()
     matieres=["Python","Java","C++"]
-    possibles=get_dispo_enseignant_accueil()
+    possibles={}# get_dispo_enseignant_accueil()
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
@@ -217,7 +146,7 @@ def res_sond():
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     groupes=["11A","11B","11C","12A","12B","12C"]
     # res_eleve,groupe,res_qs in sondages
-    res_eleve={"nom":"Chabin","prenom":"Alexandre","matiere_voulue":"Java","volontaire":"oui","commentaire":"Je suis motivé"}
+    res_eleve=get_res_sondages(1, groupes)
     groupe="11A"
     res_qs=[{"question":"Quelle matière voulez vous voir en priorité ?","reponse":"Java","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","reponse":"oui","id_quest":2}, {"question":"Avez vous des remarques ?","reponse":"Je suis motivé","id_quest":3}]
     sondages=[[res_eleve,groupe,res_qs],[ res_eleve,groupe,res_qs], [res_eleve,groupe,res_qs]]
