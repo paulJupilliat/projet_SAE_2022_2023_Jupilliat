@@ -517,9 +517,7 @@ def get_res_QCMs(semaine:int,liste_groupes=[])->list:
                 rep=[]
                 el=Eleve.query.filter(Eleve.num_etu == eleve.num_etu).first()
                 res_eleve=[el,el.groupe_s2,rep]
-                for qcm in qcms:
-                    res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
-                    res_eleve[2].append(res_QCM)
+          
                 rep_sond=RepSondage.query.join(Sondage).filter(RepSondage.num_etu==el.num_etu).filter(Sondage.date_sond >= sem.date_debut).filter(Sondage.date_sond <= sem.date_fin).first()
                 res_eleve.append(rep_sond)
                 resultats.append(res_eleve)
@@ -1165,3 +1163,47 @@ def get_id_sondage_max():
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)
+
+# fais une fonction qui renvoi les élèves retenus poir un oral (prioirité aux élèves qui ont des notes en dessous de 10, si ils sont volontaires ou pas, ensuite prioirité aux élèves volontaires, ensuite aux autres))
+def eleves_retenus_oral(id_oral):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
+    liste_eleves=Eleve.query.all()
+    liste_eleves_retenus=[]
+    matiere = oral.matiere
+    for eleve in liste_eleves:
+        reponse_sondage = RepSondage.query.filter(RepSondage.idSondage == oral.idSondage, RepSondage.num_etu == eleve.num_etu).first()
+        if reponse_sondage is not None:
+            if reponse_sondage.volontaire == "oui":
+                if reponse_sondage.matiereVoulu == matiere:
+                    liste_eleves_retenus.append(eleve)
+    return liste_eleves_retenus
+
+def eleves_non_retenus_oral(id_oral):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
+    liste_eleves=Eleve.query.all()
+    liste_eleves_non_retenus=[]
+    matiere = oral.matiere
+    for eleve in liste_eleves:
+        reponse_sondage = RepSondage.query.filter(RepSondage.idSondage == oral.idSondage, RepSondage.num_etu == eleve.num_etu).first()
+        if reponse_sondage is not None:
+            if reponse_sondage.volontaire == "non":
+                if reponse_sondage.matiereVoulu == matiere:
+                    liste_eleves_non_retenus.append(eleve)
+    return liste_eleves_non_retenus
+
+def eleves_besoin_oral(id_oral):
+    oral=Oral.query.filter(Oral.id_oral==id_oral).first()
+    liste_eleves=Eleve.query.all()
+    liste_eleves_besoin=[]
+    matiere = oral.matiere
+    qcm = QCM.query.filter(QCM.idMatiere == matiere).first()
+    for eleve in liste_eleves:
+        res_qcm = ResultatQCM.query.filter(ResultatQCM.idQCM == qcm.idQCM, ResultatQCM.num_etu == eleve.num_etu).first()
+        reponse_sondage = RepSondage.query.filter(RepSondage.idSondage == oral.idSondage, RepSondage.num_etu == eleve.num_etu).first()
+        if reponse_sondage is not None:
+            if reponse_sondage.volontaire == "non":
+                if reponse_sondage.matiereVoulu == matiere:
+                    if res_qcm is not None:
+                        if res_qcm.note < 10:
+                            liste_eleves_besoin.append(eleve)
+    return liste_eleves_besoin
