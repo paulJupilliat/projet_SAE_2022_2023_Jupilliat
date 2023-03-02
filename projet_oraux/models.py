@@ -26,7 +26,8 @@ class Sondage(db.Model):
     __tablename__ = "sondage"
     id_sond = db.Column(db.Integer, primary_key=True)
     url_sond = db.Column(db.String(500))
-    date_sond = db.Column(db.String(500))
+    date_debut_sond = db.Column(db.String(500))
+    date_fin_sond = db.Column(db.String(500))
     def __repr__(self):
         """representation de l objet Sondage"""
         return f"Sondage({self.id_sond}, {self.url_sond})"

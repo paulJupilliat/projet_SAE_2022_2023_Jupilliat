@@ -8,7 +8,7 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
-engine = create_engine('mysql+mysqlconnector://paul:paul@localhost/soutien', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 # engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 session = Session(engine)
 Base = declarative_base()
@@ -19,10 +19,11 @@ class Sondage(Base):
     __tablename__ = "sondage"
     id_sond = Column(Integer, primary_key=True)
     url_sond = Column(String(500))
-    date_sond = Column(String(500))
+    date_debut_sond = Column(String(500))
+    date_fin_sond = Column(String(500))
     def __repr__(self):
         """representation de l objet Sondage"""
-        return f"Sondage({self.id_sond}, {self.url_sond})"
+        return f"Sondage({self.id_sond}, {self.url_sond}, {self.date_debut_sond}, {self.date_fin_sond})"
 class Matiere(Base):
     """classe Matiere qui contient les matieres
     """
@@ -49,11 +50,11 @@ class QCM(Base):
         """representation de l objet QCM"""
         return f"QCM({self.id_qcm}, {self.nom_qcm}, {self.url_qcm}, {self.date_debut}, {self.date_fin})"
 
-def get_id_QCM(nom_matiere, url, id_matiere):
+def get_id_QCM(nom_matiere, url, id_matiere,date_debut,date_fin):
     id_qcm = 0
     res = session.query(QCM).filter(QCM.url_qcm == url).count()
     if res == 0:
-        qcm = QCM(id_qcm = id_qcm, nom_qcm = nom_matiere, url_qcm = url, id_matiere = id_matiere)
+        qcm = QCM(id_qcm = id_qcm, nom_qcm = nom_matiere, url_qcm = url, id_matiere = id_matiere, date_debut = date_debut, date_fin = date_fin )
         session.add(qcm)
         session.commit()
         id_qcm = get_id_QCM_max()
@@ -61,11 +62,48 @@ def get_id_QCM(nom_matiere, url, id_matiere):
         id_qcm = session.query(QCM.id_qcm).filter(QCM.url_qcm == url).first()[0]
     return id_qcm
 
-def get_id_sondage(url):
+def formater_date(date):
+    """transforme une donnée tel que (Ouvert : mardi 28 février 2023, 13:46) en (2023/02/28)"""
+    date = date.split(":")
+    date = date[1].split(",")
+    jour = date[0].split(" ")[2]
+    mois = date[0].split(" ")[3]
+    annee = date[0].split(" ")[4]
+    if mois == "janvier":
+        mois = "01"
+    elif mois == "février":
+        mois = "02"
+    elif mois == "mars":
+        mois = "03"
+    elif mois == "avril":
+        mois = "04"
+    elif mois == "mai":
+        mois = "05"
+    elif mois == "juin":
+        mois = "06"
+    elif mois == "juillet":
+        mois = "07"
+    elif mois == "août":
+        mois = "08"
+    elif mois == "septembre":
+        mois = "09"
+    elif mois == "octobre":
+        mois = "10"
+    elif mois == "novembre":
+        mois = "11"
+    elif mois == "décembre":
+        mois = "12"
+    if len(jour) == 1:
+        jour = "0" + jour
+    date = annee + "/" + mois + "/" + jour
+    return date
+   
+
+def get_id_sondage(url, date_debut_sond, date_fin_sond):
     id = 0
     res = session.query(Sondage).filter(Sondage.url_sond == url).count()
     if res == 0:
-        sondage = Sondage(id_sond = 0, url_sond = url)
+        sondage = Sondage(id_sond = 0, url_sond = url, date_debut_sond = date_debut_sond, date_fin_sond = date_fin_sond)
         session.add(sondage)
         session.commit()
         id = get_id_sondage_max()
@@ -136,13 +174,17 @@ try:
             bouton_questionnaire.click()
             if "QCM" in partie[i]:
                 nom_matiere = browser.find_element(By.XPATH,"/html/body/div[2]/div[4]/div/header/div/div[1]/div[1]/nav/ol/li[1]/a")
-                id_QCM = get_id_QCM(nom_matiere.text,browser.current_url,id_matiere)
+                date_debut = formater_date(browser.find_element(By.XPATH,"/html/body/div[2]/div[4]/div/div[3]/div/section/div[1]/div/div[2]/div/div[1]").text)
+                date_fin = formater_date(browser.find_element(By.XPATH,"/html/body/div[2]/div[4]/div/div[3]/div/section/div[1]/div/div[2]/div/div[2]").text)
+                id_QCM = get_id_QCM(nom_matiere.text,browser.current_url,id_matiere, date_debut, date_fin)
                 nom = nom_matiere.text +" -"+ nom_partie +"-notes.csv"
                 list_move.insert(0,(id_QCM,nom.replace("/",""),None))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Résultats").click()
             else:
                 nom = nom_partie.split("\n")[0] + ".csv"
-                id_sondage = get_id_sondage(browser.current_url)
+                date_debut_sond = formater_date(browser.find_element(By.XPATH,"/html/body/div[3]/div[4]/div/div[3]/div/section/div[1]/div/div[2]/div/div[1]").text)
+                date_fin_sond = formater_date(browser.find_element(By.XPATH,"/html/body/div[3]/div[4]/div/div[3]/div/section/div[1]/div/div[2]/div/div[2]").text)
+                id_sondage = get_id_sondage(browser.current_url,date_debut_sond=date_debut_sond,date_fin_sond=date_fin_sond)
                 list_move.append((id_sondage,nom.replace("/",""),nom.split("(")[-1][:-5]))
                 browser.find_element(By.PARTIAL_LINK_TEXT,"Réponses").click()
             browser.find_element(By.XPATH ,"//button[text()='Télécharger']").click()
