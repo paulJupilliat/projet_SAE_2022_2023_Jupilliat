@@ -63,9 +63,18 @@
                         </tr>
                         {% for matiere in matieres_demandées.keys() %}
                             <tr>
-                                <td>{{ matiere }}</td>
+                                {% if matiere == "" %}
+                                    <td>aucune</td>
+                                {% else %}
+                                    <td>{{ matiere }}</td>
+                                {% endif %}
                                 <td>{{ matieres_demandées[matiere]["nb"] }}</td>
-                                <td>{{ matieres_demandées[matiere]["Moyenne"] }}</td>
+                                {% if matieres_demandées[matiere]["Moyenne"] == none %}
+                                    <td>~</td>
+                                {% else %}
+                                    <td>{{ matieres_demandées[matiere]["Moyenne"] }}</td>
+                                {% endif %}
+                                
                             </tr>
                         {% endfor %}
                     </tbody>
