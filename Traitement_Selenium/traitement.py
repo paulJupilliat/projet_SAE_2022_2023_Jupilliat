@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
 Base = declarative_base()
-engine = create_engine('mysql+mysqlconnector://paul:paul@localhost/soutien', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 # engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 session = Session(engine)
 
