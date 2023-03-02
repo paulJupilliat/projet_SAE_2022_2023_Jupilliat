@@ -82,8 +82,8 @@ def Acceuil():
     #moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
     #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
     sondage = get_res_sondage_accueil()
-    matieres=["Python","Java","C++"]
-    possibles={}# get_dispo_enseignant_accueil()
+    matieres=get_matiere()
+    possibles=get_possibilite_soutien()
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
@@ -105,9 +105,9 @@ def Disponibilite():
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
-    matieres=["Python","Java","C++", "BDD", "Reseau", "IHM", "Web", "Dev Efficace"]
-    possibles={"Chabin":["BDD","Java","Reseau"],"Adobet":["IHM","Java","BDD"],"Arsouze":["Web","Python","Dev Efficace"], "Anglade" : ["Python",], "Roza":["Dev Efficace", "Java", "Python"]}
-    dispos = [{"nom_prof": "Chabin", "date_oral":"02/01/2023"}, {"nom_prof": "Arzouz","date_oral":"02/01/2023"}]
+    matieres=get_matiere()
+    possibles=get_possibilite_soutien()
+    dispos = disponibilites_enseignant(1)
     return render_template("Dispo.html",title="Disponibilité", semaines=semaines, dispos = dispos, matieres=matieres, possibles= possibles)
 
 @app.route("/GererSesDispo")

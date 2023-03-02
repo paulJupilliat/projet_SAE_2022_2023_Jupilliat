@@ -436,18 +436,18 @@ def get_dispo_enseignant_accueil(): #ne marche pas encore car ne retrouve pas la
     """
     # select nom_prof from Enseignant natural join EstDisponible natural join Oral where date_oral = semaine
     sem = get_semaine_act()
-    profs_dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.date_oral >= '2023/02/27').filter(EstDisponible.oral.date_oral <= '2023/03/05').all()
+    profs_dispo = EstDisponible.query.join(Professeur).join(Oral).filter(Oral.date_oral >= '2023/02/27').filter(Oral.date_oral <= '2023/03/05').all()
      
     #recup des matieres par prof
     possibles={}
     matieres_tot=[]
     for p in profs_dispo:
         possibles[p]=[]
-        matieres_prof=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == p).all()
+        matieres_prof=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == p.id_prof).all()
         for m in matieres_prof:
-            possibles[p].append(m.nom_matiere)
-            if m.nom_matiere not in matieres_tot:
-                matieres_tot.append(m.nom_matiere)
+            possibles[p].append(m)
+            if m not in matieres_tot:
+                matieres_tot.append(m)
     return possibles,matieres_tot
 
 def get_res_sondage_accueil()->dict: 
@@ -686,6 +686,30 @@ def get_res_QCM_eleve(id_eleve:int, id_sem:int)->list:
     res_qcm = ResultatQCM.query.filter(ResultatQCM.qcm.date_fin >= sem.date_debut).filter(ResultatQCM.qcm.date_fin <= sem.date_fin).filter(ResultatQCM.num_etu == id_eleve).all()
     return res_qcm
 
+def get_matiere():
+    """fonction recuperant les matieres
+
+    Returns:
+        list: liste des matieres
+    """
+    matieres = Matiere.query.all()
+    return matieres
+
+
+def get_possibilite_soutien()->dict:
+    """fonction permettant de recuperer les possibilites de soutien pour chaque prof
+
+    Args:
+        
+    Returns:
+        dict: key=prof, value=liste de possibilites de soutien
+    """
+    profs = Professeur.query.all()
+    possibilites = {}
+    for prof in profs:
+        possibilites[prof] = PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == prof.id_prof).all()
+    return possibilites
+
 def get_res_sond_eleve(id_eleve:int, id_sem:int)->list:
     """fonction recuperant les resultats du sondage pour un eleve et une date
 
@@ -725,7 +749,7 @@ def get_eleves_groupe(groupe:int, date:str):
     eleves = Eleve.query.filter(Eleve.groupe_s2 == groupe).filter(Eleve.date_fin >= sem.date_debut).filter(Eleve.date_fin <= sem.date_fin).all()
     return eleves
 
-def disponibilites_enseignant(id_enseignant:int, date:str)->list:
+def disponibilites_enseignant(id_enseignant:int)->list:
     """fonction recuperant les disponibilites d un enseignant pour une date
 
     Args:
@@ -734,8 +758,8 @@ def disponibilites_enseignant(id_enseignant:int, date:str)->list:
     Returns:
         list: liste des disponibilites
     """
-    sem = Semaine.query.filter(Semaine.date_debut <= date).filter(Semaine.date_fin >= date).first()
-    dispo = EstDisponible.query.join(Oral).filter(Oral.date_oral >= sem.date_debut).filter(Oral.date_oral <= sem.date_fin).filter(EstDisponible.id_prof == id_enseignant).all()
+    sem = get_semaine_act()
+    dispo = EstDisponible.query.join(Oral).filter(Oral.date_oral >= '2023/02/27').filter(Oral.date_oral <= '2023/03/05').filter(EstDisponible.id_prof == id_enseignant).all()
     return dispo
 
 def ajouter_resultat_eleve(id_QCM:int,num_etu:int,note:float)->None:
