@@ -31,9 +31,10 @@
                     <tr>
                         <th id="Groupe">Groupe</td>
                         
-                        {% for matiere in qcm['generale'].keys() %}
+                            {% for matiere in qcm['generale'] %}
                             <th id="{{ matiere }}">{{ matiere }}</td>
                         {% endfor %}
+                    
                     </tr>
                     {% for groupe in qcm.keys() %}
                         <tr>
