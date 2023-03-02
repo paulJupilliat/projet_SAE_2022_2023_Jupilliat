@@ -93,15 +93,15 @@
                         <tr>
                             <th id="Prof">Prof</td>
                             {% for matiere in matieres %}
-                                <th id="{{ matiere }}">{{ matiere }}</td>
+                                <th id="{{ matiere }}">{{ matiere.nom_matiere }}</td>
                             {% endfor %}
                         </tr>
                          <!-- possibles[p].append(m.nomMatiere) -->
                         {% for prof in possibles.keys() %}
                             <tr>
-                                <td>{{ prof }}</td>
+                                <td>{{ prof.nom_prof }}</td>
                                 {% for matiere in matieres %}
-                                    {% if matiere in possibles[prof] %}
+                                    {% if matiere.id_matiere == possibles[prof][0].id_matiere %}
                                         <td>Oui</td>
                                     {% else %}
                                         <td>Non</td>

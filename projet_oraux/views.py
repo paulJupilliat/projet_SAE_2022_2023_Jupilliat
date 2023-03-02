@@ -82,8 +82,8 @@ def Acceuil():
     #moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
     #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
     sondage = get_res_sondage_accueil()
-    matieres=["Python","Java","C++"]
-    possibles={}# get_dispo_enseignant_accueil()
+    matieres=get_matiere()
+    possibles=get_possibilite_soutien()
     semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
     {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
     {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},

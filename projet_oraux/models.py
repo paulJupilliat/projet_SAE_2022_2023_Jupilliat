@@ -429,18 +429,18 @@ def get_dispo_enseignant_accueil(): #ne marche pas encore car ne retrouve pas la
     """
     # select nom_prof from Enseignant natural join EstDisponible natural join Oral where date_oral = semaine
     sem = get_semaine_act()
-    profs_dispo = EstDisponible.query.join(Professeur).filter(EstDisponible.oral.date_oral >= '2023/02/27').filter(EstDisponible.oral.date_oral <= '2023/03/05').all()
+    profs_dispo = EstDisponible.query.join(Professeur).join(Oral).filter(Oral.date_oral >= '2023/02/27').filter(Oral.date_oral <= '2023/03/05').all()
      
     #recup des matieres par prof
     possibles={}
     matieres_tot=[]
     for p in profs_dispo:
         possibles[p]=[]
-        matieres_prof=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == p).all()
+        matieres_prof=PossibiliteSoutien.query.join(Matiere).filter(PossibiliteSoutien.id_prof == p.id_prof).all()
         for m in matieres_prof:
-            possibles[p].append(m.nom_matiere)
-            if m.nom_matiere not in matieres_tot:
-                matieres_tot.append(m.nom_matiere)
+            possibles[p].append(m)
+            if m not in matieres_tot:
+                matieres_tot.append(m)
     return possibles,matieres_tot
 
 def get_res_sondage_accueil()->dict: 
