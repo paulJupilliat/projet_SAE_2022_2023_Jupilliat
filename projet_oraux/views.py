@@ -155,10 +155,16 @@ def res_sond():
     return render_template("res_sond.html",title="Resultat sondage",groupes=groupes,sondages=sondages,questions=questions,semaines=semaines,colspan=colspan)
 @app.route("/Soutien")
 def Soutien():
-    matieres=[{"id_matiere":1,"nom_matiere":"Python"},{"id_matiere":2,"nom_matiere":"Java"}]
-    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"}, {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"}]
-    eleve_ret={"nom_eleve":"Paul","volontaire":"oui","matiere_voulue":"Python","matiere_retenue":{"matiere":"Python","note":12}}
-    retenus ={1:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+    matieres= get_matieres()
+    semaines=get_semaines()
+    eleve_ret={"nom_eleve":"Paul",
+               "volontaire":"oui",
+               "matiere_voulue":"Python",
+               "matiere_retenue":{"matiere":"Python","note":12}}
+    retenus ={1:{"eleve":eleve_ret,
+                 "notes_qcm":[15,12],
+                 "profs":{"profs_dispos":[{"nom_prof":"Chabin"}],
+                          "profs_possibles":[{"nom_prof":"Chabin"}]}},
               2:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 3:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 4:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
