@@ -95,7 +95,7 @@ def formater_date(date):
         mois = "12"
     if len(jour) == 1:
         jour = "0" + jour
-    date = annee + "/" + mois + "/" + jour
+    date = jour + "/" + mois + "/" + annee
     return date
    
 

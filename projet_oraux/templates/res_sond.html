@@ -40,7 +40,6 @@
 {% endblock %}
 {% block center %}
         <div id="encadrer_table">
-            {{ sondages }}
             <table id="tableau">
                 <thead>
                     <tr>
@@ -59,19 +58,20 @@
                         {% endfor %}
                     </tr>
                 
-                    {% for res_eleve,groupe,res_qs in sondages %}
+                    {% for groupe,eleves in eleves.items() %}
+                    {% for num_eleve,eleve in eleves.items() %}
                     <tr>
-                        <td class="etu"> <a id="color_noir" href="{{url_for ('Suivie_etu')}}"> {{ res_eleve.num_etu }} </a></td>
+                        <td class="etu"> <a id="color_noir" href="{{url_for ('Suivie_etu')}}"> {{ eleve['num_etu'] }} </a></td>
                         <td class="grp">{{ groupe }}</td>
-                        <td class="soutien">{{ res_eleve.volontaire }}</td>
-                        <td class="mat">{{ res_eleve.matiere_voulue }}</td>
-                        <td class="comm">{{ res_eleve.commentaire }}</td>
-                        {% for question in res_qs %}
-                            <td class="question{{question.id_quest}}">{{ question.reponse }}</td>
-                        {% endfor %}
+                        <td class="soutien">{{res_eleve[eleve['num_etu']]['volontaire'] }}</td>
+                        <td class="mat">{{ res_eleve[eleve['num_etu']]['matiere_voulue'] }}</td>
+                        <td class="comm">{{ res_eleve[eleve['num_etu']]['commentaire'] }}</td>
+                        <td class="question1">{{ reponse_sondage[eleve['num_etu']]['reponse'] }}</td>
+
+                        
                     </tr>
                     {% endfor %}
-                    
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
