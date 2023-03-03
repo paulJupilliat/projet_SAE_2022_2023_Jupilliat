@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
 Base = declarative_base()
-engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://paul:paul@localhost/soutien', echo=True, future=True)
 # engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 session = Session(engine)
 
@@ -25,7 +25,7 @@ class Sondage(Base):
     __tablename__ = "sondage"
     id_sond = Column(Integer, primary_key=True)
     url_sond = Column(String(50))
-    date_sond = Column(String(50))
+    date_debut_sond = Column(String(50))
     def __repr__(self):
         """representation de l objet Sondage"""
         return f"Sondage({self.id_sond}, {self.url_sond})"
@@ -96,7 +96,7 @@ def ajouter_resultat_eleve(id_QCM,num_etu,note):
     else:
         pass
 
-def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_sondage: str, matiere_voulu: str, commentaire: str):
+def ajouter_reponse_sondage(participation : str, id_sondage: int, num_etu: str, date_debut_sondage: str, matiere_voulu: str, commentaire: str):
     nb_rep = session.query(RepSondage).filter(RepSondage.num_etu == num_etu).filter(RepSondage.id_sondage == id_sondage).count()
     if nb_rep == 0:
         rep = RepSondage(volontaire = participation, id_sondage = id_sondage, num_etu = num_etu,

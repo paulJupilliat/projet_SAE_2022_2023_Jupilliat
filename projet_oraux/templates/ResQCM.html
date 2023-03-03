@@ -51,7 +51,7 @@
             <th class="noms">Etudiant</th>
             <th class="noms">Groupe</th>
             {% for matiere in matieres %}
-                <th class="noms">{{ matiere }}</th>
+                <th class="noms">{{ matiere.nom_matiere }}</th>
             {% endfor %}
             <th class="noms">Soutien</th>
             <th class="noms">Voeu matiere</th>
@@ -66,33 +66,29 @@
                     {% endfor %}
                 </select>
             </th>
-            {% for matiere,moyenne in res_bandeau %}
-                <th class="moy">{{ moyenne }}</th>
-            {% endfor %}
+            
+            <!-- on regarde si la matiere correspond a la matière dans le bandeau   -->
+                
+                {% for matiere in matieres %}
+                    <th class="moy">{{ res_bandeau[matiere.nom_matiere] }}</th>
+                {% endfor %}
+            
         </tr>
         </table>
         <table class="scrolable">
             <tbody>
-            {% for eleve,groupe,qcms,rep_sond in resultats %}
+            {% for groupe,eleves in eleves.items() %}
+            {% for num_eleve,eleve in eleves.items() %}
                 <tr>
                     <td><a href="{{url_for ('Suivie_etu')}}"> {{ eleve.nom }} {{ eleve.prenom }}</a></td>
                     <td>{{ groupe }}</td>
-                    <!-- ici il faut avoir les notes des qcms et si il y en a pas, on met '-'   -->
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    {% for qcm in qcms %} 
-                        {% if qcm == ""%}
-                        <td>-</td>
-                        {% else %}
-                        <td>{{ qcm }}</td>
-                        {% endif %}
+                    {% for matiere in matieres %}
+                        <td>{{ res_eleves[eleve.num_etu][matiere.id_matiere] }}</td>
                     {% endfor %}
-                    <td>{{ rep_sond.volontaire }}</td>
-                    <td>{{ rep_sond.matiere_voulue }}</td>
+                    <td>{{ res_sondage_eleve[eleve.num_etu]['volontaire']}}</td>
+                    <td>{{ res_sondage_eleve[eleve.num_etu]['matiere_voulue']}}
                 </tr>
+            {% endfor %}
             {% endfor %}
             </tbody>
     </table></div></section>

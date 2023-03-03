@@ -8,7 +8,7 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy import func
 from sqlalchemy.orm import declarative_base, Session, relationship, backref
-engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
+engine = create_engine('mysql+mysqlconnector://paul:paul@localhost/soutien', echo=True, future=True)
 # engine = create_engine('mysql+mysqlconnector://mathys:mathys@localhost/Poney', echo=True, future=True)
 session = Session(engine)
 Base = declarative_base()
@@ -95,7 +95,7 @@ def formater_date(date):
         mois = "12"
     if len(jour) == 1:
         jour = "0" + jour
-    date = jour + "/" + mois + "/" + annee
+    date =  jour + "/" + mois + "/" + annee
     return date
    
 

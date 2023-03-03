@@ -31,9 +31,10 @@
                     <tr>
                         <th id="Groupe">Groupe</td>
                         
-                        {% for matiere in qcm['generale'].keys() %}
+                            {% for matiere in qcm['generale'] %}
                             <th id="{{ matiere }}">{{ matiere }}</td>
                         {% endfor %}
+                    
                     </tr>
                     {% for groupe in qcm.keys() %}
                         <tr>
@@ -61,22 +62,26 @@
                             <th id="NBDem">Nombre demandes</td>
                             <th id="MoyGen">Moyenne generale</td>
                         </tr>
-                        {% for matiere in matieres_demandées.keys() %}
+
+
+                        {% for matiere in matiere_demandees.keys() %}
                             <tr>
                                 {% if matiere == "" %}
                                     <td>aucune</td>
                                 {% else %}
                                     <td>{{ matiere }}</td>
                                 {% endif %}
-                                <td>{{ matieres_demandées[matiere]["nb"] }}</td>
-                                {% if matieres_demandées[matiere]["Moyenne"] == none %}
+                                <td>{{ matiere_demandees[matiere]["nb"] }}</td>
+                                {% if matiere_demandees[matiere]["Moyenne"] == none %}
                                     <td>~</td>
                                 {% else %}
-                                    <td>{{ matieres_demandées[matiere]["Moyenne"] }}</td>
+                                    <td>{{ matiere_demandees[matiere]["Moyenne"] }}</td>
                                 {% endif %}
                                 
                             </tr>
                         {% endfor %}
+
+                        
                     </tbody>
                 </table>
                 

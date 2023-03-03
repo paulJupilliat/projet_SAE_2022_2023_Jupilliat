@@ -16,8 +16,8 @@ def mkpath (p):
             os.path. dirname ( __file__ ),
             p))
 app.config['SQLALCHEMY_DATABASE_URI']=(
-    'mysql+mysqlconnector://mathys:'+
-        'mathys@localhost/Poney?charset=utf8mb4')
+    'mysql+mysqlconnector://paul:'+
+        'paul@localhost/soutien?charset=utf8mb4')
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
