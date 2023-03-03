@@ -143,26 +143,32 @@ def save_paramEns():
     return render_template("paramEns.html",title="Paramètres Enseignant")
 @app.route("/res_sond")
 def res_sond():
-    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
-    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
-    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
-    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
-    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
-    groupes=["11A","11B","11C","12A","12B","12C"]
+    semaines= get_semaines()
+    groupes = get_groupes(1)
     # res_eleve,groupe,res_qs in sondages
-    res_eleve=get_res_sondages(1, groupes)
-    groupe="11A"
-    res_qs=[{"question":"Quelle matière voulez vous voir en priorité ?","reponse":"Java","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","reponse":"oui","id_quest":2}, {"question":"Avez vous des remarques ?","reponse":"Je suis motivé","id_quest":3}]
-    sondages=[[res_eleve,groupe,res_qs],[ res_eleve,groupe,res_qs], [res_eleve,groupe,res_qs]]
-    questions=[{"question":"Quelle matière voulez vous voir en priorité ?","id_quest":1}, {"question":"Etes vous volontaire pour aider les autres ?","id_quest":2}, {"question":"Avez vous des remarques ?","id_quest":3}]
+    eleves = {}
+    i = 1
+    for groupe in groupes:
+        eleves[groupe] = get_eleves_groupe(groupe)
+        
+    res_eleve=get_res_sondages(1)
+    res_qs=[{"question":getquestion_sondage(1),"reponse":get_matiere_voulu(1,22102813),"id_quest":1}]
+    questions=[{"question":getquestion_sondage(1).question,"id_quest":getquestion_sondage(1).id_quest}]
     colspan=len(questions)+5
-    return render_template("res_sond.html",title="Resultat sondage",groupes=groupes,sondages=sondages,questions=questions,semaines=semaines,colspan=colspan)
+    reponse_sondage = get_rep_question(1)
+    return render_template("res_sond.html",title="Resultat sondage",res_eleve=res_eleve,reponse_sondage=reponse_sondage, groupes=groupes,questions=questions,semaines=semaines,colspan=colspan, eleves=eleves)
 @app.route("/Soutien")
 def Soutien():
-    matieres=[{"id_matiere":1,"nom_matiere":"Python"},{"id_matiere":2,"nom_matiere":"Java"}]
-    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"}, {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"}]
-    eleve_ret={"nom_eleve":"Paul","volontaire":"oui","matiere_voulue":"Python","matiere_retenue":{"matiere":"Python","note":12}}
-    retenus ={1:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
+    matieres= get_matieres()
+    semaines=get_semaines()
+    eleve_ret={"nom_eleve":"Paul",
+               "volontaire":"oui",
+               "matiere_voulue":"Python",
+               "matiere_retenue":{"matiere":"Python","note":12}}
+    retenus ={1:{"eleve":eleve_ret,
+                 "notes_qcm":[15,12],
+                 "profs":{"profs_dispos":[{"nom_prof":"Chabin"}],
+                          "profs_possibles":[{"nom_prof":"Chabin"}]}},
               2:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 3:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
                 4:{"eleve":eleve_ret,"notes_qcm":[15,12],"profs":{"profs_dispos":[{"nom_prof":"Chabin"}],"profs_possibles":[{"nom_prof":"Chabin"}]}},
@@ -256,24 +262,15 @@ def Suivie_etu():#num_etudiant
 
 @app.route("/SuivieGenEtu")
 def SuivieGenEtu():
-    eleves=[{"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":3,"moyenne":11,"dern_comm":"Progrès considérable"},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":4,"moyenne":8,"dern_comm":"Il reste encore du travail"},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":1,"moyenne":14,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":0,"moyenne":18,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":2,"moyenne":13,"dern_comm":""},
-    {"eleve":{"nom":"DUPONT","prenom":"Jean","num_etu":22107932,"groupe_s1":"14A","groupe_s2":"12B"},"nb_part":7,"moyenne":5,"dern_comm":"C'est pas ouf"}]
-    semaine_act={"id_sem":1,"semestre":1,"annee":2018}
-    semaines=[{"id_semaine":1,"date_debut":"02/01/2023","date_fin":"08/01/2023"},
-    {"id_semaine":2,"date_debut":"09/01/2023","date_fin":"15/01/2023"},{"id_semaine":3,"date_debut":"16/01/2023","date_fin":"22/01/2023"},
-    {"id_semaine":4,"date_debut":"23/01/2023","date_fin":"29/01/2023"}, {"id_semaine":5,"date_debut":"30/01/2023","date_fin":"05/02/2023"},
-    {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
-    {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
-    groupes=["11A","11B","11C","12A","12B","12C"]
-    return render_template("SuiviGenEtu.html",title="Suivi général étudiant",suivi_gen=eleves,semaine_act=semaine_act,semaines=semaines,groupes=groupes)
+    semaines= get_semaines()
+    groupes=get_groupes(1)
+    eleves = {}
+    particpations = get_nb_participations_oral()
+    moyennes = get_moyenne_generale()
+    commentaire = get_res_sondages(1)
+    for groupe in groupes:
+        eleves[groupe] = get_eleves_groupe(groupe)
+    return render_template("SuiviGenEtu.html",title="Suivi général étudiant",eleves=eleves,semaines=semaines,groupes=groupes, particpations=particpations, moyennes=moyennes, commentaire=commentaire)
 @app.route("/search/",methods=("POST",))
 def search():
     search = request.form.get("recherche")

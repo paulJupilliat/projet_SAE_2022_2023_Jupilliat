@@ -19,7 +19,7 @@ class Eleve(db.Model):
     groupe_s2 = db.Column(db.String(50))
     def __repr__(self):
         """representation de l objet Eleve"""
-        return f"Eleve({self.nom}, {self.prenom}, {self.groupe_s1}, {self.groupe_s2})"
+        return f"Eleve({self.num_etu}, {self.nom}, {self.prenom}, {self.groupe_s1}, {self.groupe_s2})"
 class Sondage(db.Model):
     """classe Sondage qui contient les sondages
     """
@@ -252,7 +252,7 @@ def get_recap_etudiant(id_etu:int,num_semaine:int)->tuple:
     Return:
         qcms: les qcms de l etudiant
         soutien: les soutiens de l etudiant"""
-    sem=Semaine.query.filter(Semaine.numSemaine==num_semaine).first().id_semaine
+    sem=Semaine.query.filter(Semaine.id_semaine==num_semaine).first().id_semaine
     qcms=get_res_QCM_eleve(id_etu,sem)
     soutien=get_soutiens_etudiant(id_etu,sem)
     sondage=get_sondage_etudiant(id_etu,sem)
@@ -321,7 +321,7 @@ def get_graphe_etudiant(id_etu:int,date_deb:str,date_fin:str,liste_mat:list):
         str_js+="\tdata.addColumn('number', '"+matiere+"');\n"
     semaines = Semaine.query.filter(Semaine.date_debut >= date_deb).filter(Semaine.date_fin <= date_fin).all()
     for sem in semaines:
-        liste_sem=[sem.numSemaine]
+        liste_sem=[sem.id_semaine]
         for mat in liste_mat:
             #recupere la note si elle existe pour la semaine et la matiere
             idmat=Matiere.query.filter(Matiere.nom_matiere==mat).first().id_matiere
@@ -358,6 +358,12 @@ def get_matieres_etu(id_etu):
         liste_matieres: la liste des matieres"""
     liste_qcms=QCM.query.filter(QCM.num_etu == id_etu).all()
     return Matiere.query.filter(Matiere.id_matiere.in_(liste_qcms)).all()
+
+def get_matieres():
+    """fonction qui recupere les matieres
+    Return:
+        liste_matieres: la liste des matieres"""
+    return Matiere.query.all()  
 
 def get_moyenne_groupe(groupe:str,id_qcm:int)->float:
     """fonction qui recupere la moyenne d un groupe pour un qcm
@@ -572,7 +578,7 @@ def get_groupes(semestre:int)->list:
             if e.groupe_s2 not in groupes:
                 groupes.append(e.groupe_s2)
     return groupes
-def get_res_sondages(semaine:int,liste_groupes=[])->list:
+def get_res_sondages_sem(semaine:int,liste_groupes=[])->list:
     """fonction recuperant les resultats de sondage pour une date
 
     Args:
@@ -774,24 +780,24 @@ def gen_soutien(num_sem:int):
         seuil (float): seuil de la moyenne
     """
     #genere les soutiens pour la semaine donnee
-    sem=Semaine.query.filter(Semaine.numSemaine==num_sem).first()
-    semaine_suivante=Semaine.query.filter(Semaine.numSemaine==num_sem+1).first()
+    sem=Semaine.query.filter(Semaine.id_semaine==num_sem).first()
+    semaine_suivante=Semaine.query.filter(Semaine.id_semaine==num_sem+1).first()
     if Oral.query.filter(Oral.date_oral>=semaine_suivante.date_debut).filter(Oral.date_oral<=semaine_suivante.date_fin).count()==0:
-        jour_sout=lecture_parametre_def("Jour de soutien")
-        heure_sout=lecture_parametre_def("Heure de soutien")
-        date_sout=semaine_suivante.date_debut+datetime.timedelta(days=jour_sout)
-        max_id_oral=Oral.query.order_by(Oral.id_oral.desc()).first().id_oral
-        oral=Oral(id_oral=max_id_oral+1,date_oral=date_sout,heure_debut=heure_sout,heure_fin=heure_sout+datetime.timedelta(hours=1))
+        jour_sout=2
+        heure_sout='14:00:00'
+        date_sout=semaine_suivante.date_debut.split(" ")[0]+" "+str(jour_sout)+"/00/00"
+        max_id_oral=Oral.query.count()
+        oral=Oral(id_oral=max_id_oral+1,date_oral=date_sout,heure_oral=heure_sout)
         db.session.add(oral)
         db.session.commit()
     oraux=Oral.query.filter(Oral.date_oral>=semaine_suivante.date_debut).filter(Oral.date_oral<=semaine_suivante.date_fin).all()
-    seuil=float(lecture_parametre_def("Seuil"))
+    seuil=0.7
     qcms_trouve=False
     while not qcms_trouve:
         #cherche une semaine avec des qcms
-        qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).order_by(Matiere.nom_matiere).all()
+        qcms=QCM.query.join(Matiere).filter(QCM.date_fin == sem.date_debut).filter(QCM.date_fin == sem.date_fin).order_by(Matiere.nom_matiere).all()
         if len(qcms)==0:
-            sem=Semaine.query.filter(Semaine.numSemaine==num_sem-1).first()
+            sem=Semaine.query.filter(Semaine.id_semaine==num_sem-1).first()
             num_sem-=1
         else:
             qcms_trouve=True
@@ -970,48 +976,33 @@ def get_moyenne_gen_etu(id_etu:int)->float:
     else:
         return moyenne/nb_notes
 
-def get_dern_comm(id_sem:int,id_etu:int)->str:
+def get_dern_comm(id_etu:int)->str:
     """Retourne le dernier commentaire d'oral présent à cette semaine
     """
-    sem_act=Semaine.query.filter(Semaine.id_semaine==id_sem).first()
-    part=ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu==id_etu).filter(Oral.date_oral>=sem_act.date_debut).filter(Oral.date_oral<=sem_act.date_fin)
+    sem_act=Semaine.query.filter(Semaine.id_semaine==get_semaine_act()).first()
+    part=ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu==id_etu)
     if part:
         return part.commentaire
-    cpt_sem=id_sem-1
+    cpt_sem= get_semaine_act()-1
     while not part and cpt_sem>0:
-        part = ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu == id_etu).filter(
-            Oral.date_oral >= sem_act.date_debut).filter(Oral.date_oral <= sem_act.date_fin)
+        part = ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu == id_etu)
         if part:
             return part.commentaire
         cpt_sem-=1
     return ""   
 
-
-def get_suivi_gen(id_sem:int)->list:
+def get_suivi_gen()->list:
     """Retourne les donnees pour le suivi general d'une semaine
-    {% for eleve in eleves %}
-                    <tr>
-                        <td><a href="{{url_for ('Suivie_etu',num_etu=eleve.num_etu)}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
-                        <td>{{ eleve.nb_part }}</td>
-                        {% if semaine_act.semestre == 1 %}
-                            <td>{{ eleve.eleve.groupe_s1 }}</td>
-                        {% else %}
-                            <td>{{ eleve.eleve.groupe_s2 }}</td>
-                        {% endif %}
-                        <td>{{ eleve.moyenne }}</td>
-                        <td>{{ eleve.dern_comm }}</td>
-                    </tr>
-                {% endfor %} 
     """
     eleves=Eleve.query.all()
     suivi_gen=[]
     for eleve in eleves:
         suivi_et={"eleve":eleve,"nb_part":0,"moyenne":0,"dern_comm":""}
-        parts=ParticipantsOral.query.filter(ParticipantsOral.num_etu==eleve.num_etu).all().count()
+        parts=ParticipantsOral.query.filter(ParticipantsOral.num_etu==eleve.num_etu).all()
         suivi_et["nb_part"]=parts
         moyenne=get_moyenne_gen_etu(eleve.num_etu)
         suivi_et["moyenne"]=moyenne
-        dern_comm=get_dern_comm(id_sem,eleve.num_etu)
+        dern_comm=get_dern_comm(eleve.num_etu)
         suivi_et["dern_comm"]=dern_comm
         suivi_gen.append(suivi_et)
     return suivi_gen
@@ -1282,4 +1273,25 @@ def get_rep_question(id_quest):
     dict = {}
     for rep in rep_question:
         dict[rep.num_etu] = {'reponse' : rep.reponse,'id_quest' : rep.id_quest}
+    return dict
+
+def get_nb_participations_oral():
+    """renvoi le nombre de participation à un oral pour un élève donné"""
+    liste_oral = ParticipantsOral.query.all()
+    dict = {}
+    for oral in liste_oral:
+        if oral.num_etu in dict:
+            dict[oral.num_etu] += 1
+        else:
+            dict[oral.num_etu] = 1
+    return dict
+
+def get_moyenne_generale():
+    resultat_qcm = ResultatQCM.query.all()
+    dict = {}
+    for res in resultat_qcm:
+        if res.num_etu in dict:
+            dict[res.num_etu] += res.note
+        else:
+            dict[res.num_etu] = res.note
     return dict

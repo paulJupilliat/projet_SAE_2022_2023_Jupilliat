@@ -64,32 +64,18 @@
         </table>
         <table class="scrolable" id="tab2">
             <tbody>
-                <!-- {% for eleve in eleves %}
-                    <tr>
-                        <td><a href="{{url_for ('Suivie_etu',num_etu=eleve.num_etu)}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
-                        <td>{{ eleve.nb_part }}</td>
-                        {% if semaine_act.semestre == 1 %}
-                            <td>{{ eleve.eleve.groupe_s1 }}</td>
-                        {% else %}
-                            <td>{{ eleve.eleve.groupe_s2 }}</td>
-                        {% endif %}
-                        <td>{{ eleve.moyenne }}</td>
-                        <td>{{ eleve.dern_comm }}</td>
-                    </tr>
-                {% endfor %}  -->
-                {% for eleve in suivi_gen %}
-                    <tr>
-                        <td><a href="{{url_for ('Suivie_etu')}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
-                        <td>{{ eleve.nb_part }}</td>
-                        {% if semaine_act.semestre == 1 %}
-                            <td>{{ eleve.eleve.groupe_s1 }}</td>
-                        {% else %}
-                            <td>{{ eleve.eleve.groupe_s2 }}</td>
-                        {% endif %}
-                        <td>{{ eleve.moyenne }}</td>
-                        <td>{{ eleve.dern_comm }}</td>
+                
+                {% for groupe,eleves in eleves.items() %}
+                {% for num_eleve,eleve in eleves.items() %}
+                    <tr class="ligne">
+                        <td class="noms">{{ eleve['nom'] +" "+ eleve['prenom'] }}</td>
+                        <td class="noms">{{ particpations[eleve['num_etu']] }}</td>
+                        <td class="noms">{{ groupe }}</td>
+                        <td class="noms">{{ moyennes[eleve['num_etu']] }}</td>
+                        <td class="noms">{{ commentaire[eleve['num_etu']]['commentaire'] }}</td>
                     </tr>
                 {% endfor %} 
+                {% endfor %}
                 
                 </tbody>
         </table></section>
