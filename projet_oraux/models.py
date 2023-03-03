@@ -490,7 +490,7 @@ def get_res_QCMs(semaine:int,liste_groupes=[])->list:
             if semestre == "S1":
                 res_eleve.append(el.groupe_s1)
             else:
-                res_eleve.append(el.groupe_s2)
+                res_eleve.append(el.groupe_s2) 
             res_eleve.append(rep)
             for qcm in qcms:
                 res_QCM=ResultatQCM.query.join(QCM).join(Eleve).filter(ResultatQCM.id_qcm==qcm.id_qcm).filter(Eleve.num_etu==el.num_etu).first()
@@ -523,7 +523,7 @@ def get_res_QCMs(semaine:int,liste_groupes=[])->list:
                 resultats.append(res_eleve)
     return resultats
 
-def get_moyennes_res_QCMs(semaine:int,id:str)->dict:
+def get_moyennes_res_QCMs()->dict:
     """fonction recuperant les resultats de QCM pour une date
     en fonction de l id de groupe
     Args:
@@ -531,8 +531,8 @@ def get_moyennes_res_QCMs(semaine:int,id:str)->dict:
     Returns:
         dict: dico des resultats de QCM
     """
-    sem = Semaine.query.filter(Semaine.id_semaine == semaine).first()
-    qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= sem.date_debut).filter(QCM.date_fin <= sem.date_fin).all().order_by(Matiere.nom_matiere)
+    sem = get_semaine_act()
+    qcms=QCM.query.join(Matiere).filter(QCM.date_fin >= '02/27/2023').filter(QCM.date_fin <= '03/05/2023').all().order_by(Matiere.nom_matiere)
     resultats={}
     if id=="generale":
         for qcm in qcms:
@@ -725,21 +725,16 @@ def get_eleve(id_eleve:int)->Eleve:
     eleve = Eleve.query.filter(Eleve.num_etu == id_eleve).first()
     return eleve
 
-def get_eleves_groupe(groupe:int, date:str):
-    """fonction recuperant les eleves d un groupe pour une date
-
-    Args:
-        groupe (String): groupe de l eleve
-        date (String): date du QCM
-    Returns:
-        list: liste des eleves
-    """
-    sem = Semaine.query.filter(Semaine.date_debut <= date).filter(Semaine.date_fin >= date).first()
-    #on verifie si on est en periode 1 ou 2
-    if Periode.query.filter(Periode.id_periode==sem.id_periode).first().semestre==1:
-        eleves = Eleve.query.filter(Eleve.groupe_s1 == groupe).filter(Eleve.date_debut >= sem.date_debut).filter(Eleve.date_debut <= sem.date_fin).all()
-    eleves = Eleve.query.filter(Eleve.groupe_s2 == groupe).filter(Eleve.date_fin >= sem.date_debut).filter(Eleve.date_fin <= sem.date_fin).all()
-    return eleves
+def get_eleves_groupe(groupe:int):
+    """fonction recuperant les eleves d un groupe"""
+    eleves = Eleve.query.filter(Eleve.groupe_s1 == groupe).all()
+    dict = {}
+    i = 1
+    for eleve in eleves:
+        dict['eleve'+str(i)] = {'num_etu':eleve.num_etu,'nom':eleve.nom,'prenom' : eleve.prenom,'groupe1' :eleve.groupe_s1,'goupe2' :eleve.groupe_s2}
+        i += 1
+        
+    return dict
 
 def disponibilites_enseignant(id_enseignant:int)->list:
     """fonction recuperant les disponibilites d un enseignant pour une date
@@ -1232,3 +1227,59 @@ def eleves_besoin_oral(id_oral):
                         if res_qcm.note < 10:
                             liste_eleves_besoin.append(eleve)
     return liste_eleves_besoin
+
+def get_resultats_qcms():
+    res_qcms = ResultatQCM.query.all()
+    dict = {}
+    for res_qcm in res_qcms:
+        if res_qcm.num_etu not in dict:
+            dict[res_qcm.num_etu] = {}
+        dict[res_qcm.num_etu][res_qcm.id_qcm] = res_qcm.note
+    return dict
+
+def moyenne_res_qcms():
+    qcms = ResultatQCM.query.all()
+    dict = {}
+    for qcm in qcms:
+        matiere_qcm = QCM.query.filter(QCM.id_qcm == qcm.id_qcm).first().id_matiere
+        matiere = Matiere.query.filter(Matiere.id_matiere == matiere_qcm).first().nom_matiere
+        if qcm.id_qcm not in dict:
+            dict[matiere] = []
+        dict[matiere].append(qcm.note)
+    for key in dict:
+        dict[key] = sum(dict[key]) / len(dict[key])
+    return dict
+
+
+def get_resultat_qcm_eleve():
+    eleves = Eleve.query.all()
+    Resultat = ResultatQCM.query.all()
+    dict = {}
+    for eleve in eleves:
+        dict[eleve.num_etu] = {}
+        for res_qcm in Resultat:
+            if res_qcm.num_etu == eleve.num_etu:
+                dict[eleve.num_etu][res_qcm.id_qcm] = res_qcm.note
+    return dict
+
+def getquestion_sondage(id_sondage):
+    question = QuestionSondage.query.filter(QuestionSondage.id_sond == id_sondage).first()
+    return question
+
+def get_matiere_voulu(id_sondage, num_etu):
+    matiere = RepSondage.query.filter(RepSondage.id_sondage == id_sondage, RepSondage.num_etu == num_etu).first().matiere_voulue
+    return matiere    
+
+def get_res_sondages(id_sondage):
+    res_sondages = RepSondage.query.filter(RepSondage.id_sondage == id_sondage).all()
+    dict = {}
+    for res in res_sondages:
+        dict[res.num_etu] = {'volontaire' : res.volontaire, 'matiere_voulue' : res.matiere_voulue, 'commentaire' : res.commentaire}
+    return dict
+
+def get_rep_question(id_quest):
+    rep_question = ReponseQuestionSondage.query.filter(ReponseQuestionSondage.id_quest == id_quest).all()
+    dict = {}
+    for rep in rep_question:
+        dict[rep.num_etu] = {'reponse' : rep.reponse,'id_quest' : rep.id_quest}
+    return dict

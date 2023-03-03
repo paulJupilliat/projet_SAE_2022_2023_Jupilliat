@@ -67,15 +67,19 @@ def route():
 @app.route("/ResQCM")
 def ResQCM():
     semaines= get_semaines()
-    groupes=["11A","11B","11C","12A","12B","12C"]
-    matieres=["Python","Java","C++","Projet QCM (BUT2)"]
-
-    res_bandeau=[("Python", 12), ("Java", 15), ("C++", 18)]
+    groupes=get_groupes(1)
+    matieres=get_matiere()
+    res_bandeau= moyenne_res_qcms()
     reps={"matiere_voulue":"Python", "volontaire":"oui"}
-    el={"num_etu":1, "nom":"Dupont", "prenom":"Jean", "groupe_s1":"11A", "groupe_s2":"11A"}
+    res_eleves= get_resultat_qcm_eleve()
     resultats= get_res_QCMs(1, groupes)
-    return render_template("ResQCM.html",title="Resultat QCM",
-    semaines=semaines,matieres=matieres, groupes=groupes,res_bandeau=res_bandeau, resultats=resultats)
+    eleves = {}
+    reponse_sondage= get_rep_question(1)
+    res_sondage_eleve= get_res_sondages(1)
+    for groupe in groupes:
+        eleves[groupe]=get_eleves_groupe(groupe)
+    return render_template("ResQCM.html",title="Resultat QCM",res_sondage_eleve = res_sondage_eleve,
+    semaines=semaines,matieres=matieres, groupes=groupes,res_bandeau=res_bandeau, resultats=resultats,res_eleves=res_eleves, eleves=eleves, reponse_sondage=reponse_sondage)
 
 @app.route("/Acceuil")
 def Acceuil():
