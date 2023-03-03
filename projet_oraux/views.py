@@ -84,7 +84,7 @@ def ResQCM():
 @app.route("/Acceuil")
 def Acceuil():
     #moyennes["generale"][nom_matiere]=get_moyenne_generale(qcm.id_qcm)
-    #matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
+    #matiere_demandees[r.matiere_voulue]={"nb":1,"Moyenne":None}
     sondage = get_res_sondage_accueil()
     matieres=get_matiere()
     possibles=get_possibilite_soutien()
@@ -94,7 +94,7 @@ def Acceuil():
     {"id_semaine":6,"date_debut":"06/02/2023","date_fin":"12/02/2023"},{"id_semaine":7,"date_debut":"13/02/2023","date_fin":"19/02/2023"},
     {"id_semaine":8,"date_debut":"20/02/2023","date_fin":"26/02/2023"},{"id_semaine":9,"date_debut":"27/02/2023","date_fin":"05/03/2023"}]
     return render_template(
-        "Acceuil.html",title="Acceuil",qcm=get_resultats_qcm_accueil(), matieres_demandées=sondage,
+        "Acceuil.html",title="Acceuil",qcm=get_resultats_qcm_accueil(), matiere_demandees=sondage,
         matieres=matieres, possibles=possibles,semaines=semaines)
 
 @app.route("/connexionAdm")

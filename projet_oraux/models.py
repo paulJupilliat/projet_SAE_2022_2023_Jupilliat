@@ -452,21 +452,21 @@ def get_res_sondage_accueil()->dict:
         pour l acceuil
     """
     sem = get_semaine_act()
-    matieres_demandées={}
+    matiere_demandees={}
     rep_sondage = RepSondage.query.join(Sondage).filter(Sondage.date_debut_sond >= '02/27/2023').filter(Sondage.date_fin_sond <= '03/05/2023').all()
     for r in rep_sondage:
-        if r.matiere_voulue in matieres_demandées:
-            matieres_demandées[r.matiere_voulue]["nb"]+=1
+        if r.matiere_voulue in matiere_demandees:
+            matiere_demandees[r.matiere_voulue]["nb"]+=1
         else:
-            matieres_demandées[r.matiere_voulue]={"nb":1,"Moyenne":None}
-    for nom_m in matieres_demandées:
+            matiere_demandees[r.matiere_voulue]={"nb":1,"Moyenne":None}
+    for nom_m in matiere_demandees:
         mat=Matiere.query.filter(Matiere.nom_matiere==nom_m).first()
         if mat is not None :
             qcm=QCM.query.filter(QCM.id_matiere==mat.id_matiere).filter(QCM.date_fin >= '02/27/2023').filter(QCM.date_fin <= '03/05/2023').first()
             if qcm is not None:
                 moyenne=get_moyenne_generale(qcm.id_qcm)
-                matieres_demandées[nom_m]["Moyenne"]=moyenne
-    return matieres_demandées
+                matiere_demandees[nom_m]["Moyenne"]=moyenne
+    return matiere_demandees
 
 def get_res_QCMs(semaine:int,liste_groupes=[])->list:
     """fonction recuperant les resultats de QCM pour une date
