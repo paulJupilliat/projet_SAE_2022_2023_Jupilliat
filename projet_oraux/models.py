@@ -19,7 +19,7 @@ class Eleve(db.Model):
     groupe_s2 = db.Column(db.String(50))
     def __repr__(self):
         """representation de l objet Eleve"""
-        return f"Eleve({self.nom}, {self.prenom}, {self.groupe_s1}, {self.groupe_s2})"
+        return f"Eleve({self.num_etu}, {self.nom}, {self.prenom}, {self.groupe_s1}, {self.groupe_s2})"
 class Sondage(db.Model):
     """classe Sondage qui contient les sondages
     """
@@ -580,7 +580,7 @@ def get_groupes(semestre:int)->list:
             if e.groupe_s2 not in groupes:
                 groupes.append(e.groupe_s2)
     return groupes
-def get_res_sondages(semaine:int,liste_groupes=[])->list:
+def get_res_sondages_sem(semaine:int,liste_groupes=[])->list:
     """fonction recuperant les resultats de sondage pour une date
 
     Args:
@@ -733,21 +733,16 @@ def get_eleve(id_eleve:int)->Eleve:
     eleve = Eleve.query.filter(Eleve.num_etu == id_eleve).first()
     return eleve
 
-def get_eleves_groupe(groupe:int, date:str):
-    """fonction recuperant les eleves d un groupe pour une date
-
-    Args:
-        groupe (String): groupe de l eleve
-        date (String): date du QCM
-    Returns:
-        list: liste des eleves
-    """
-    sem = Semaine.query.filter(Semaine.date_debut <= date).filter(Semaine.date_fin >= date).first()
-    #on verifie si on est en periode 1 ou 2
-    if Periode.query.filter(Periode.id_periode==sem.id_periode).first().semestre==1:
-        eleves = Eleve.query.filter(Eleve.groupe_s1 == groupe).filter(Eleve.date_debut >= sem.date_debut).filter(Eleve.date_debut <= sem.date_fin).all()
-    eleves = Eleve.query.filter(Eleve.groupe_s2 == groupe).filter(Eleve.date_fin >= sem.date_debut).filter(Eleve.date_fin <= sem.date_fin).all()
-    return eleves
+def get_eleves_groupe(groupe:int):
+    """fonction recuperant les eleves d un groupe"""
+    eleves = Eleve.query.filter(Eleve.groupe_s1 == groupe).all()
+    dict = {}
+    i = 1
+    for eleve in eleves:
+        dict['eleve'+str(i)] = {'num_etu':eleve.num_etu,'nom':eleve.nom,'prenom' : eleve.prenom,'groupe1' :eleve.groupe_s1,'goupe2' :eleve.groupe_s2}
+        i += 1
+        
+    return dict
 
 def disponibilites_enseignant(id_enseignant:int)->list:
     """fonction recuperant les disponibilites d un enseignant pour une date
@@ -983,48 +978,33 @@ def get_moyenne_gen_etu(id_etu:int)->float:
     else:
         return moyenne/nb_notes
 
-def get_dern_comm(id_sem:int,id_etu:int)->str:
+def get_dern_comm(id_etu:int)->str:
     """Retourne le dernier commentaire d'oral présent à cette semaine
     """
-    sem_act=Semaine.query.filter(Semaine.id_semaine==id_sem).first()
-    part=ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu==id_etu).filter(Oral.date_oral>=sem_act.date_debut).filter(Oral.date_oral<=sem_act.date_fin)
+    sem_act=Semaine.query.filter(Semaine.id_semaine==get_semaine_act()).first()
+    part=ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu==id_etu)
     if part:
         return part.commentaire
-    cpt_sem=id_sem-1
+    cpt_sem= get_semaine_act()-1
     while not part and cpt_sem>0:
-        part = ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu == id_etu).filter(
-            Oral.date_oral >= sem_act.date_debut).filter(Oral.date_oral <= sem_act.date_fin)
+        part = ParticipantsOral.query.join(Oral).filter(ParticipantsOral.num_etu == id_etu)
         if part:
             return part.commentaire
         cpt_sem-=1
     return ""   
 
-
-def get_suivi_gen(id_sem:int)->list:
+def get_suivi_gen()->list:
     """Retourne les donnees pour le suivi general d'une semaine
-    {% for eleve in eleves %}
-                    <tr>
-                        <td><a href="{{url_for ('Suivie_etu',num_etu=eleve.num_etu)}}">{{ eleve.eleve.nom }} {{ eleve.eleve.prenom }}</a></td>
-                        <td>{{ eleve.nb_part }}</td>
-                        {% if semaine_act.semestre == 1 %}
-                            <td>{{ eleve.eleve.groupe_s1 }}</td>
-                        {% else %}
-                            <td>{{ eleve.eleve.groupe_s2 }}</td>
-                        {% endif %}
-                        <td>{{ eleve.moyenne }}</td>
-                        <td>{{ eleve.dern_comm }}</td>
-                    </tr>
-                {% endfor %} 
     """
     eleves=Eleve.query.all()
     suivi_gen=[]
     for eleve in eleves:
         suivi_et={"eleve":eleve,"nb_part":0,"moyenne":0,"dern_comm":""}
-        parts=ParticipantsOral.query.filter(ParticipantsOral.num_etu==eleve.num_etu).all().count()
+        parts=ParticipantsOral.query.filter(ParticipantsOral.num_etu==eleve.num_etu).all()
         suivi_et["nb_part"]=parts
         moyenne=get_moyenne_gen_etu(eleve.num_etu)
         suivi_et["moyenne"]=moyenne
-        dern_comm=get_dern_comm(id_sem,eleve.num_etu)
+        dern_comm=get_dern_comm(eleve.num_etu)
         suivi_et["dern_comm"]=dern_comm
         suivi_gen.append(suivi_et)
     return suivi_gen
@@ -1240,3 +1220,46 @@ def eleves_besoin_oral(id_oral):
                         if res_qcm.note < 10:
                             liste_eleves_besoin.append(eleve)
     return liste_eleves_besoin
+
+def getquestion_sondage(id_sondage):
+    question = QuestionSondage.query.filter(QuestionSondage.id_sond == id_sondage).first()
+    return question
+
+def get_matiere_voulu(id_sondage, num_etu):
+    matiere = RepSondage.query.filter(RepSondage.id_sondage == id_sondage, RepSondage.num_etu == num_etu).first().matiere_voulue
+    return matiere    
+
+def get_res_sondages(id_sondage):
+    res_sondages = RepSondage.query.filter(RepSondage.id_sondage == id_sondage).all()
+    dict = {}
+    for res in res_sondages:
+        dict[res.num_etu] = {'volontaire' : res.volontaire, 'matiere_voulue' : res.matiere_voulue, 'commentaire' : res.commentaire}
+    return dict
+
+def get_rep_question(id_quest):
+    rep_question = ReponseQuestionSondage.query.filter(ReponseQuestionSondage.id_quest == id_quest).all()
+    dict = {}
+    for rep in rep_question:
+        dict[rep.num_etu] = {'reponse' : rep.reponse,'id_quest' : rep.id_quest}
+    return dict
+
+def get_nb_participations_oral():
+    """renvoi le nombre de participation à un oral pour un élève donné"""
+    liste_oral = ParticipantsOral.query.all()
+    dict = {}
+    for oral in liste_oral:
+        if oral.num_etu in dict:
+            dict[oral.num_etu] += 1
+        else:
+            dict[oral.num_etu] = 1
+    return dict
+
+def get_moyenne_generale():
+    resultat_qcm = ResultatQCM.query.all()
+    dict = {}
+    for res in resultat_qcm:
+        if res.num_etu in dict:
+            dict[res.num_etu] += res.note
+        else:
+            dict[res.num_etu] = res.note
+    return dict
